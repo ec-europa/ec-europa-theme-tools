@@ -1,0 +1,7 @@
+name = Nexteuropa views
+description  = Views style plugins created for Nexteuropa BEM components
+package = "Nexteuropa Digital Transformation"
+core = 7.x
+files[] = views_plugin_style_nexteuropa_listing.inc
+
+dependencies[] = views

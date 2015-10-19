@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * nexteuropa_formatters.module
+ */
+
+require_once 'nexteuropa_formatters.field.inc';
+require_once 'nexteuropa_formatters.field_group.inc';
+
+/**
+ * Implements hook_theme().
+ */
+function nexteuropa_formatters_theme($existing, $type, $theme, $path) {
+  return array(
+    'nexteuropa_bem_item_list' => array(
+      'file' => 'nexteuropa_formatters.theme.inc',
+      'variables' => array(
+        'items' => array(),
+        'modifiers' => array(),
+        'type' => 'div',
+        'attributes' => array(),
+      ),
+    ),
+  );
+}

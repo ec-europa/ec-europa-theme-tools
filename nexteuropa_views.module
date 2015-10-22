@@ -48,10 +48,10 @@ function template_preprocess_views_view_nexteuropa_listing(&$variables) {
   }
 
   $columns_num = 1;
-  if ($listing_column_name == 'two_columns') {
+  if (isset($listing_column_name) && $listing_column_name == 'two_columns') {
     $columns_num = 2;
   }
-  elseif ($listing_column_name == 'three_columns') {
+  elseif (isset($listing_column_name) && $listing_column_name == 'three_columns') {
     $columns_num = 3;
   }
 

@@ -5,8 +5,8 @@
  * Adding BEM related custom field formatters.
  */
 
-global $listing_view_modes;
-$listing_view_modes = array('title', 'meta', 'teaser');
+global $_nexteuropa_formatters_listing_view_modes;
+$_nexteuropa_formatters_listing_view_modes = array('title', 'meta', 'teaser');
 
 /**
  * Implements hook_field_formatter_info().
@@ -19,6 +19,11 @@ function nexteuropa_formatters_field_formatter_info() {
         'text',
         'entityreference',
         'link_field',
+      ),
+      'settings' => array(
+        'expander_has_expander' => FALSE,
+        'expander_trim_at' => 0,
+        'expander_trim_to' => 0,
       ),
     ),
     'link_button_default' => array(
@@ -74,6 +79,41 @@ function nexteuropa_formatters_field_formatter_info() {
       ),
     ),
   );
+}
+
+/**
+ * Implements hook_field_formatter_settings_form().
+ */
+function nexteuropa_formatters_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+
+  $element = array();
+
+  if ($display['type'] == 'context_nav_item') {
+    $element['expander_has_expander'] = array(
+      '#title' => t('Has expander'),
+      '#type' => 'checkbox',
+      '#size' => 1,
+      '#default_value' => $settings['expander_has_expander'],
+    );
+    $element['expander_trim_at'] = array(
+      '#title' => t('Trim at'),
+      '#type' => 'textfield',
+      '#size' => 2,
+      '#default_value' => $settings['expander_trim_at'],
+      '#element_validate' => array('element_validate_integer'),
+    );
+    $element['expander_trim_to'] = array(
+      '#title' => t('Trim to'),
+      '#type' => 'textfield',
+      '#size' => 2,
+      '#default_value' => $settings['expander_trim_to'],
+      '#element_validate' => array('element_validate_integer'),
+    );
+  }
+
+  return $element;
 }
 
 /**
@@ -177,28 +217,37 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         if (isset($layout_field_settings[$field_name]['formatter_settings']['ft']['lb'])) {
           $label_altered = $layout_field_settings[$field_name]['formatter_settings']['ft']['lb'];
         }
-        $label = (isset($label_altered) ? $label_altered : $instance['label']);
+        $wrapper_label = (isset($label_altered) ? $label_altered : $instance['label']);
 
-        $element['#prefix'] = '<span class="context-nav__label">' . $label . '</span>';
-        $element['#prefix'] .= '<div class="context-nav__items">';
-        $element['#suffix'] = '</div>';
+        // Apply custom label to the element.
+        $element = array_merge(
+          $element,
+          _nexteuropa_formatters_get_context_nav_wrapper(
+            $wrapper_label,
+            isset($display['settings']['expander_has_expander']) ? $display['settings']['expander_has_expander'] : FALSE,
+            isset($display['settings']['expander_trim_at']) ? $display['settings']['expander_trim_at'] : FALSE,
+            isset($display['settings']['expander_trim_to']) ? $display['settings']['expander_trim_to'] : FALSE
+          )
+        );
+
         switch ($field['type']) {
           case 'entityreference':
             $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
             foreach ($items as $delta => $item) {
 
-              $label = $handler->getLabel($item['entity']);
-              // Note the assignment ($url = ) here is intended to be an
-              // assignment.
-              if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
-                $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
-                $link = l($label, $link_url, $uri['options']);
-                $element[$delta] = array(
-                  '#markup' => '<span class="context-nav__item">' . $link . '</span>',
-                );
-              }
-              else {
-                $element[$delta] = array('#markup' => check_plain($label));
+              if ($label = $handler->getLabel($item['entity'])) {
+                if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
+                  $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
+                  $link = l($label, $link_url, $uri['options']);
+                  $element[$delta] = array(
+                    '#prefix' => '<span class="context-nav__item">',
+                    '#markup' => $link,
+                    '#suffix' => '</span>',
+                  );
+                }
+                else {
+                  $element[$delta] = array('#markup' => check_plain($label));
+                }
               }
             }
             break;
@@ -339,11 +388,11 @@ function nexteuropa_formatters_field_formatter_info_alter(&$info) {
  * Implements hook_field_formatter_settings_form_alter().
  */
 function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_form, $context) {
-  global $listing_view_modes;
+  global $_nexteuropa_formatters_listing_view_modes;
 
   if (
     $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
-    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], $listing_view_modes)
+    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], $_nexteuropa_formatters_listing_view_modes)
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
@@ -380,10 +429,10 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
  * Implements hook_field_formatter_settings_summary_alter().
  */
 function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary, $context) {
-  global $listing_view_modes;
+  global $_nexteuropa_formatters_listing_view_modes;
   if (
     $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
-    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], $listing_view_modes)
+    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], $_nexteuropa_formatters_listing_view_modes)
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];

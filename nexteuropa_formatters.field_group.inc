@@ -23,7 +23,19 @@ function nexteuropa_formatters_field_group_formatter_info() {
   $formatters['meta_wrapper'] = array(
     'label' => t('Meta Wrapper'),
     'description' => t('This fieldgroup renders meta component wrapper'),
-    'instance_settings' => array('modifier' => ''),
+    'instance_settings' => array(
+      'modifier' => '',
+      'classes' => '',
+    ),
+  );
+
+  $formatters['context_nav'] = array(
+    'label' => t('Context Nav'),
+    'description' => t('This fieldgroup renders the context nav wrapper'),
+    'instance_settings' => array(
+      'modifier' => '',
+      'classes' => '',
+    ),
   );
 
   foreach (array_keys($formatters) as $key) {
@@ -39,6 +51,10 @@ function nexteuropa_formatters_field_group_formatter_info() {
 
 /**
  * Implements hook_field_group_format_settings().
+ *
+ * It might be possible that the #options only contains "None", this has been
+ * added as a temporary placeholder. Whenever a new modifier is being added to
+ * the system, we should add it here.
  */
 function nexteuropa_formatters_field_group_format_settings($group) {
 
@@ -58,6 +74,17 @@ function nexteuropa_formatters_field_group_format_settings($group) {
         '#options' => array(
           '' => t('None'),
           'meta--header' => t('Meta header'),
+        ),
+        '#default_value' => isset($group->format_settings['instance_settings']['modifier']) ? $group->format_settings['instance_settings']['modifier'] : '',
+      );
+      break;
+
+    case 'context_nav':
+      $form['instance_settings']['modifier'] = array(
+        '#title' => t('Modifiers'),
+        '#type' => 'select',
+        '#options' => array(
+          '' => t('None'),
         ),
         '#default_value' => isset($group->format_settings['instance_settings']['modifier']) ? $group->format_settings['instance_settings']['modifier'] : '',
       );
@@ -85,17 +112,46 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
         '#id' => $id,
       );
 
-      // Start with an empty modifier.
-      $modifier = '';
-
-      // Check if it is set and has a value. We do this because we dont want an
-      // empty space after a class.
+      // Add our modifiers and classes.
+      $modifier_and_classes = '';
+      // Add only those with data.
       if (isset($group->format_settings['instance_settings']['modifier']) && $group->format_settings['instance_settings']['modifier'] !== '') {
-        $modifier = ' ' . $group->format_settings['instance_settings']['modifier'];
+        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['modifier'];
+      }
+      if (isset($group->format_settings['instance_settings']['classes']) && $group->format_settings['instance_settings']['classes'] !== '') {
+        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['classes'];
+      }
+
+      $add['#prefix'] = '<div class="meta' . $modifier_and_classes . '">';
+      $add['#suffix'] = '</div>';
+
+      $element += $add;
+      break;
+
+    // Context nav.
+    case 'context_nav':
+
+      $add = array(
+        '#type' => 'markup',
+        '#weight' => $group->weight,
+        '#id' => $id,
+        '#attached' => array(
+          'js' => array(drupal_get_path('module', 'nexteuropa_formatters') . '/js/context-nav.js'),
+        ),
+      );
+
+      // Add our modifiers and classes.
+      $modifier_and_classes = '';
+      // Add only those with data.
+      if (isset($group->format_settings['instance_settings']['modifier']) && $group->format_settings['instance_settings']['modifier'] !== '') {
+        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['modifier'];
+      }
+      if (isset($group->format_settings['instance_settings']['classes']) && $group->format_settings['instance_settings']['classes'] !== '') {
+        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['classes'];
       }
 
       // Add it.
-      $add['#prefix'] = '<div class="meta' . $modifier . '">';
+      $add['#prefix'] = '<div class="context-nav' . $modifier_and_classes . '">';
       $add['#suffix'] = '</div>';
 
       $element += $add;

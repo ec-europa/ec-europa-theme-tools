@@ -19,6 +19,9 @@ function nexteuropa_inpage_nav_block_info() {
  * Implements hook_block_view().
  */
 function nexteuropa_inpage_nav_block_view($delta = '') {
+  // Get our preferred content languages order.
+  $content_language_order = _dt_core_content_language_order();
+
   $block = array();
 
   if ($delta === "inline_navigation") {
@@ -30,6 +33,19 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
 
       return $block;
     }
+
+    $content_language = $node->language;
+    // Find first available translation that is applicable.
+    foreach ($content_language_order as $language_code) {
+      $translation = entity_translation_get_existing_language('node', $node, $language_code);
+      //We have a translation so lets use it.
+      if ($translation == $language_code) {
+        $content_language = $language_code;
+        break;
+      }
+      $content_language = $translation;
+    }
+
     $layout = ds_get_layout('node', $node->type, 'full');
     $layout_field_settings = ds_get_field_settings('node', $node->type, 'full');
     // DS region to work with.
@@ -46,7 +62,7 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
         // Get anchored headings from body field.
         if ($element == 'body' && !empty($node->body)) {
           $node_wrapper = entity_metadata_wrapper('node', $node);
-          $body = $node_wrapper->body->value->value();
+          $body = $node_wrapper->language($content_language)->body->value->value();
           $headings = _nexteuropa_inpage_nav_markup_anchor($body);
           $field_info = field_info_instance('node', $element, $node->type);
           $weight = isset($field_info['display']['full']) ? $field_info['display']['full']['weight'] : $field_info['display']['default']['weight'];
@@ -62,8 +78,9 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
         if (isset($node->{$element}) && isset($layout_field_settings[$element]) && $id = _nexteuropa_inpage_nav_field_anchor($layout_field_settings[$element], $node->{$element})) {
           // Get the field label.
           $field_info = field_info_instance('node', $element, $node->type);
+          $translated_label = i18n_field_translate_property($field_info, 'label', $content_language);
           $items[$element]['weight'] = $field_info['display']['full']['weight'];
-          $items[$element]['item'] = '<a href="#' . $id . '" class="inpage_nav__list-item">' . $field_info['label'] . '</a>';
+          $items[$element]['item'] = '<a href="#' . $id . '" class="inpage_nav__list-item">' . $translated_label . '</a>';
         }
 
         // If group, check if group label has id attribute to be used as anchor.
@@ -71,14 +88,14 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
           if ($group_anchor = _nexteuropa_inpage_nav_group_anchor($group, $node)) {
             $items[$element]['weight'] = $group->weight;
             $items[$element]['children'] = $group->children;
-            $items[$element]['item'] = '<a href="#' . $group_anchor['id'] . '" class="inpage_nav__list-item">' . $group_anchor['label'] . '</a>';
+            $items[$element]['item'] = '<a href="#' . $group_anchor['id'] . '" class="inpage_nav__list-item">' . t($group_anchor['label'], array(), array('langcode' => $content_language)) . '</a>';
           }
         }
       }
     }
     elseif (!empty($node->body)) {
       $node_wrapper = entity_metadata_wrapper('node', $node);
-      $body = $node_wrapper->body->value->value();
+      $body = $node_wrapper->language($content_language)->body->value->value();
       $headings = _nexteuropa_inpage_nav_markup_anchor($body);
       $body_heading_count = 1;
       foreach ($headings as $heading) {

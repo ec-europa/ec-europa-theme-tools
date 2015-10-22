@@ -26,6 +26,7 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     ),
     'form' => TRUE,
     'image' => TRUE,
+    'is_nexteuropa' => TRUE,
   );
 
   $layouts['ne_bootstrap_3_9_stacked'] = array(
@@ -40,6 +41,7 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     ),
     'form' => TRUE,
     'image' => TRUE,
+    'is_nexteuropa' => TRUE,
   );
 
   $layouts['ne_bootstrap_3_9_stacked_conditional'] = array(
@@ -54,6 +56,7 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     ),
     'form' => TRUE,
     'image' => TRUE,
+    'is_nexteuropa' => TRUE,
   );
 
   $layouts['ne_bootstrap_1col_stacked'] = array(
@@ -67,6 +70,7 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     ),
     'form' => TRUE,
     'image' => TRUE,
+    'is_nexteuropa' => TRUE,
   );
 
   $layouts['ne_2col'] = array(
@@ -78,6 +82,7 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     ),
     'form' => TRUE,
     'image' => TRUE,
+    'is_nexteuropa' => TRUE,
   );
 
   $layouts['ne_2col_sidebar_no_link'] = array(
@@ -89,6 +94,7 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     ),
     'form' => TRUE,
     'image' => TRUE,
+    'is_nexteuropa' => TRUE,
   );
 
   $layouts['ne_1col'] = array(
@@ -99,6 +105,7 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     ),
     'form' => TRUE,
     'image' => TRUE,
+    'is_nexteuropa' => TRUE,
   );
 
   return $layouts;

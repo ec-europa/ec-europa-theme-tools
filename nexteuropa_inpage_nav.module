@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Nexteuropa inline page navigation
+ * Nexteuropa inline page navigation.
  */
 
 define('NEXTEUROPA_INPAGE_NAV_DEPTH', 'h2');
@@ -38,7 +38,7 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
     // Find first available translation that is applicable.
     foreach ($content_language_order as $language_code) {
       $translation = entity_translation_get_existing_language('node', $node, $language_code);
-      //We have a translation so lets use it.
+      // We have a translation so lets use it.
       if ($translation == $language_code) {
         $content_language = $language_code;
         break;
@@ -238,7 +238,7 @@ function _nexteuropa_inpage_nav_is_group_empty($group, $node) {
 /**
  * Implements hook_theme().
  *
- * Used to wrap the items in a specific class BEM way
+ * Used to wrap the items in a specific class BEM way.
  */
 function nexteuropa_inpage_nav_theme() {
   return array(

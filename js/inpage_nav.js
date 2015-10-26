@@ -1,3 +1,6 @@
+/**
+ * @file
+ */
 (function ($) {
   Drupal.behaviors.inpage_navigation = {
     fixWidth: function($e, $parent) {
@@ -14,7 +17,8 @@
       var currentItem = $("li.active > a", $navBar);
       if (currentItem.length == 0) {
         $navBarCurrent.text(Drupal.settings.inpage_navigation.node_title);
-      } else {
+      }
+      else {
         $navBarCurrent.text(currentItem.text());
       }
     },
@@ -31,18 +35,18 @@
             title = Drupal.settings.inpage_navigation.node_title;
 
         // Calculate width on window resize, and check offset height of in-page
-        // nav block
+        // nav block.
         $(window).resize(function(e) {
           Drupal.behaviors.inpage_navigation.fixWidth($inPageBlock, $inPageBlockParent);
 
           inPageBlockTop = $inPageBlock.offset().top;
           inPageBlockHeight = $inPageBlock.height();
 
-          // Refresh scrollspy
+          // Refresh scrollspy.
           $('body').scrollspy('refresh');
         });
 
-        var $navBar = $('<div class="inpage-nav__navbar-wrapper is-scrollspy-target"><nav class="navbar navbar-default navbar-fixed-top inpage-nav__navbar"><div class="container inpage-nav__container"><div class="navbar-header inpage-nav__header"  data-toggle="collapse" data-target="#inpage-navigation-list" aria-expanded="false" aria-controls="navbar"><button type="button" class="navbar-toggle collapsed inpage-nav__toggle"><span class="sr-only">' + Drupal.t("Toggle navigation") + '</span><span class="inpage-nav__icon-arrow icon icon--arrow-down"></span></button><span class="navbar-brand inpage-nav__help">' +  Drupal.t('On this page') + '</span><div class="inpage-nav__current-wrapper"><span class="navbar-brand inpage-nav__current">' +  title + '</span></div></div><div class="navbar-collapse collapse" id="inpage-navigation-list"><span class="inpage-nav__title" >' +  title + '</span>' + $inPage.html() + '</div></div></nav>'),
+        var $navBar = $('<div class="inpage-nav__navbar-wrapper is-scrollspy-target"><nav class="navbar navbar-default navbar-fixed-top inpage-nav__navbar"><div class="container inpage-nav__container"><div class="navbar-header inpage-nav__header"  data-toggle="collapse" data-target="#inpage-navigation-list" aria-expanded="false" aria-controls="navbar"><button type="button" class="navbar-toggle collapsed inpage-nav__toggle"><span class="sr-only">' + Drupal.t("Toggle navigation") + '</span><span class="inpage-nav__icon-arrow icon icon--arrow-down"></span></button><span class="navbar-brand inpage-nav__help">' + Drupal.t('On this page') + '</span><div class="inpage-nav__current-wrapper"><span class="navbar-brand inpage-nav__current">' + title + '</span></div></div><div class="navbar-collapse collapse" id="inpage-navigation-list"><span class="inpage-nav__title" >' + title + '</span>' + $inPage.html() + '</div></div></nav>'),
             $navBarHeader = $('.inpage-nav__header', $navBar),
             $navBarCurrent = $('.inpage-nav__current', $navBar),
             $navBarTitle = $('.inpage-nav__title', $navBar),
@@ -53,14 +57,14 @@
         $('body').append($navBar);
 
         enquire.register("screen and (min-width: 992px)", {
-          // desktop
+          // Desktop.
           match : function() {
             // Adding function that is calculating and adding inpage-nav block
             // width. This is due to usage of position: fixed on the inpage-nav
             // element.
             Drupal.behaviors.inpage_navigation.fixWidth($inPageBlock, $inPageBlockParent);
 
-            // Remove class that adds overflow: hidden to body
+            // Remove class that adds overflow: hidden to body.
             $('body').removeClass('is-inpage-nav-open');
             $inPageBlock.affix('checkPosition');
           },
@@ -91,7 +95,7 @@
             });
 
             $navBar.on("activate.bs.scrollspy", function(e) {
-              // Set title to current;
+              // Set title to current;.
               Drupal.behaviors.inpage_navigation.currentTitle($navBar, $navBarCurrent);
             });
 
@@ -109,7 +113,7 @@
 
             $(window).scroll(function(e) {
               $window = $(this);
-              // Set title to current;
+              // Set title to current;.
               Drupal.behaviors.inpage_navigation.currentTitle($navBar, $navBarCurrent);
 
               // Show navbar if scroll is under the block.
@@ -119,16 +123,17 @@
 
               if (inPageBottom <= docViewTop) {
                 $navBar.addClass('is-active');
-              } else {
+              }
+              else {
                 $navBar.removeClass('is-active');
                 $('#inpage-navigation-list').collapse('hide');
               }
             });
           },
 
-          // mobile
+          // Mobile.
           unmatch : function() {
-            // Collapse navbar on changing to mobile behavior
+            // Collapse navbar on changing to mobile behavior.
             if ($('.inpage-nav__navbar-wrapper').hasClass('is-collapsed')) {
               $('#inpage-navigation-list').collapse('hide');
             }

@@ -30,7 +30,7 @@ function theme_nexteuropa_bem_item_list($variables) {
   $attributes['class'] = array_merge($attributes['class'], $modifiers);
 
   $output = '';
-  
+
   if (!empty($items)) {
     $output .= '<div class="listing__wrapper">';
     $output .= "<$type" . drupal_attributes($attributes) . '>';

@@ -22,7 +22,7 @@ class views_plugin_style_nexteuropa_listing extends views_plugin_style {
   /**
    * Form.
    */
-  function options_form(&$form, &$form_state) {
+  public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
     $form['listing_columns'] = array(

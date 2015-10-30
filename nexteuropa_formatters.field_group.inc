@@ -38,6 +38,16 @@ function nexteuropa_formatters_field_group_formatter_info() {
     ),
   );
 
+  $formatters['section_group'] = array(
+    'label' => t('Section Group'),
+    'description' => t('Section Group wrapper that should be used in display suite regions that are being wrapped with Section class'),
+    'instance_settings' => array(
+      'modifier' => '',
+      'layout' => '',
+      'classes' => '',
+    ),
+  );
+
   foreach (array_keys($formatters) as $key) {
     $formatter = &$formatters[$key];
     $formatter['instance_settings']['required_fields'] = 1;
@@ -87,6 +97,31 @@ function nexteuropa_formatters_field_group_format_settings($group) {
           '' => t('None'),
         ),
         '#default_value' => isset($group->format_settings['instance_settings']['modifier']) ? $group->format_settings['instance_settings']['modifier'] : '',
+      );
+      break;
+
+    case 'section_group':
+      $form['instance_settings']['modifier'] = array(
+        '#title' => t('Modifiers'),
+        '#type' => 'select',
+        '#options' => array(
+          '' => t('None'),
+          'section__group--full-width' => t('Full width'),
+          'section__group--highlight-grey' => t('Highlight Grey'),
+          'section__group--highlight-yellow' => t('Highlight Yellow'),
+        ),
+        '#default_value' => isset($group->format_settings['instance_settings']['modifier']) ? $group->format_settings['instance_settings']['modifier'] : '',
+      );
+
+      $form['instance_settings']['layout'] = array(
+        '#title' => t('Extra Layout'),
+        '#type' => 'select',
+        '#options' => array(
+          '' => t('None'),
+          'col-md-8' => t('Column 8'),
+          'col-md-9' => t('Column 9'),
+        ),
+        '#default_value' => isset($group->format_settings['instance_settings']['layout']) ? $group->format_settings['instance_settings']['layout'] : '',
       );
       break;
   }
@@ -153,6 +188,44 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
       // Add it.
       $add['#prefix'] = '<div class="context-nav' . $modifier_and_classes . '">';
       $add['#suffix'] = '</div>';
+
+      $element += $add;
+      break;
+
+    case 'section_group':
+      $add = array(
+        '#type' => 'markup',
+        '#weight' => $group->weight,
+        '#id' => $id,
+      );
+
+      // Add our modifiers and classes.
+      $modifier_and_classes = '';
+      // Add only those with data.
+      if (isset($group->format_settings['instance_settings']['modifier']) && $group->format_settings['instance_settings']['modifier'] !== '') {
+        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['modifier'];
+      }
+      if (isset($group->format_settings['instance_settings']['classes']) && $group->format_settings['instance_settings']['classes'] !== '') {
+        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['classes'];
+      }
+
+      if (isset($group->format_settings['instance_settings']['layout']) && $group->format_settings['instance_settings']['layout'] !== '') {
+        switch ($group->format_settings['instance_settings']['layout']) {
+          case 'col-md-8':
+            $add['#prefix'] = '<div class="section__group row' . $modifier_and_classes . '"><div class="col-md-8">';
+            $add['#suffix'] = '</div></div>';
+            break;
+
+          case 'col-md-9':
+            $add['#prefix'] = '<div class="section__group row' . $modifier_and_classes . '"><div class="col-md-9">';
+            $add['#suffix'] = '</div></div>';
+            break;
+        }
+      }
+      else {
+        $add['#prefix'] = '<div class="section__group' . $modifier_and_classes . '">';
+        $add['#suffix'] = '</div>';
+      }
 
       $element += $add;
       break;

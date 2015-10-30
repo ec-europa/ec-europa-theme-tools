@@ -1,6 +1,8 @@
 /**
  * @file
+ * In-page nav related behaviors.
  */
+
 (function ($) {
   Drupal.behaviors.inpage_navigation = {
     fixWidth: function($e, $parent) {

@@ -7,11 +7,11 @@
  /**
   * Returns HTML for a list or nested list of items.
   *
-  * @param $variables
+  * @param array $variables
   *   An associative array containing:
   *   - items: An array of items to be displayed in the list. If an item is a
   *     string, then it is used as is. If an item is an array, then the "data"
-  *     element of the array is used as the contents of the list item. If an item
+  *     element of the array is used as the contents of the list item. If item
   *     is an array with a "children" element, those children are displayed in a
   *     nested list. All other elements are treated as attributes of the list
   *     item element.
@@ -59,7 +59,12 @@ function theme_nexteuropa_bem_item_list($variables) {
       }
       if (count($children) > 0) {
         // Render nested list.
-        $data .= theme_nexteuropa_bem_item_list(array('items' => $children, 'title' => NULL, 'type' => $type, 'attributes' => $attributes));
+        $data .= theme_nexteuropa_bem_item_list(array(
+          'items' => $children,
+          'title' => NULL,
+          'type' => $type,
+          'attributes' => $attributes,
+        ));
       }
       if ($i == 1) {
         $attributes['class'][] = 'first';

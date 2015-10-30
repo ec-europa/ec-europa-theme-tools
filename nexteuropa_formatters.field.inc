@@ -456,21 +456,21 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
       if (!empty($summary)) {
         $summary .= '<br />';
       }
-      $summary .= t('BEM: List layout') . ': ' . $settings['nexteuropa_listing_columns'];
+      $summary .= t('BEM: List layout: %columns', array('%columns' => $settings['nexteuropa_listing_columns']));
     }
 
     if (isset($settings['nexteuropa_listing_modifier']) && !empty($settings['nexteuropa_listing_modifier'])) {
       if (!empty($summary)) {
         $summary .= '<br />';
       }
-      $summary .= t('BEM: Listing Modifier') . ': ' . $settings['nexteuropa_listing_modifier'];
+      $summary .= t('BEM: Listing Modifier: %modifier', array('%modifier' => $settings['nexteuropa_listing_modifier']));
     }
 
     if (isset($settings['nexteuropa_listing_wrapper_modifier']) && !empty($settings['nexteuropa_listing_wrapper_modifier'])) {
       if (!empty($summary)) {
         $summary .= '<br />';
       }
-      $summary .= t('BEM: Listing Wrapper Modifier') . ': ' . $settings['nexteuropa_listing_wrapper_modifier'];
+      $summary .= t('BEM: Listing Wrapper Modifier: %wrapper_modifier', array('%wrapper_modifier' => $settings['nexteuropa_listing_wrapper_modifier']));
     }
   }
 }

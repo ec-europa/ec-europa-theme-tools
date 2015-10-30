@@ -1,6 +1,8 @@
 /**
  * @file
+ * Contextual navigation related behaviors.
  */
+
 (function ($) {
   Drupal.behaviors.contextual_nav = {
     attach: function(context) {

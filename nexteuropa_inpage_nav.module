@@ -42,24 +42,15 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
 
     $content_language = $node->language;
     // Find first available translation that is applicable.
-<<<<<<< HEAD:lib/modules/nexteuropa_inpage_nav/nexteuropa_inpage_nav.module
-    foreach ($content_language_order as $language_code) {
-      $translation = entity_translation_get_existing_language('node', $node, $language_code);
-      // We have a translation so lets use it.
-      if ($translation == $language_code) {
-        $content_language = $language_code;
-        break;
-=======
     if (!empty($content_language_order)) {
       foreach ($content_language_order as $language_code) {
         $translation = entity_translation_get_existing_language('node', $node, $language_code);
-        //We have a translation so lets use it.
+        // We have a translation so lets use it.
         if ($translation == $language_code) {
           $content_language = $language_code;
           break;
         }
         $content_language = $translation;
->>>>>>> 14357719795bd856c5313eeb355934e098a06b13:project/modules/custom/nexteuropa_inpage_nav/nexteuropa_inpage_nav.module
       }
     }
     $layout = ds_get_layout('node', $node->type, 'full');

@@ -20,7 +20,13 @@ function nexteuropa_inpage_nav_block_info() {
  */
 function nexteuropa_inpage_nav_block_view($delta = '') {
   // Get our preferred content languages order.
-  $content_language_order = _dt_core_content_language_order();
+  $content_language_order = array();
+  if (function_exists('_dt_core_content_language_order')) {
+    $content_language_order = _dt_core_content_language_order();
+  }
+  elseif (function_exists('_cwt_core_content_language_order')) {
+    $content_language_order = _cwt_core_content_language_order();
+  }
 
   $block = array();
 
@@ -36,16 +42,26 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
 
     $content_language = $node->language;
     // Find first available translation that is applicable.
+<<<<<<< HEAD:lib/modules/nexteuropa_inpage_nav/nexteuropa_inpage_nav.module
     foreach ($content_language_order as $language_code) {
       $translation = entity_translation_get_existing_language('node', $node, $language_code);
       // We have a translation so lets use it.
       if ($translation == $language_code) {
         $content_language = $language_code;
         break;
+=======
+    if (!empty($content_language_order)) {
+      foreach ($content_language_order as $language_code) {
+        $translation = entity_translation_get_existing_language('node', $node, $language_code);
+        //We have a translation so lets use it.
+        if ($translation == $language_code) {
+          $content_language = $language_code;
+          break;
+        }
+        $content_language = $translation;
+>>>>>>> 14357719795bd856c5313eeb355934e098a06b13:project/modules/custom/nexteuropa_inpage_nav/nexteuropa_inpage_nav.module
       }
-      $content_language = $translation;
     }
-
     $layout = ds_get_layout('node', $node->type, 'full');
     $layout_field_settings = ds_get_field_settings('node', $node->type, 'full');
     // DS region to work with.

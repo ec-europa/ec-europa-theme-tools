@@ -27,35 +27,35 @@ function nexteuropa_formatters_field_formatter_info() {
       ),
     ),
     'link_button_default' => array(
-      'label' => 'Link button default',
+      'label' => t('Link button default'),
       'field types' => array(
         'link_field',
         'taxonomy_term_reference',
       ),
     ),
     'link_button_primary' => array(
-      'label' => 'Link button primary',
+      'label' => t('Link button primary'),
       'field types' => array(
         'link_field',
         'taxonomy_term_reference',
       ),
     ),
     'link_button_secondary' => array(
-      'label' => 'Link button secondary',
+      'label' => t('Link button secondary'),
       'field types' => array(
         'link_field',
         'taxonomy_term_reference',
       ),
     ),
     'link_button_call_for_action' => array(
-      'label' => 'Link button call for action',
+      'label' => t('Link button call for action'),
       'field types' => array(
         'link_field',
         'taxonomy_term_reference',
       ),
     ),
     'link_button_block' => array(
-      'label' => 'Link button block',
+      'label' => t('Link button block'),
       'field types' => array(
         'link_field',
         'taxonomy_term_reference',
@@ -68,14 +68,14 @@ function nexteuropa_formatters_field_formatter_info() {
       ),
     ),
     'link_listing_title' => array(
-      'label' => 'Listing title',
+      'label' => t('Listing title'),
       'field types' => array(
         'link_field',
         'taxonomy_term_reference',
       ),
     ),
     'entity_reference_section' => array(
-      'label' => 'Entity reference section group',
+      'label' => t('Entity reference section group'),
       'field types' => array(
         'entityreference',
       ),
@@ -367,21 +367,82 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
  */
 function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, $instance, $items, $display, $formatter, $element) {
   foreach ($items as $delta => $item) {
-    // Set attribute from formatter settings.
-    $item['attributes']['class'] = _nexteuropa_formatters_field_formatter_view_classes($formatter);
 
-    // Call theme function of link module (theme_link_formatter_link_default).
-    $element[$delta] = array(
-      '#theme' => 'link_formatter_link_default',
-      '#element' => $item,
-      '#field' => $instance,
-      '#display' => $display,
-      '#prefix' => '<div class="listing__item">',
-      '#suffix' => '</div>',
-    );
+    switch ($field['type']) {
+      case 'link_field':
+        // Set attribute from formatter settings.
+        $formatter_class_default = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+        $title_item_modifier = $display['settings']['nexteuropa_title_item_modifier'];
+        $title_item_link_modifier = $display['settings']['nexteuropa_title_item_link_modifier'];
+
+        if (isset($title_item_link_modifier) && $title_item_link_modifier !== '') {
+          $item['attributes']['class'] = $formatter_class_default . ' ' . $title_item_link_modifier;
+        }
+        else {
+          $item['attributes']['class'] = $formatter_class_default;
+        }
+
+        $element[$delta] = array(
+          '#theme' => 'link_formatter_link_default',
+          '#element' => $item,
+          '#field' => $instance,
+          '#display' => $display,
+        );
+
+        if (isset($title_item_modifier) && $title_item_modifier !== '') {
+          $element[$delta]['#prefix'] = '<div class="listing__item ' . $title_item_modifier . '">';
+          $element[$delta]['#suffix'] = '</div>';
+        }
+        else {
+          $element[$delta]['#prefix'] = '<div class="listing__item">';
+          $element[$delta]['#suffix'] = '</div>';
+        }
+        break;
+
+      case 'taxonomy_term_reference':
+        $title_item_modifier = $display['settings']['nexteuropa_title_item_modifier'];
+        $title_item_link_modifier = $display['settings']['nexteuropa_title_item_link_modifier'];
+        $term = entity_metadata_wrapper('taxonomy_term', taxonomy_term_load($item['tid']));
+
+        $element[$delta] = array(
+          '#theme' => 'link',
+          '#text' => $term->name->value(),
+          '#path' => $term->field_core_top_task_link->url->value(),
+          '#options' => array(
+            'attributes' => array(
+              'title' => $term->name->value(),
+            ),
+          ),
+          '#field' => $instance,
+          '#display' => $display,
+        );
+
+        if (isset($title_item_link_modifier) && $title_item_link_modifier !== '') {
+          $element[$delta]['#options']['attributes']['class'] = 'listing__item-link' . ' ' . $title_item_link_modifier;
+        }
+        else {
+          $element[$delta]['#options']['attributes']['class'] = 'listing__item-link';
+        }
+
+        if (isset($title_item_modifier) && $title_item_modifier !== '') {
+          $element[$delta]['#prefix'] = '<div class="listing__item ' . $title_item_modifier . '">';
+          $element[$delta]['#suffix'] = '</div>';
+        }
+        else {
+          $element[$delta]['#prefix'] = '<div class="listing__item">';
+          $element[$delta]['#suffix'] = '</div>';
+        }
+        break;
+    }
   }
   if ($field['cardinality'] == -1) {
-    $element['#prefix'] = '<div class="listing listing--title">';
+    $list_modifiers = $display['settings']['nexteuropa_title_listing_modifier'];
+    if ($list_modifiers !== '') {
+      $element['#prefix'] = "<div class='listing listing--title " . $list_modifiers . "'>";
+    }
+    else {
+      $element['#prefix'] = '<div class="listing listing--title">';
+    }
     $element['#suffix'] = '</div>';
     return $element;
   }
@@ -396,6 +457,11 @@ function nexteuropa_formatters_field_formatter_info_alter(&$info) {
     'nexteuropa_listing_columns' => 'default',
     'nexteuropa_listing_modifier' => '',
     'nexteuropa_listing_wrapper_modifier' => '',
+  );
+  $info['link_listing_title']['settings'] += array(
+    'nexteuropa_title_listing_modifier' => '',
+    'nexteuropa_title_item_modifier' => '',
+    'nexteuropa_title_item_link_modifier' => '',
   );
 }
 
@@ -439,6 +505,31 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
       '#description' => t('Class names separated by spaces.'),
     );
   }
+  elseif ($context['instance']['display'][$context['view_mode']]['type'] == 'link_listing_title') {
+    $display = $context['instance']['display'][$context['view_mode']];
+    $settings = $display['settings'];
+
+    $settings_form['nexteuropa_title_listing_modifier'] = array(
+      '#type' => 'textfield',
+      '#title' => t('List modifier'),
+      '#default_value' => $settings['nexteuropa_title_listing_modifier'],
+      '#description' => t('Class names separated by spaces.'),
+    );
+
+    $settings_form['nexteuropa_title_item_modifier'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Item modifier'),
+      '#default_value' => $settings['nexteuropa_title_item_modifier'],
+      '#description' => t('Class names separated by spaces.'),
+    );
+
+    $settings_form['nexteuropa_title_item_link_modifier'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Item link modifier'),
+      '#default_value' => $settings['nexteuropa_title_item_link_modifier'],
+      '#description' => t('Class names separated by spaces.'),
+    );
+  }
 }
 
 /**
@@ -471,6 +562,25 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
         $summary .= '<br />';
       }
       $summary .= t('BEM: Listing Wrapper Modifier: %wrapper_modifier', array('%wrapper_modifier' => $settings['nexteuropa_listing_wrapper_modifier']));
+    }
+  }
+  elseif ($context['instance']['display'][$context['view_mode']]['type'] == 'link_listing_title') {
+    $display = $context['instance']['display'][$context['view_mode']];
+    $settings = $display['settings'];
+
+    $modifiers = array(
+      'List modifier' => 'nexteuropa_title_listing_modifier',
+      'Item modifier' => 'nexteuropa_title_item_modifier',
+      'Item link modifier' => 'nexteuropa_title_item_link_modifier',
+    );
+
+    foreach ($modifiers as $label => $modifier) {
+      if (isset($settings[$modifier])) {
+        if (!empty($summary)) {
+          $summary .= '<br />';
+        }
+        $summary .= $label . ': ' . $settings[$modifier];
+      }
     }
   }
 }

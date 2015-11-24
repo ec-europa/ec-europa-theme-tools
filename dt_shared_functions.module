@@ -1,0 +1,129 @@
+<?php
+/**
+ * @file
+ * This file contains the shared functions between dt_core and cwt_core.
+ */
+
+class DtSharedSourceFieldError extends Exception {};
+class DtSharedDestinationFieldError extends Exception {};
+class DtSharedFieldTypeAreNotSame extends Exception {};
+class DtParentCircular extends Exception {};
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alters the exposed form to include some additional logic.
+ */
+function dt_shared_functions_form_views_exposed_form_alter(&$form, &$form_state) {
+  if (!$form_state['submitted']) {
+    // Hide the button, but only when js is available.
+    if (isset($form['reset']) && !empty($form['reset'])) {
+      $form['reset']['#attributes']['class'][] = 'js-hide';
+      $form['reset']['#attributes']['class'][] = 'js-showonsubmit';
+    }
+  }
+}
+
+/**
+ * Implements hook_ajax_render_alter().
+ *
+ * Hide the showonsubmit button after the ajax request.
+ */
+function dt_shared_functions_ajax_render_alter(&$commands) {
+  $commands[] = ajax_command_invoke('.js-showonsubmit', 'show');
+}
+
+
+/**
+ * Copy values from source to destination filed.
+ *
+ * @param string $entity_type
+ *   The type of entity, like: node.
+ * @param string $bundle
+ *   Entity bundle, like: page.
+ * @param string $source_field_name
+ *   Source field name, like: field_core_link.
+ * @param string $destination_field_name
+ *   Destination field, like: field_core_links.
+ *
+ * @throws \DtSharedSourceFieldError
+ *   Exception when no source field with the given name.
+ * @throws \DtSharedDestinationFieldError
+ *   Exception when no destination field with the given name.
+ * @throws \DtSharedFieldTypeAreNotSame
+ *   Exception when source and destination are not the same field type.
+ */
+function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name) {
+  // Source and destination field info.
+  $source_field_info = field_info_field($source_field_name);
+  $destination_field_info = field_info_field($destination_field_name);
+
+  // Error handling.
+  if (!$source_field_info) {
+    throw new DtSharedSourceFieldError(
+      t('There is not any %source (source field) with this name.', array(
+        '%source' => $source_field_name,
+      ))
+    );
+  }
+  if (!$destination_field_info) {
+    throw new DtSharedDestinationFieldError(
+      t('There is not any %source (source field) with this name.', array(
+        '%source' => $destination_field_name,
+      ))
+    );
+  }
+  if ($source_field_info['type'] != $destination_field_info['type']) {
+    throw new DtSharedFieldTypeAreNotSame(
+      t('%source (source) and %destination (destination) are not the same field type.', array(
+        '%source' => $source_field_name,
+        '%destination' => $destination_field_name,
+      ))
+    );
+  }
+  // Source field  is a multiple one.
+  $source_field_is_multiple = ($source_field_info['cardinality'] != 1) ? TRUE : FALSE;
+  // Destination field is a multiple one.
+  $destination_field_is_multiple = ($destination_field_info['cardinality'] != 1) ? TRUE : FALSE;
+
+  // Query the entities.
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', $entity_type)
+    ->entityCondition('bundle', $bundle);
+  $result = $query->execute();
+
+  // Use the result if any.
+  if (isset($result[$entity_type])) {
+    // Get the entity ids from result.
+    $ids = array_keys($result[$entity_type]);
+    // Load entities using ids.
+    $entities = entity_load($entity_type, $ids, array(), TRUE);
+    foreach ($entities as $entity) {
+      $entity_wrapper = entity_metadata_wrapper($entity_type, $entity);
+
+      // Check the source field for value.
+      if (
+        isset($entity_wrapper->$source_field_name)
+        && $entity_wrapper->$source_field_name->value()
+        && $entity_wrapper->$destination_field_name->value() == NULL
+      ) {
+        // Same cardinality.
+        if ($source_field_is_multiple == $destination_field_is_multiple) {
+          $entity_wrapper->$destination_field_name = $entity_wrapper->$source_field_name->value();
+        }
+        // Source is multiple field, but destination not,
+        // than take the first element.
+        elseif ($source_field_is_multiple && !$destination_field_is_multiple) {
+          $entity_wrapper->$destination_field_name = reset($entity_wrapper->$source_field_name->value());
+        }
+        // Source is single element field, but destination not,
+        // than use an array wrapper.
+        else {
+          // Take the first item of array.
+          $entity_wrapper->$destination_field_name = array($entity_wrapper->$source_field_name->value());
+        }
+        $entity_wrapper->save();
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+<?php
+/**
+ * @file
+ * nexteuropa_ds_fields.module
+ */
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function nexteuropa_ds_fields_ds_fields_info($entity_type) {
+  $fields = array();
+
+  $fields['comment_count'] = array(
+
+    // title: title of the field.
+    'title' => t('Comments count'),
+
+    'field_type' => DS_FIELD_TYPE_FUNCTION,
+    'function' => '_nexteuropa_ds_fields_token_replace',
+
+    // properties: can have different keys.
+    'properties' => array(
+      'value' => '[node:comment-count] comments',
+    ),
+  );
+
+  return array('node' => $fields);
+
+}
+
+/**
+ * Custom function for single token replacement in a field.
+ */
+function _nexteuropa_ds_fields_token_replace($field) {
+  if (isset($field['properties']['value'])) {
+    $value = $field['properties']['value'];
+    $value = token_replace($value, array($field['entity_type'] => $field['entity']), array('clear' => TRUE));
+    return $value;
+  }
+}

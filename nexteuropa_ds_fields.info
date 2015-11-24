@@ -1,0 +1,6 @@
+name = Nexteuropa Display Suite fields
+description  = "Generic Display Suite fields"
+package = "Nexteuropa Digital Transformation"
+core = 7.x
+
+dependencies[] = ds

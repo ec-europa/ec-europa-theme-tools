@@ -130,7 +130,9 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
 
 /**
  * Helper: fixes the language of a field.
- * @param $field_name string
+ *
+ * @param string $field_name
+ *   Machine name of field.
  */
 function _dt_shared_fix_field_language($field_name) {
   $language_default = language_default();
@@ -164,7 +166,9 @@ function _dt_shared_fix_field_language($field_name) {
 
 /**
  * Helper to move content between 'title' and 'title_field' fields.
- * @param $content_type
+ *
+ * @param string $content_type
+ *   Machine name of content type.
  */
 function _dt_shared_fix_titles($content_type) {
   // However, the tile is also still 'title', not 'title_field'.
@@ -175,7 +179,7 @@ function _dt_shared_fix_titles($content_type) {
     ->fetchCol();
 
   // Copy existing value to the new type of field.
-  foreach($ids as $id) {
+  foreach ($ids as $id) {
     $wrapper = entity_metadata_wrapper('node', $id);
     // Get current value from 'title'.
     $title = $wrapper->title->value();

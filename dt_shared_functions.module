@@ -181,5 +181,7 @@ function _dt_shared_fix_titles($content_type) {
     $title = $wrapper->title->value();
     // Not set this value to the 'title_field'.
     $wrapper->title_field->set($title);
+    // Save changes.
+    $wrapper->save();
   }
 }

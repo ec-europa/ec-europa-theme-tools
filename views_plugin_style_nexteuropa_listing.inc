@@ -16,6 +16,7 @@ class views_plugin_style_nexteuropa_listing extends views_plugin_style {
     $options['listing_columns'] = array('default' => NULL);
     $options['listing_modifier'] = array('default' => NULL);
     $options['listing_wrapper_modifier'] = array('default' => NULL);
+    $options['listing_item_modifier'] = array('default' => NULL);
     return $options;
   }
 
@@ -49,6 +50,13 @@ class views_plugin_style_nexteuropa_listing extends views_plugin_style {
       '#type' => 'textfield',
       '#title' => t('BEM: Listing Wrapper Modifier'),
       '#default_value' => $this->options['listing_wrapper_modifier'],
+      '#description' => t('Class names separated by spaces.'),
+    );
+
+    $form['listing_item_modifier'] = array(
+      '#type' => 'textfield',
+      '#title' => t('BEM: Listing Item Modifier'),
+      '#default_value' => $this->options['listing_item_modifier'],
       '#description' => t('Class names separated by spaces.'),
     );
   }

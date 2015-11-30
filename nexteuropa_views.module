@@ -34,6 +34,11 @@ function template_preprocess_views_view_nexteuropa_listing(&$variables) {
     $variables['listing_wrapper_modifier'] = ' ' . $style_plugin_options['listing_wrapper_modifier'];
   }
 
+  $variables['listing_item_modifier'] = '';
+  if (!empty($style_plugin_options['listing_item_modifier'])) {
+    $variables['listing_item_modifier'] = ' ' . $style_plugin_options['listing_item_modifier'];
+  }
+
   if ($row_plugin->plugin_name == 'ds') {
     $ds_view_mode = $row_plugin->options['view_mode'];
     $variables['ds_view_mode'] = ' listing--' . str_replace('_', '-', $ds_view_mode);

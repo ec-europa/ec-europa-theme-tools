@@ -10,7 +10,7 @@
   <?php foreach ($columns as $column): ?>
     <div class="listing<?php print (isset($ds_view_mode) ? $ds_view_mode : '') . $listing_modifier; ?>">
     <?php foreach ($column as $id => $row): ?>
-      <div class="listing__item">
+      <div class="listing__item<?php print $listing_item_modifier; ?>">
         <?php print $row; ?>
       </div>
     <?php endforeach; ?>

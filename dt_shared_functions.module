@@ -132,7 +132,7 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
  * Helper: fixes the language of a field.
  * @param $field_name string
  */
-function _dt_core_fix_field_language($field_name) {
+function _dt_shared_fix_field_language($field_name) {
   $language_default = language_default();
   $lang_code = $language_default->language;
 
@@ -166,7 +166,7 @@ function _dt_core_fix_field_language($field_name) {
  * Helper to move content between 'title' and 'title_field' fields.
  * @param $content_type
  */
-function _dt_core_fix_titles($content_type) {
+function _dt_shared_fix_titles($content_type) {
   // However, the tile is also still 'title', not 'title_field'.
   $ids = db_select('node', 'n')
     ->fields('n', array('nid'))

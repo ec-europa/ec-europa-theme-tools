@@ -130,34 +130,37 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
 
 /**
  * Helper: fixes the language of a field.
- * @param $field_name string
+ *
+ * @param string $field_name
+ *   Machine name of field.
  */
 function _dt_shared_fix_field_language($field_name) {
-  $language_default = language_default();
-  $lang_code = $language_default->language;
-
-  $query = "SELECT language, entity_id FROM " .
-    'field_data_' . $field_name .
-    " AS fdfb WHERE language = 'und' AND (SELECT count(*) FROM " .
-    'field_data_' . $field_name .
-    " WHERE entity_id = fdfb.entity_id GROUP BY entity_id ) = 1";
-  $data = db_query($query)->fetchAll();
-
-  foreach ($data as $key => $value) {
-    db_update('field_data_' . $field_name)
-      ->fields(array(
-        'language' => $lang_code,
-      ))
-      ->condition('entity_id', $value->entity_id)
-      ->condition('language', 'und', '=')
-      ->execute();
-
-    db_update('field_revision_' . $field_name)
-      ->fields(array(
-        'language' => $lang_code,
-      ))
-      ->condition('entity_id', $value->entity_id)
-      ->condition('language', 'und', '=')
-      ->execute();
+  // Default language.
+  $language_default = language_default()->language;
+  // Table names for update.
+  $table_names = array(
+    "field_data_$field_name",
+    "field_revision_$field_name",
+  );
+  foreach ($table_names as $table_name) {
+    $query = "
+      UPDATE
+        $table_name AS field_data
+        INNER JOIN (
+          SELECT
+            entity_id
+          FROM
+            $table_name
+          GROUP BY
+            entity_id
+          HAVING
+            count(*) = 1
+        ) AS filter ON filter.entity_id = field_data.entity_id
+      SET
+        language = '$language_default'
+      WHERE
+        language = 'und';
+    ";
+    db_query($query);
   }
 }

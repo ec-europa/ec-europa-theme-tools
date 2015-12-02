@@ -165,18 +165,3 @@ function _dt_shared_fix_field_language($field_name) {
   }
 }
 
-/**
- * Helper to move content between 'title' and 'title_field' fields.
- *
- * @param string $content_type
- *   Machine name of content type.
- */
-function _dt_shared_fix_titles($content_type) {
-  $nodes = node_load_multiple(array(), array('type' => 'file'));
-  foreach ($nodes as $node) {
-    $wrapper = entity_metadata_wrapper('node', $node);
-    $title = $wrapper->title->value();
-    $wrapper->title_field->set($title);
-    $wrapper->save();
-  }
-}

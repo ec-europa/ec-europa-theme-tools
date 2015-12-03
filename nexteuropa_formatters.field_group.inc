@@ -45,6 +45,9 @@ function nexteuropa_formatters_field_group_formatter_info() {
       'modifier' => '',
       'layout' => '',
       'classes' => '',
+      'show_label' => 0,
+      'attributes' => '',
+      'label_element' => 'h2',
     ),
   );
 
@@ -101,6 +104,26 @@ function nexteuropa_formatters_field_group_format_settings($group) {
       break;
 
     case 'section_group':
+      $form['instance_settings']['show_label'] = array(
+        '#title' => t('Show label'),
+        '#type' => 'select',
+        '#options' => array(0 => t('No'), 1 => t('Yes')),
+        '#default_value' => isset($group->format_settings['instance_settings']['show_label']) ? $group->format_settings['instance_settings']['show_label'] : $formatter['instance_settings']['show_label'],
+        '#weight' => 1,
+      );
+      $form['instance_settings']['label_element'] = array(
+        '#title' => t('Label element'),
+        '#type' => 'textfield',
+        '#default_value' => isset($group->format_settings['instance_settings']['label_element']) ? $group->format_settings['instance_settings']['label_element'] : $formatter['instance_settings']['label_element'],
+        '#weight' => 2,
+      );
+      $form['instance_settings']['attributes'] = array(
+        '#title' => t('Attributes'),
+        '#type' => 'textfield',
+        '#default_value' => isset($group->format_settings['instance_settings']['attributes']) ? $group->format_settings['instance_settings']['attributes'] : $formatter['instance_settings']['attributes'],
+        '#description' => t('E.g. name="anchor"'),
+        '#weight' => 3,
+      );
       $form['instance_settings']['modifier'] = array(
         '#title' => t('Modifiers'),
         '#type' => 'select',
@@ -111,8 +134,8 @@ function nexteuropa_formatters_field_group_format_settings($group) {
           'section__group--highlight-yellow' => t('Highlight Yellow'),
         ),
         '#default_value' => isset($group->format_settings['instance_settings']['modifier']) ? $group->format_settings['instance_settings']['modifier'] : '',
+        '#weight' => 4,
       );
-
       $form['instance_settings']['layout'] = array(
         '#title' => t('Extra Layout'),
         '#type' => 'select',
@@ -122,6 +145,7 @@ function nexteuropa_formatters_field_group_format_settings($group) {
           'col-md-9' => t('Column 9'),
         ),
         '#default_value' => isset($group->format_settings['instance_settings']['layout']) ? $group->format_settings['instance_settings']['layout'] : '',
+        '#weight' => 5,
       );
       break;
   }
@@ -193,6 +217,15 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
       break;
 
     case 'section_group':
+      $show_label = isset($group->format_settings['instance_settings']['show_label']) ? $group->format_settings['instance_settings']['show_label'] : 0;
+      $label_element = isset($group->format_settings['instance_settings']['label_element']) ? $group->format_settings['instance_settings']['label_element'] : 'h2';
+      $attributes = isset($group->format_settings['instance_settings']['attributes']) ? ' ' . $group->format_settings['instance_settings']['attributes'] : '';
+      $layout = isset($group->format_settings['instance_settings']['layout']) && $group->format_settings['instance_settings']['layout'] !== '';
+
+      if ($show_label) {
+        $label = '<' . $label_element . '><span>' . check_plain(t($group->label)) . '</span></' . $label_element . '>';
+      }
+
       $add = array(
         '#type' => 'markup',
         '#weight' => $group->weight,
@@ -209,21 +242,30 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
         $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['classes'];
       }
 
-      if (isset($group->format_settings['instance_settings']['layout']) && $group->format_settings['instance_settings']['layout'] !== '') {
+      if ($layout) {
         switch ($group->format_settings['instance_settings']['layout']) {
           case 'col-md-8':
-            $add['#prefix'] = '<div class="section__group row' . $modifier_and_classes . '"><div class="col-md-8">';
+            $add['#prefix'] = '<div ' . $attributes . ' class="section__group row' . $modifier_and_classes . '"><div class="col-md-8">';
+            if ($show_label) {
+              $add['#prefix'] .= $label;
+            }
             $add['#suffix'] = '</div></div>';
             break;
 
           case 'col-md-9':
-            $add['#prefix'] = '<div class="section__group row' . $modifier_and_classes . '"><div class="col-md-9">';
+            $add['#prefix'] = '<div ' . $attributes . ' class="section__group row' . $modifier_and_classes . '"><div class="col-md-9">';
+            if ($show_label) {
+              $add['#prefix'] .= $label;
+            }
             $add['#suffix'] = '</div></div>';
             break;
         }
       }
       else {
-        $add['#prefix'] = '<div class="section__group' . $modifier_and_classes . '">';
+        $add['#prefix'] = '<div ' . $attributes . ' class="section__group' . $modifier_and_classes . '">';
+        if ($show_label) {
+          $add['#prefix'] .= $label;
+        }
         $add['#suffix'] = '</div>';
       }
 

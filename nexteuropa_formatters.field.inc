@@ -660,7 +660,7 @@ function nexteuropa_formatters_ds_fields_info($entity_type) {
     'properties' => array(
       'view_machine_name' => 'team_members',
       'view_display' => 'block_2',
-      'view_arguments' => array('name'),
+      'view_arguments' => array('role'),
     ),
   );
 

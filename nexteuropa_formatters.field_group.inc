@@ -223,7 +223,7 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
       $layout = isset($group->format_settings['instance_settings']['layout']) && $group->format_settings['instance_settings']['layout'] !== '';
 
       if ($show_label) {
-        $label = '<' . $label_element . '><span>' . check_plain(t($group->label)) . '</span></' . $label_element . '>';
+        $label = '<' . $label_element . '><span>' . check_plain($group->label) . '</span></' . $label_element . '>';
       }
 
       $add = array(

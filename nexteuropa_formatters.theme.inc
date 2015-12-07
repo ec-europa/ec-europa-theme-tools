@@ -115,7 +115,7 @@ function theme_nexteuropa_file_translations($variables) {
         'title' => t('Click to see translations'),
       ),
       '#title' => t("All languages @count", array('@count' => $files_count))
-      . " <span class='icon icon--down-blue'></span>",
+      . " <span class='icon icon--down icon--blue-dark'></span>",
     );
     // Attaching the link.
     $output .= render($link);

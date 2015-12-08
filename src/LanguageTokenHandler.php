@@ -32,8 +32,9 @@ class LanguageTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHandler
             $language_token_value = _dt_shared_functions_content_language($node);
           }
           else {
-            // On other cases we fall back to english.
-            $language_token_value = 'en';
+            global $language;
+            // On other cases we fall back to interface..
+            $language_token_value = $language->language;
           }
 
           // Set the replacement.

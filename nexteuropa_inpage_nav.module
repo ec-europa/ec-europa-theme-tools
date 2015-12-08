@@ -61,13 +61,18 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
           $node_wrapper = entity_metadata_wrapper('node', $node);
           $body = $node_wrapper->language($content_language)->body->value->value();
           $headings = _nexteuropa_inpage_nav_markup_anchor($body);
-          $field_info = field_info_instance('node', $element, $node->type);
-          $weight = isset($field_info['display']['full']) ? $field_info['display']['full']['weight'] : $field_info['display']['default']['weight'];
-          $body_heading_count = 1;
-          foreach ($headings as $heading) {
-            $items['body_' . $body_heading_count]['weight'] = $weight + $body_heading_count;
-            $items['body_' . $body_heading_count]['item'] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
-            $body_heading_count++;
+          if (!empty($headings)) {
+            $field_info = field_info_instance('node', $element, $node->type);
+            $weight = isset($field_info['display']['full']) ? $field_info['display']['full']['weight'] : $field_info['display']['default']['weight'];
+            $body_heading_count = 1;
+            $items['body']['weight'] = $weight;
+            foreach ($headings as $heading) {
+              $current_heading = 'body_' . $body_heading_count;
+              $items['body']['children'][] = $current_heading;
+              $items[$current_heading]['weight'] = $body_heading_count;
+              $items[$current_heading]['item'] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
+              $body_heading_count++;
+            }
           }
         }
 
@@ -96,21 +101,25 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
       $headings = _nexteuropa_inpage_nav_markup_anchor($body);
       $body_heading_count = 1;
       foreach ($headings as $heading) {
-        $items['body_' . $body_heading_count]['weight'] = $body_heading_count;
-        $items['body_' . $body_heading_count]['item'] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
+        $current_heading = 'body_' . $body_heading_count;
+        $items[$current_heading]['weight'] = $body_heading_count;
+        $items[$current_heading]['item'] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
         $body_heading_count++;
       }
     }
 
     if (!empty($items)) {
       // Sort items.
-      // First by date, ignoring groups.
+      // First by weight, ignoring groups.
       uasort($items, function($a, $b) {
         return $a['weight'] - $b['weight'];
       });
       $sorted = array();
       foreach ($items as $element => $item) {
-        $sorted[$element] = $item['item'];
+        // Add only if it has item and not only children. See 'body'.
+        if (isset($item['item'])) {
+          $sorted[$element] = $item['item'];
+        }
         if (isset($item['children'])) {
           foreach ($item['children'] as $child) {
             // Check if child needs to be added.

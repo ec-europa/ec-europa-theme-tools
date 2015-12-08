@@ -21,8 +21,8 @@ function nexteuropa_inpage_nav_block_info() {
 function nexteuropa_inpage_nav_block_view($delta = '') {
   // Get our preferred content languages order.
   $content_language_order = array();
-  if (function_exists('_dt_core_content_language_order')) {
-    $content_language_order = _dt_core_content_language_order();
+  if (function_exists('_dt_shared_functions_content_language_order')) {
+    $content_language_order = _dt_shared_functions_content_language_order();
   }
   elseif (function_exists('_cwt_core_content_language_order')) {
     $content_language_order = _cwt_core_content_language_order();
@@ -41,7 +41,7 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
     }
 
     // Find first available translation that is applicable.
-    $content_language = _dt_core_content_language($node);
+    $content_language = _dt_shared_functions_content_language($node);
 
     $layout = ds_get_layout('node', $node->type, 'full');
     $layout_field_settings = ds_get_field_settings('node', $node->type, 'full');

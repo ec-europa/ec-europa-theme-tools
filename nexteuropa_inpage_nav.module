@@ -116,7 +116,8 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
       });
       $sorted = array();
       foreach ($items as $element => $item) {
-        // Add only if it has item and not only children. See 'body'.
+        // Add only if it has item and not only children.
+        // See: 'body' has only children.
         if (isset($item['item'])) {
           $sorted[$element] = $item['item'];
         }

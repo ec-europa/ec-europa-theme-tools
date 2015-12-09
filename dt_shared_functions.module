@@ -25,6 +25,15 @@ class DtSharedFieldTypeAreNotSame extends Exception {}
 class DtParentCircular extends Exception {}
 
 /**
+ * Implements hook_token_info().
+ */
+function dt_shared_functions_token_info() {
+  $token_info = array();
+  nexteuropa_token_get_handler('language_handler')->hookTokenInfoAlter($token_info);
+  return $token_info;
+}
+
+/**
  * Implements hook_nexteuropa_token_token_handlers().
  */
 function dt_shared_functions_nexteuropa_token_token_handlers() {

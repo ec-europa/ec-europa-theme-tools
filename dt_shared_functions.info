@@ -5,4 +5,6 @@ package = NextEuropa
 version = 7.x-1.0
 project = nexteuropa
 
+registry_autoload[] = PSR-4
+
 dependencies[] = views

@@ -1,0 +1,36 @@
+<?php
+/**
+ * @file
+ * Dt_shared_functions.install file.
+ */
+
+/**
+ * Removing 2 conflicting theme settings.
+ */
+function dt_shared_functions_update_7101() {
+  $themes = list_themes();
+  foreach ($themes as $theme_obj) {
+    if ($theme_obj->status) {
+      // Current theme.
+      $theme = $theme_obj->name;
+      // Target correct variable.
+      $target_settings = 'theme_' . $theme . '_settings';
+      // Get the current settings.
+      $theme_settings = variable_get($target_settings, FALSE);
+      // If settings are not there, configure it, otherwise adapt them.
+      if (!$theme_settings) {
+        $theme_settings = array(
+          'bootstrap_anchors_fix' => 0,
+          'bootstrap_anchors_smooth_scrolling' => 0,
+        );
+      }
+      else {
+        $theme_settings['bootstrap_anchors_fix'] = 0;
+        $theme_settings['bootstrap_anchors_smooth_scrolling'] = 0;
+      }
+
+      // Store the settings again.
+      variable_set($target_settings, $theme_settings);
+    }
+  }
+}

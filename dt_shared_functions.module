@@ -1,13 +1,28 @@
 <?php
+
 /**
  * @file
  * This file contains the shared functions between dt_core and cwt_core.
  */
+class DtSharedSourceFieldError extends Exception {
+}
 
-class DtSharedSourceFieldError extends Exception {};
-class DtSharedDestinationFieldError extends Exception {};
-class DtSharedFieldTypeAreNotSame extends Exception {};
-class DtParentCircular extends Exception {};
+;
+
+class DtSharedDestinationFieldError extends Exception {
+}
+
+;
+
+class DtSharedFieldTypeAreNotSame extends Exception {
+}
+
+;
+
+class DtParentCircular extends Exception {
+}
+
+;
 
 /**
  * Implements hook_form_FORM_ID_alter().

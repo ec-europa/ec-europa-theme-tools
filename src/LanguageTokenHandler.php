@@ -50,6 +50,12 @@ class LanguageTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHandler
    * {@inheritdoc}
    */
   public function hookTokenInfoAlter(&$data) {
+    // Define the group.
+    $data['types'][self::TOKEN_TYPE] = array(
+      'name' => t('Dt tokens'),
+      'description' => t('Dt custom tokens'),
+    );
+    // And the token.
     $data['tokens'][self::TOKEN_TYPE][self::TOKEN_NAME] = array(
       'name' => t("DT Content language"),
       'description' => t("The real language of the content - not the interface."),

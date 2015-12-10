@@ -4,10 +4,34 @@
  * This file contains the shared functions between dt_core and cwt_core.
  */
 
-class DtSharedSourceFieldError extends Exception {};
-class DtSharedDestinationFieldError extends Exception {};
-class DtSharedFieldTypeAreNotSame extends Exception {};
-class DtParentCircular extends Exception {};
+/**
+ * No source field Exception.
+ */
+class DtSharedSourceFieldError extends Exception {}
+
+/**
+ * No destionation field Exception.
+ */
+class DtSharedDestinationFieldError extends Exception {}
+
+/**
+ * Fields are of same tye Exception.
+ */
+class DtSharedFieldTypeAreNotSame extends Exception {}
+
+/**
+ * Circular reference Exception.
+ */
+class DtParentCircular extends Exception {}
+
+/**
+ * Implements hook_nexteuropa_token_token_handlers().
+ */
+function dt_shared_functions_nexteuropa_token_token_handlers() {
+  return array(
+    'language_handler' => '\Drupal\dt_shared_functions\LanguageTokenHandler',
+  );
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -163,4 +187,66 @@ function _dt_shared_fix_field_language($field_name) {
     ";
     db_query($query);
   }
+}
+
+/**
+ * Get the final content language after applying translations and fallbacks.
+ */
+function _dt_shared_functions_content_language($node) {
+  // Load potential relevant languages in the correct fallback order.
+  $content_language_order = _dt_shared_functions_content_language_order();
+  $content_language = $node->language;
+  // Find first available translation that is applicable.
+  if (!empty($content_language_order)) {
+    foreach ($content_language_order as $language_code) {
+      $translation = entity_translation_get_existing_language('node', $node, $language_code);
+      // We have a translation so lets use it.
+      if ($translation == $language_code) {
+        $content_language = $language_code;
+        break;
+      }
+      $content_language = $translation;
+    }
+  }
+
+  return $content_language;
+}
+
+/**
+ * Get the languages that are applicable in the right order of fallback.
+ */
+function _dt_shared_functions_content_language_order() {
+  global $language;
+  // Get the first few languages of our fallback array. If we have a 2nd
+  // language parameter set, we have to work with an additional language. If
+  // not, we only need one.
+  // Set our maximum languages to check.
+  $max_languages = 1;
+  // First we get our url parameters.
+  $parameters = drupal_get_query_parameters();
+  // Check if the 2nd-language parameter is set.
+  if (isset($parameters['2nd-language']) && $parameters['2nd-language'] !== 'en') {
+    // Extend maximum to include the 2nd-language.
+    $max_languages = 2;
+  }
+  // Get the maximum extra languages.
+  $fallback_languages = array_slice(language_fallback_get_candidates(), 0, $max_languages);
+  // Add our current site language to the array.
+  if (!in_array($language->language, $fallback_languages)) {
+    array_unshift($fallback_languages, $language->language);
+  }
+  else {
+    // Our default language is in the array but might not be the first. So we
+    // move it.
+    // Get the key of the language.
+    $main_language_key = array_search($language->language, $fallback_languages);
+    // Store it temporary.
+    $prepend_language = $fallback_languages[$main_language_key];
+    // Remove the item.
+    unset($fallback_languages[$main_language_key]);
+    // Then add it to the front.
+    array_unshift($fallback_languages, $prepend_language);
+  }
+
+  return $fallback_languages;
 }

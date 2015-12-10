@@ -6,20 +6,12 @@
 
 define('NEXTEUROPA_INPAGE_NAV_DEPTH', 'h2');
 
-global $_nexteuropa_inpage_nav_headings_;
-
 /**
  * Implements hook_init().
  */
 function nexteuropa_inpage_nav_init() {
-  global $_nexteuropa_inpage_nav_headings_;
-  if ($node = menu_get_object('node')) {
-    node_build_content($node);
-    $content = $node->content;
-    unset($content['in_page_navigation']);
-    $html = drupal_render($content);
-    $_nexteuropa_inpage_nav_headings_ = _nexteuropa_inpage_nav_markup_anchor($html);
-  }
+  // Build the anchors.
+  _nexteuropa_inpage_nav_markup_anchor();
 }
 
 /**
@@ -35,19 +27,25 @@ function nexteuropa_inpage_nav_block_info() {
  * Implements hook_block_view().
  */
 function nexteuropa_inpage_nav_block_view($delta = '') {
-  global $_nexteuropa_inpage_nav_headings_;
   $block = array();
 
-  if ($delta === "inline_navigation") {
+  // Get our static variable.
+  $anchors = &drupal_static('_nexteuropa_inpage_nav_markup_anchor');
+
+  if (is_array($anchors) && $delta === "inline_navigation") {
+    // Initialize the block.
     $block['content'] = array();
     $items = array();
 
-    if (empty($_nexteuropa_inpage_nav_headings_) || !($node = menu_get_object('node'))) {
-
-      return $block;
+    // Also lets try to use the cached node object.
+    if (isset($anchors['node'])) {
+      $node = $anchors['node'];
     }
-
-    foreach ($_nexteuropa_inpage_nav_headings_ as $heading) {
+    else {
+      $node = menu_get_object();
+    }
+    // Loop our anchors.
+    foreach ($anchors['anchorlist'] as $heading) {
       $items[] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
     }
 
@@ -71,17 +69,51 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
 /**
  * Helper: returns the list of heading anchors in the markup.
  */
-function _nexteuropa_inpage_nav_markup_anchor($markup) {
-  $pattern = "/<" . NEXTEUROPA_INPAGE_NAV_DEPTH . ".*?id=\"(.[^\"]*)\".*?>(.[^\<]*)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">/";
-  preg_match_all($pattern, $markup, $matches);
-  $anchors = array();
-  foreach ($matches[1] as $i => $id) {
-    $anchors[] = array(
-      'id' => $id,
-      'label' => $matches[2][$i],
-    );
+function _nexteuropa_inpage_nav_markup_anchor() {
+  // Create static.
+  $anchors = &drupal_static('_nexteuropa_inpage_nav_markup_anchor');
+  // If $anchors is not yet an array we parse it.
+  if (!is_array($anchors) && $node = menu_get_object('node')) {
+    unset($node->field_core_in_page_navigation);
+    $markup = drupal_render(node_view($node));
   }
-  return $anchors;
+  else {
+    return FALSE;
+  }
+  // Initialize our array.
+  $inpage_nav_list = array();
+  // Load the document html.
+  $doc = new DOMDocument();
+  @$doc->loadHTML($markup);
+  // Loop all the elements.
+  foreach ($doc->getElementsByTagName('*') as $element) {
+    // If the element has an id tag we check for h2 elements.
+    if ($elementid = $element->getAttribute('id')) {
+      // Check if it is already an h2 element.
+      if ($element->tagName == NEXTEUROPA_INPAGE_NAV_DEPTH) {
+        // The element is an h2 tag.
+        $inpage_nav_list[] = array(
+          'id' => $elementid,
+          'label' => $element->nodeValue,
+        );
+      }
+      else {
+        // In other cases we search for the first child.
+        foreach ($element->getElementsByTagName(NEXTEUROPA_INPAGE_NAV_DEPTH) as $h2element) {
+          // The element is an h2 tag.
+          $inpage_nav_list[] = array(
+            'id' => $elementid,
+            'label' => $h2element->nodeValue,
+          );
+        }
+      }
+    }
+  }
+  // Return the data.
+  $anchors = array(
+    'anchorlist' => $inpage_nav_list,
+    'node' => $node,
+  );
 }
 
 /**

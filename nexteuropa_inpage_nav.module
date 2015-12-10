@@ -5,6 +5,19 @@
  */
 
 define('NEXTEUROPA_INPAGE_NAV_DEPTH', 'h2');
+global $_nexteuropa_inpage_nav_headings_;
+/**
+ * Implements hook_node_view().
+ */
+function nexteuropa_inpage_nav_init() {
+  global $_nexteuropa_inpage_nav_headings_;
+  $node = menu_get_object('node');
+  node_build_content($node);
+  $content = $node->content;
+  unset($content['in_page_navigation']);
+  $html = drupal_render($content);
+  $_nexteuropa_inpage_nav_headings_ = _nexteuropa_inpage_nav_markup_anchor($html);
+}
 
 /**
  * Implements hook_block_info().
@@ -19,130 +32,30 @@ function nexteuropa_inpage_nav_block_info() {
  * Implements hook_block_view().
  */
 function nexteuropa_inpage_nav_block_view($delta = '') {
-  // Get our preferred content languages order.
-  $content_language_order = array();
-  if (function_exists('_dt_shared_functions_content_language_order')) {
-    $content_language_order = _dt_shared_functions_content_language_order();
-  }
-  elseif (function_exists('_cwt_core_content_language_order')) {
-    $content_language_order = _cwt_core_content_language_order();
-  }
-
+  global $_nexteuropa_inpage_nav_headings_;
   $block = array();
 
   if ($delta === "inline_navigation") {
     $block['content'] = array();
     $items = array();
 
-    $node = menu_get_object('node');
-    if (!$node) {
+    if (empty($_nexteuropa_inpage_nav_headings_)) {
 
       return $block;
     }
 
-    // Find first available translation that is applicable.
-    $content_language = _dt_shared_functions_content_language($node);
-
-    $layout = ds_get_layout('node', $node->type, 'full');
-    $layout_field_settings = ds_get_field_settings('node', $node->type, 'full');
-    // DS region to work with.
-    $scope = 'central';
-
-    if (!empty($layout) && isset($layout['settings']['fields'])) {
-      foreach ($layout['settings']['fields'] as $element => $region) {
-        if ($region !== $scope) {
-          continue;
-        }
-        $item = FALSE;
-        $children = FALSE;
-
-        // Get anchored headings from body field.
-        if ($element == 'body' && !empty($node->body)) {
-          $node_wrapper = entity_metadata_wrapper('node', $node);
-          $body = $node_wrapper->language($content_language)->body->value->value();
-          $headings = _nexteuropa_inpage_nav_markup_anchor($body);
-          if (!empty($headings)) {
-            $field_info = field_info_instance('node', $element, $node->type);
-            $weight = isset($field_info['display']['full']) ? $field_info['display']['full']['weight'] : $field_info['display']['default']['weight'];
-            $body_heading_count = 1;
-            $items['body']['weight'] = $weight;
-            foreach ($headings as $heading) {
-              $current_heading = 'body_' . $body_heading_count;
-              $items['body']['children'][] = $current_heading;
-              $items[$current_heading]['weight'] = $body_heading_count;
-              $items[$current_heading]['item'] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
-              $body_heading_count++;
-            }
-          }
-        }
-
-        // If field, check if label is matching our depth and id attribute.
-        if (isset($node->{$element}) && isset($layout_field_settings[$element]) && $id = _nexteuropa_inpage_nav_field_anchor($layout_field_settings[$element], $node->{$element})) {
-          // Get the field label.
-          $field_info = field_info_instance('node', $element, $node->type);
-          $translated_label = i18n_field_translate_property($field_info, 'label', $content_language);
-          $items[$element]['weight'] = $field_info['display']['full']['weight'];
-          $items[$element]['item'] = '<a href="#' . $id . '" class="inpage_nav__list-item">' . $translated_label . '</a>';
-        }
-
-        // If group, check if group label has id attribute to be used as anchor.
-        if (preg_match('/group*/', $element) && $group = field_group_load_field_group($element, 'node', $node->type, 'full')) {
-          if ($group_anchor = _nexteuropa_inpage_nav_group_anchor($group, $node)) {
-            $items[$element]['weight'] = $group->weight;
-            $items[$element]['children'] = $group->children;
-            $items[$element]['item'] = '<a href="#' . $group_anchor['id'] . '" class="inpage_nav__list-item">' . t($group_anchor['label'], array(), array('langcode' => $content_language)) . '</a>';
-          }
-        }
-      }
-    }
-    elseif (!empty($node->body)) {
-      $node_wrapper = entity_metadata_wrapper('node', $node);
-      $body = $node_wrapper->language($content_language)->body->value->value();
-      $headings = _nexteuropa_inpage_nav_markup_anchor($body);
-      $body_heading_count = 1;
-      foreach ($headings as $heading) {
-        $current_heading = 'body_' . $body_heading_count;
-        $items[$current_heading]['weight'] = $body_heading_count;
-        $items[$current_heading]['item'] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
-        $body_heading_count++;
-      }
+    foreach ($_nexteuropa_inpage_nav_headings_ as $heading) {
+      $items[]['item'] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
     }
 
-    if (!empty($items)) {
-      // Sort items.
-      // First by weight, ignoring groups.
-      uasort($items, function($a, $b) {
-        return $a['weight'] - $b['weight'];
-      });
-      $sorted = array();
-      foreach ($items as $element => $item) {
-        // Add only if it has item and not only children.
-        // See: 'body' has only children.
-        if (isset($item['item'])) {
-          $sorted[$element] = $item['item'];
-        }
-        if (isset($item['children'])) {
-          foreach ($item['children'] as $child) {
-            // Check if child needs to be added.
-            if (isset($items[$child])) {
-              // Remove if previously added.
-              if (isset($sorted[$child])) {
-                unset($sorted[$child]);
-              }
-              // Add to correct location.
-              $sorted[$child] = $items[$child]['item'];
-              unset($items[$child]);
-            }
-          }
-        }
-      }
+    if (!empty($items) && $node = menu_get_object('node')) {
       // Include js.
       drupal_add_js(drupal_get_path('module', 'nexteuropa_inpage_nav') . '/js/inpage_nav.js');
       drupal_add_js(array('inpage_navigation' => array('node_title' => $node->title)), 'setting');
 
       $block['subject'] = t('Page Contents');
       $variables = array(
-        'items' => $sorted,
+        'items' => $items,
         'attributes' => array(
           'class' => 'nav inpage-nav__list',
         ),
@@ -230,7 +143,12 @@ function _nexteuropa_inpage_nav_is_group_empty($group, $node) {
       $empty = _nexteuropa_inpage_nav_is_group_empty($childgroup, $node);
     }
     // Child is field.
-    elseif (!empty($node->{$item})) {
+    elseif (preg_match('/^field_/', $item) || $item == 'body') {
+      $empty = empty($node->{$item});
+    }
+    // Other type for examlpe display suite fields.
+    else {
+      // @TODO: find a better way, at the moment we assume all other items to be not empty.
       $empty = FALSE;
     }
 

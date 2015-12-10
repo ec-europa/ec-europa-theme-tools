@@ -39,10 +39,11 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
 
     // Also lets try to use the cached node object.
     if (isset($anchors['node'])) {
-      $node = $anchors['node'];
+      $node_title = $anchors['node_title'];
     }
     else {
       $node = menu_get_object();
+      $node_title = $node->title;
     }
     // Loop our anchors.
     foreach ($anchors['anchorlist'] as $heading) {
@@ -51,7 +52,7 @@ function nexteuropa_inpage_nav_block_view($delta = '') {
 
     // Include js.
     drupal_add_js(drupal_get_path('module', 'nexteuropa_inpage_nav') . '/js/inpage_nav.js');
-    drupal_add_js(array('inpage_navigation' => array('node_title' => $node->title)), 'setting');
+    drupal_add_js(array('inpage_navigation' => array('node_title' => $node_title)), 'setting');
 
     $block['subject'] = t('Page Contents');
     $variables = array(
@@ -112,7 +113,7 @@ function _nexteuropa_inpage_nav_markup_anchor() {
   // Return the data.
   $anchors = array(
     'anchorlist' => $inpage_nav_list,
-    'node' => $node,
+    'node_title' => $node->title,
   );
 }
 

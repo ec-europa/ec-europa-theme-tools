@@ -103,6 +103,18 @@ function theme_nexteuropa_file_translations($variables) {
     // Building the link.
     $link = array(
       '#type' => 'link',
+      '#attached' => array(
+        'js' => array(
+          array(
+            'data' => drupal_get_path('theme', 'europa') . '/js/components/file.js',
+            'options' => array(
+              'group' => JS_LIBRARY,
+              'preprocess' => TRUE,
+              'every_page' => TRUE,
+            ),
+          ),
+        ),
+      ),
       '#options' => array(
         'fragment' => 'file__translations-' . $nid,
         'html' => TRUE,

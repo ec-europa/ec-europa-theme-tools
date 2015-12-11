@@ -259,3 +259,30 @@ function _dt_shared_functions_content_language_order() {
 
   return $fallback_languages;
 }
+
+/**
+ * Removing 2 conflicting theme settings.
+ */
+function _dt_shared_functions_disable_anchors() {
+  $dt_themes = ['information', 'political', 'europa', 'commissioner'];
+  foreach ($dt_themes as $theme) {
+    // Target correct variable.
+    $target_settings = 'theme_' . $theme . '_settings';
+    // Get the current settings.
+    $theme_settings = variable_get($target_settings, FALSE);
+    // If settings are not there, configure it, otherwise adapt them.
+    if (!$theme_settings) {
+      $theme_settings = array(
+        'bootstrap_anchors_fix' => 0,
+        'bootstrap_anchors_smooth_scrolling' => 0,
+      );
+    }
+    else {
+      $theme_settings['bootstrap_anchors_fix'] = 0;
+      $theme_settings['bootstrap_anchors_smooth_scrolling'] = 0;
+    }
+
+    // Store the settings again.
+    variable_set($target_settings, $theme_settings);
+  }
+}

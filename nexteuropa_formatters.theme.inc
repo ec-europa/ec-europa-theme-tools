@@ -155,7 +155,10 @@ function theme_nexteuropa_file_translations($variables) {
         ),
       );
       $file_markup = _europa_file_markup($file_object, $file_url, 'file--bare');
-      $list['items'][] = $file_markup;
+      $list['items'][] = array(
+        'class' => array('file__translations-item'),
+        'data' => $file_markup,
+      );
     }
     $output .= theme_item_list($list);
     $output .= '</div>';

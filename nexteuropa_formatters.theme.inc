@@ -160,6 +160,11 @@ function theme_nexteuropa_file_translations($variables) {
         'data' => $file_markup,
       );
     }
+    $list['items'][] = array(
+      'class' => array('file__translations-details'),
+      'data' => t('Looking for another language and it is not in the list? !link',
+        array('!link' => l(t('Find out why.'), "#"))),
+    );
     $output .= theme_item_list($list);
     $output .= '</div>';
     return $output;

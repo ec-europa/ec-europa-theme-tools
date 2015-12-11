@@ -1,0 +1,12 @@
+<?php
+/**
+ * @file
+ * Dt_shared_functions.install file.
+ */
+
+/**
+ * Removing 2 conflicting theme settings.
+ */
+function dt_shared_functions_update_7101() {
+  _dt_shared_functions_disable_anchors();
+}

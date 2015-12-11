@@ -132,10 +132,11 @@ function theme_nexteuropa_file_translations($variables) {
     $output .= render($link);
 
     // Building the list.
-    $table = array(
-      'rows' => array(),
+    $list = array(
+      'items' => array(),
+      'type' => 'ul',
       'attributes' => array(
-        'class' => array('collapse', 'pull-right', 'file__translations-table'),
+        'class' => array('collapse', 'pull-right', 'file__translations-list'),
         'id' => array('file__translations-' . $nid),
       ),
     );
@@ -154,11 +155,9 @@ function theme_nexteuropa_file_translations($variables) {
         ),
       );
       $file_markup = _europa_file_markup($file_object, $file_url, 'file--bare');
-      $table['rows'][] = array(
-        'data' => array($file_markup),
-      );
+      $list['items'][] = $file_markup;
     }
-    $output .= theme_table($table);
+    $output .= theme_item_list($list);
     $output .= '</div>';
     return $output;
   }

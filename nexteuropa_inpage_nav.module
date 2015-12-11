@@ -83,9 +83,10 @@ function _nexteuropa_inpage_nav_markup_anchor() {
   }
   // Initialize our array.
   $inpage_nav_list = array();
+  // Finding:
   // H2 elements that have an id attribute
   // DIV elements with id attributes thats first child is an H2.
-  $pattern = "/<" . NEXTEUROPA_INPAGE_NAV_DEPTH . ".*?id=\"(.[^\"]*)\".*?>(.[^\<]*)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">|<div.[!<]*?id=\"(.[^\"]*)\".*?><" . NEXTEUROPA_INPAGE_NAV_DEPTH . "><span>(.[^\<]*)<\/span><\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">/i";
+  $pattern = "/<" . NEXTEUROPA_INPAGE_NAV_DEPTH . ".*?id=\"(.[^\"]*)\".*?>(.[^\<]*)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">|<div.[!<]*?id=\"(.[^\"]*)\".*?><" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">(.*)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">/i";
 
   preg_match_all($pattern, $markup, $matches);
 
@@ -93,7 +94,7 @@ function _nexteuropa_inpage_nav_markup_anchor() {
   foreach ($matches[1] as $i => $id) {
     $inpage_nav_list[] = array(
       'id' => $matches[1][$i] . $matches[3][$i],
-      'label' => $matches[2][$i] . $matches[4][$i],
+      'label' => strip_tags($matches[2][$i] . $matches[4][$i]),
     );
   }
 

@@ -10,3 +10,10 @@
 function dt_shared_functions_update_7101() {
   _dt_shared_functions_disable_anchors();
 }
+
+/**
+ * NEXTEUROPA-7486: Grant 'configure priorities listing page' for site_manager.
+ */
+function dt_shared_functions_update_7102() {
+  _dt_roles_permissions_import_import('all');
+}

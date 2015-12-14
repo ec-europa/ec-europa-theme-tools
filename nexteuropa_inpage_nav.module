@@ -83,8 +83,8 @@ function _nexteuropa_inpage_nav_markup_anchor() {
   }
   // Initialize our array.
   $inpage_nav_list = array();
-  // Finding:
-  // H2 elements that have an id attribute
+  // Looking for:
+  // H2 elements that have an id attribute or
   // DIV elements with id attributes thats first child is an H2.
   $pattern = "/<" . NEXTEUROPA_INPAGE_NAV_DEPTH . ".*?id=\"(.[^\"]*)\".*?>(.[^\<]*)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">|<div.[!<]*?id=\"(.[^\"]*)\".*?><" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">(.*?)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">/i";
 

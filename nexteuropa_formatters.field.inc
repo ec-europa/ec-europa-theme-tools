@@ -659,8 +659,8 @@ function nexteuropa_formatters_ds_fields_info($entity_type) {
     'function' => '_nexteuropa_formatters_theme_ds_team_field',
     'properties' => array(
       'view_machine_name' => 'team_members',
-      'view_display' => 'block_2',
-      'view_arguments' => array('role'),
+      'view_display' => 'block_3',
+      'view_arguments' => array('name'),
     ),
   );
 

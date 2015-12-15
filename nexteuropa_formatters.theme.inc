@@ -83,3 +83,91 @@ function theme_nexteuropa_bem_item_list($variables) {
   }
   return $output;
 }
+
+/**
+ * Returns markup for a list of file translations.
+ *
+ * @param array $variables
+ *   Accepts: $variables['node']->field_core_file.
+ *
+ * @return string
+ *   Markup of transleations.
+ */
+function theme_nexteuropa_file_translations($variables) {
+  $files_count = isset($variables['node']->field_core_file) ? count($variables['node']->field_core_file) : 0;
+
+  if ($files_count > 1) {
+    $files = $variables['node']->field_core_file;
+    $nid = $variables['node']->nid;
+    $output = '<div class="file__translations">';
+    // Building the link.
+    $link = array(
+      '#type' => 'link',
+      '#attached' => array(
+        'js' => array(
+          array(
+            'data' => drupal_get_path('theme', 'europa') . '/js/components/file.js',
+            'options' => array(
+              'group' => JS_LIBRARY,
+              'preprocess' => TRUE,
+              'every_page' => TRUE,
+            ),
+          ),
+        ),
+      ),
+      '#options' => array(
+        'fragment' => 'file__translations-' . $nid,
+        'html' => TRUE,
+      ),
+      '#attributes' => array(
+        'class' => array('file__translations-control', 'pull-right'),
+        'data-toggle' => array('collapse'),
+        'aria-expanded' => array('false'),
+        'aria-controls' => array('file__translations-' . $nid),
+        'title' => t('Click to see translations'),
+      ),
+      '#title' => t("All languages @count", array('@count' => $files_count)),
+    );
+    // Attaching the link.
+    $output .= render($link);
+
+    // Building the list.
+    $list = array(
+      'items' => array(),
+      'type' => 'ul',
+      'attributes' => array(
+        'class' => array('collapse', 'pull-right', 'file__translations-list'),
+        'id' => array('file__translations-' . $nid),
+      ),
+    );
+    foreach ($files as $lang => $file) {
+      $languages = locale_language_list();
+      $language = isset($languages[$lang]) ? $languages[$lang] : NULL;;
+      $file_info = reset($file);
+      $file_object = file_load($file_info['fid']);
+      $file_object->filename = t('@language version', array('@language' => $language));
+      $file_url = array(
+        'path' => file_create_url($file_info['uri']),
+        'options' => array(
+          'attributes' => array(
+            'class' => array('file__btn', 'btn'),
+          ),
+        ),
+      );
+      $file_markup = _europa_file_markup($file_object, $file_url, 'file--bare');
+      $list['items'][] = array(
+        'class' => array('file__translations-item'),
+        'data' => $file_markup,
+      );
+    }
+    $list['items'][] = array(
+      'class' => array('file__translations-details'),
+      'data' => t('Looking for another language and it is not in the list? !link',
+        array('!link' => l(t('Find out why.'), "#"))),
+    );
+    $output .= theme_item_list($list);
+    $output .= '</div>';
+    return $output;
+  }
+  return '';
+}

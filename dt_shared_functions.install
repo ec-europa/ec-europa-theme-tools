@@ -12,8 +12,10 @@ function dt_shared_functions_update_7101() {
 }
 
 /**
- * NEXTEUROPA-7486: Grant 'configure priorities listing page' for site_manager.
+ * Placeholder only. Moved to dt_core_update_7157().
  */
 function dt_shared_functions_update_7102() {
-  _dt_roles_permissions_import_import('all');
+  // Remved since it was introducing a bug as it was not applicable on CWT.
+  // Keeping this empty hook to preserve the schema version.
+  // @see dt_core_update_7157().
 }

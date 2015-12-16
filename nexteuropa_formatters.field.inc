@@ -78,6 +78,13 @@ function nexteuropa_formatters_field_formatter_info() {
         'taxonomy_term_reference',
       ),
     ),
+    'link_listing_title' => array(
+      'label' => t('Listing title'),
+      'field types' => array(
+        'link_field',
+        'taxonomy_term_reference',
+      ),
+    ),
     'entity_reference_section' => array(
       'label' => t('Entity reference section group'),
       'field types' => array(
@@ -86,6 +93,13 @@ function nexteuropa_formatters_field_formatter_info() {
       'settings' => array(
         'view_mode' => 'default',
         'links' => TRUE,
+      ),
+    ),
+    'telephone' => array(
+      'label' => t('Telephone link'),
+      'field types' => array('text'),
+      'settings' => array(
+        'title' => '',
       ),
     ),
   );
@@ -312,6 +326,14 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               }
             }
             break;
+        }
+        break;
+
+      case 'telephone':
+        foreach ($items as $delta => $item) {
+          $element[$delta] = array(
+            '#markup' => '<a href="tel:' . $item['safe_value'] . '" class="field--telephone">' . $item['safe_value'] . '</a>',
+          );
         }
         break;
 

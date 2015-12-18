@@ -19,3 +19,10 @@ function dt_shared_functions_update_7102() {
   // Keeping this empty hook to preserve the schema version.
   // @see dt_core_update_7157().
 }
+
+/**
+ * NEXTEUROPA-7763: jQuery version to 1.7 which is safe enought.
+ */
+function dt_shared_functions_update_7103() {
+  variable_set('jquery_update_jquery_admin_version', '1.7');
+}

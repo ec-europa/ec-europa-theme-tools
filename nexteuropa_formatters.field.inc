@@ -35,6 +35,10 @@ function nexteuropa_formatters_field_formatter_info() {
       'field types' => array(
         'link_field',
         'taxonomy_term_reference',
+        'entityreference',
+      ),
+      'settings' => array(
+        'link_title' => '',
       ),
     ),
     'link_button_primary' => array(
@@ -142,6 +146,14 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
     }
   }
 
+  if ($display['type'] == 'link_button_default' && $field['type'] == 'entityreference') {
+    $element['link_title'] = array(
+      '#title' => t('Title'),
+      '#type' => 'textfield',
+      '#default_value' => $settings['link_title'],
+    );
+  }
+
   return $element;
 }
 
@@ -207,6 +219,7 @@ function nexteuropa_formatters_field_formatter_prepare_view($entity_type, $entit
     }
 
     // Iterate through the fieldable entities again to attach the loaded data.
+
     foreach ($entities as $id => $entity) {
       $rekey = FALSE;
 
@@ -266,7 +279,6 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           case 'entityreference':
             $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
             foreach ($items as $delta => $item) {
-
               if ($label = $handler->getLabel($item['entity'])) {
                 if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
                   $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
@@ -378,6 +390,22 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             }
             break;
 
+          case 'entityreference':
+            $settings = $display['settings'];
+            foreach ($items as $delta => $item) {
+              $label = $settings['link_title'] != '' ? $settings['link_title'] : $item['entity']->title;
+              $element[$delta] = array(
+                '#type' => 'link',
+                '#title' => $label,
+                '#href' => 'node/' . $items[$delta]['target_id'],
+                '#options' => array(
+                  'attributes' => array(
+                    'class' => _nexteuropa_formatters_field_formatter_view_classes($formatter),
+                  ),
+                ),
+              );
+            }
+            break;
         }
         // Multiple field wrapper.
         if (($field['cardinality'] == -1) && ($formatter != 'link_button_block')) {

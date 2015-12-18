@@ -19,3 +19,10 @@ function dt_shared_functions_update_7102() {
   // Keeping this empty hook to preserve the schema version.
   // @see dt_core_update_7157().
 }
+
+/**
+ * Changing jQuery version 1.7 for admin pages.
+ */
+function dt_shared_functions_update_7103() {
+  variable_set('jquery_update_jquery_admin_version', '1.7');
+}

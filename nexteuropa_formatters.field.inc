@@ -219,7 +219,6 @@ function nexteuropa_formatters_field_formatter_prepare_view($entity_type, $entit
     }
 
     // Iterate through the fieldable entities again to attach the loaded data.
-
     foreach ($entities as $id => $entity) {
       $rekey = FALSE;
 

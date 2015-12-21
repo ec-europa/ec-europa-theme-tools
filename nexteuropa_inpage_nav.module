@@ -11,7 +11,9 @@ define('NEXTEUROPA_INPAGE_NAV_DEPTH', 'h2');
  */
 function nexteuropa_inpage_nav_init() {
   // Build the anchors.
-  _nexteuropa_inpage_nav_markup_anchor();
+  if (!path_is_admin(current_path())) {
+    _nexteuropa_inpage_nav_markup_anchor();
+  }
 }
 
 /**

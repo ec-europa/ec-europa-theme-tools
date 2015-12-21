@@ -31,7 +31,7 @@
       });
 
       // Add the button onclick event.
-      $('.context-nav__expander').on('click', '.context-nav__more-button', function() {
+      $('.context-nav__expander').click('.context-nav__more-button', function() {
         var $button = $(this),
             $elements = $button.closest('.has-expander').find('.context-nav__item').detach();
         // Replace the content with our elements.

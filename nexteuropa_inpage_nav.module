@@ -75,7 +75,6 @@ function _nexteuropa_inpage_nav_markup_anchor() {
   $anchors = &drupal_static('_nexteuropa_inpage_nav_markup_anchor');
   // If $anchors is not yet an array we parse it.
   if (!is_array($anchors) && $node = menu_get_object('node')) {
-    unset($node->field_core_in_page_navigation);
     $render_array = node_view($node);
     $markup = drupal_render($render_array);
   }

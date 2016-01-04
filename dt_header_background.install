@@ -1,0 +1,36 @@
+  <?php
+/**
+ * @file
+ * Digital Transformation Header Background install file.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function dt_header_background_enable() {
+  // Activation message.
+  drupal_set_message(t('DT Header Background feature is now active on your site.'));
+}
+
+ /**
+ * Implements hook_install().
+ */
+function dt_header_background_install() {
+  // Set the default header background image.
+  _dt_header_background_set_default_header_background();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function dt_header_background_disable() {
+  variable_set('dt_default_header_background', FALSE);
+  drupal_set_message(t('DT Header Background feature is now disabled on your site.'));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function dt_header_background_uninstall() {
+  variable_set('dt_default_header_background', FALSE);
+}

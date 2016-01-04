@@ -1,0 +1,217 @@
+<?php
+/**
+ * @file
+ * Code for the Core feature.
+ */
+
+/**
+ * Implements template_preprocess_node().
+ */
+function dt_header_background_preprocess_node(&$variables) {
+  $node = $variables['node'];
+  // If we have the field and if we are viewing the node's page.
+  if (isset($node->field_core_header_image) && $variables['view_mode'] == 'full') {
+    // Check if have a value for the field.
+    $header_back = field_get_items('node', $node, 'field_core_header_image');
+    // Get the fid form the value or check for a default value.
+    if ($header_back) {
+      $fid = $header_back[0]['fid'];
+    }
+    else {
+      $fid = variable_get('dt_default_header_background', FALSE);
+    }
+    // Fid might be unexistent.
+    if ($fid) {
+      // Set a variable available in the tpls.
+      $variables['header_back'] = TRUE;
+      $dir = 'public://css/header-backgrounds/';
+      // Add the css to the page.
+      $uri = $dir . 'header_background_' . $fid . '.css';
+      drupal_add_css($uri, array('group' => CSS_THEME, 'every_page' => FALSE));
+    }
+  }
+}
+
+/**
+ * Implements hook_workbench_moderation_transition().
+ */
+function dt_header_background_workbench_moderation_transition($node) {
+  // Create the Entity wrapper and handle the header background image.
+  $entity_wrapper = entity_metadata_wrapper('node', $node);
+  if (isset($node->field_core_header_image)
+    && NULL !== $entity_wrapper->field_core_header_image->value()) {
+    _dt_header_background_handle_header_background($entity_wrapper);
+  }
+}
+
+/**
+ * Set the default header background image.
+ */
+function _dt_header_background_set_default_header_background($fid = FALSE) {
+  // We receive the fid only on a theme setting form submit.
+  if (!$fid) {
+    // Set the "default" image for the header background.
+    $filepath = drupal_realpath(drupal_get_path('module', 'dt_header_background') . '/images/header_background_default.png');
+    if (file_exists($filepath)) {
+      $data = file_get_contents($filepath);
+      $file = file_save_data($data, 'public://', FILE_EXISTS_RENAME);
+      $fid = $file->fid;
+      file_usage_add($file, 'dt_header_background', 'default', 1);
+    }
+  }
+
+  // Setting a variable containing the file id.
+  variable_set('dt_default_header_background', $fid);
+  // Prepare and store the css file.
+  _dt_header_background_handle_header_background(NULL, $fid);
+}
+
+/**
+ * Helper function to generate css files for the header background.
+ */
+function _dt_header_background_handle_header_background($entity_wrapper = NULL, $fid = FALSE) {
+  if (!$fid) {
+    // We need the file id.
+    $fid = $entity_wrapper->field_core_header_image->value()['fid'];
+  }
+  // Load the managed file.
+  $file = file_load($fid);
+  // We want to store those css files in a specific path.
+  $dir = 'public://css/header-backgrounds/';
+  // Build the uri for our css file.
+  $uri = $dir . 'header_background_' . $fid . '.css';
+  // Get the real path basing on the uri.
+  $filepath = drupal_realpath($uri);
+
+  // If we already a this file no reasons to go further.
+  if (!file_exists($filepath)) {
+    // Prepare the filesystem.
+    file_prepare_directory($dir, FILE_CREATE_DIRECTORY);
+    // Get all the breakpoints belonging to "this" theme.
+    $breakpoints = breakpoints_breakpoint_load_all_theme('europa');
+    // Need to reverse the order of the breakpoint, mobile first.
+    $breakpoints = array_reverse($breakpoints);
+    // Get all the images presets.
+    $styles = image_styles();
+    // Get the presets name.
+    $style_names = array_keys($styles);
+    // Filter the ones regarding the header image.
+    $header_styles = preg_grep('#^header_image*#', $style_names);
+    // Prepare containers.
+    $mapping = array();
+    $css = '';
+
+    foreach ($breakpoints as $breakpoint) {
+      $name = $breakpoint->machine_name;
+      // Get the key to find correspondencies in the image presets.
+      $breakpoint_key = substr($name, strrpos($name, '.') + 1);
+      // Get the styles related to this breakpoint.
+      $style_names_breakpoint = preg_grep('#' . $breakpoint_key . '#', $header_styles);
+      if (!empty($style_names_breakpoint)) {
+        // We base on the multiplier.
+        sort($style_names_breakpoint);
+        foreach ($style_names_breakpoint as $style_name) {
+          // Build an array mapping the breakpoints media queries and the
+          // image url.
+          $mapping[$breakpoints[$name]->breakpoint][] = image_style_url($style_name, $file->uri);
+        }
+      }
+      // Create the css rules for each breakpoint.
+      $css .= '@media ' . $breakpoints[$name]->breakpoint . ' {' . PHP_EOL;
+      $css .= ' .page-header--image {' . PHP_EOL;
+      $css .= '   background-image: url("' . $mapping[$breakpoints[$name]->breakpoint][0] . '");' . PHP_EOL;
+      $css .= ' }' . PHP_EOL;
+      $css .= '}' . PHP_EOL;
+      $css .= PHP_EOL;
+
+      // High resolution displays.
+      $css .= '@media ' . $breakpoints[$name]->breakpoint . ', (-webkit-min-device-pixel-ratio: 2), (min--moz-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2/1), (min-device-pixel-ratio: 2),(min-resolution: 2dppx)  {' . PHP_EOL;
+      $css .= ' .page-header--image {' . PHP_EOL;
+      $css .= '   background-image: url("' . $mapping[$breakpoints[$name]->breakpoint][1] . '");' . PHP_EOL;
+      $css .= ' }' . PHP_EOL;
+      $css .= '}' . PHP_EOL;
+      $css .= PHP_EOL;
+    }
+    // Save the file.
+    file_unmanaged_save_data($css, $uri, FILE_EXISTS_REPLACE);
+  }
+}
+
+/**
+ * Implements hook_file_delete().
+ */
+function dt_header_background_file_delete($file) {
+  $fid = $file->fid;
+  $uri = 'public://css/header-backgrounds/';
+  $file = drupal_realpath($uri) . '/header_background_' . $fid . '.css';
+  if (file_exists($file)) {
+    unlink($file);
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dt_header_background_form_alter(&$form, &$form_state) {
+  if ($form['#form_id'] == 'system_theme_settings') {
+    // Save the current value for the background image if any.
+    $header_background = variable_get('dt_default_header_background', FALSE);
+    if ($header_background) {
+      $form_state['storage']['dt_default_header_background'] = $header_background;
+    }
+
+    // Header Background.
+    $form['header'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Header background'),
+      '#group' => 'europa',
+    );
+
+    $form['header']['default_header_background'] = array(
+      '#type' => 'managed_file',
+      '#title' => t('Default image for the header'),
+      '#upload_validators' => array(
+        'file_validate_is_image' => array(),
+        'file_validate_extensions' => array('png jpg jpeg'),
+        //'file_validate_image_resolution' => array(2400*900),
+      ),
+      '#progress_message' => t('Uploading the image'),
+      '#progress_indicator' => 'throbber',
+      '#default_value' => variable_get('dt_default_header_background', FALSE),
+      '#required' => FALSE,
+      '#upload_location' => 'public://',
+      '#weight' => 0,
+      '#theme' => 'theme_image_widget',
+      '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
+    );
+
+    $form['#submit'][] = "_dt_header_background_theme_settings_submit";
+  }
+}
+
+/**
+ * Custom submit function for the theme setting form.
+ */
+function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
+  // User uploaded a new image or there is already a value.
+  $fid = $form_state['values']['default_header_background'] == 0 ? FALSE : $form_state['values']['default_header_background'];
+  // We store the previous valuee to be able to delete the css file.
+  $prev = isset($form_state['storage']['default_header_background']) ? $form_state['storage']['default_header_background'] : FALSE;
+  // If there is a value and it changed in this submission, prepare everything.
+  if ($fid) {
+    if ($fid != $prev) {
+      _dt_header_background_set_default_header_background($fid);
+    }
+  }
+  // There's no default header background.
+  else {
+    // Let's check if it has been removed in this submission.
+    if ($prev) {
+      $file = new stdClass();
+      $file->fid = $prev;
+      dt_header_background_file_delete($file);
+      file_usage_delete($file, 'dt_header_background');
+      variable_del('dt_default_header_background');
+    }
+  }
+}

@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Code for the Core feature.
+ * Code for the header background feature.
  */
 
 /**
@@ -169,11 +169,11 @@ function dt_header_background_form_alter(&$form, &$form_state) {
 
     $form['header']['default_header_background'] = array(
       '#type' => 'managed_file',
-      '#title' => t('Default image for the header'),
+      '#title' => t('Default image for the header background'),
       '#upload_validators' => array(
         'file_validate_is_image' => array(),
-        'file_validate_extensions' => array('png jpg jpeg'),
-        //'file_validate_image_resolution' => array(2400*900),
+        'file_validate_extensions' => array('png jpg jpeg gif'),
+        'file_validate_image_resolution' => array('0', '2400x900'),
       ),
       '#progress_message' => t('Uploading the image'),
       '#progress_indicator' => 'throbber',

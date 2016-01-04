@@ -54,7 +54,7 @@ function _dt_header_background_set_default_header_background($fid = FALSE) {
     $filepath = drupal_realpath(drupal_get_path('module', 'dt_header_background') . '/images/header_background_default.png');
     if (file_exists($filepath)) {
       $data = file_get_contents($filepath);
-      $file = file_save_data($data, 'public://', FILE_EXISTS_RENAME);
+      $file = file_save_data($data, 'public://header_background_default.png', FILE_EXISTS_REPLACE);
       $fid = $file->fid;
       file_usage_add($file, 'dt_header_background', 'default', 1);
     }

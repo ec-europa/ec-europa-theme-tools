@@ -74,6 +74,10 @@ function _dt_header_background_set_default_header_background($ct = FALSE, $fid =
   }
 
   // Setting a variable containing the file id.
+  if (!$ct) {
+    $ct = 'default';
+  }
+
   variable_set('dt_header_background_' . $ct, $fid);
   // Prepare and store the css file.
   _dt_header_background_handle_header_background(NULL, $fid);
@@ -219,42 +223,35 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       ),
     );
 
-    dt_header_background_per_content_type($form, $form_state);
+    // Get a list of the existing content type.
+    $content_types = node_type_get_types();
+    $i = 1;
+    foreach ($content_types as $machine_name => $content_type) {
+      if (field_info_instance('node', 'field_core_header_image', $machine_name) !== NULL) {
+        $form['header']['overrides']['dt_header_background_' . $machine_name] = array(
+          '#type' => 'managed_file',
+          '#title' => t('Default image for the header background for the %ct content type', array('%ct' => $content_type->name)),
+          '#upload_validators' => array(
+            'file_validate_is_image' => array(),
+            'file_validate_extensions' => array('png jpg jpeg gif'),
+            'file_validate_image_resolution' => array('0', '2400x900'),
+          ),
+          '#progress_message' => t('Uploading the image'),
+          '#progress_indicator' => 'throbber',
+          '#default_value' => variable_get('dt_header_background_' . $machine_name, FALSE),
+          '#required' => FALSE,
+          '#upload_location' => 'public://',
+          '#weight' => $i,
+          '#theme' => 'theme_image_widget',
+          '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
+        );
+
+        $i++;
+      }
+    }
 
     $form['#submit'][] = "_dt_header_background_theme_settings_submit";
   }
-}
-
-function dt_header_background_per_content_type(&$form, &$form_state) {
-  // Get a list of the existing content type.
-  $content_types = node_type_get_types();
-  $i = 1;
-  foreach ($content_types as $machine_name => $content_type) {
-    if (field_info_instance('node', 'field_core_header_image', $machine_name) !== NULL) {
-      $form['header']['overrides']['dt_header_background_' . $machine_name] = array(
-        '#type' => 'managed_file',
-        '#title' => t('Default image for the header background for the %ct content type', array('%ct' => $content_type->name)),
-        '#upload_validators' => array(
-          'file_validate_is_image' => array(),
-          'file_validate_extensions' => array('png jpg jpeg gif'),
-          'file_validate_image_resolution' => array('0', '2400x900'),
-        ),
-        '#progress_message' => t('Uploading the image'),
-        '#progress_indicator' => 'throbber',
-        '#default_value' => variable_get('dt_header_background_' . $machine_name, FALSE),
-        '#required' => FALSE,
-        '#upload_location' => 'public://',
-        '#weight' => $i,
-        '#theme' => 'theme_image_widget',
-        '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
-      );
-
-      $i++;
-    }
-  }
-
-  $form_state['rebuild'] = TRUE;
-  return $form['header']['overrides'];
 }
 
 /**

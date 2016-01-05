@@ -214,6 +214,8 @@ function dt_header_background_form_alter(&$form, &$form_state) {
 
     $form['header']['overrides'] = array(
       '#type' => 'fieldset',
+      '#title' => t('Overrides per content type'),
+      '#description' => t('This is the list of content types where you can set a different default background image for the header'),
       '#prefix' => '<div id="dt_header_background_overrides">',
       '#suffix' => '</div>',
       '#states' => array(

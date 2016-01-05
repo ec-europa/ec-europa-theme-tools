@@ -18,7 +18,11 @@ function dt_header_background_preprocess_node(&$variables) {
       $fid = $header_back[0]['fid'];
     }
     else {
-      $fid = variable_get('dt_default_header_background', FALSE);
+      $ct = $node->type;
+      $fid = variable_get('dt_header_background_' . $ct, FALSE);
+      if (!$fid) {
+        $fid = variable_get('dt_header_background_default', FALSE);
+      }
     }
 
     // Fid might be still unexistent.
@@ -48,7 +52,7 @@ function dt_header_background_workbench_moderation_transition($node) {
 /**
  * Set the default header background image.
  */
-function _dt_header_background_set_default_header_background($fid = FALSE) {
+function _dt_header_background_set_default_header_background($ct = FALSE, $fid = FALSE) {
   // We receive the fid only on a theme setting form submit.
   if (!$fid) {
     // Set the "default" image for the header background.
@@ -70,7 +74,7 @@ function _dt_header_background_set_default_header_background($fid = FALSE) {
   }
 
   // Setting a variable containing the file id.
-  variable_set('dt_default_header_background', $fid);
+  variable_set('dt_header_background_' . $ct, $fid);
   // Prepare and store the css file.
   _dt_header_background_handle_header_background(NULL, $fid);
 }
@@ -164,10 +168,14 @@ function dt_header_background_file_delete($file) {
 function dt_header_background_form_alter(&$form, &$form_state) {
   if ($form['#form_id'] == 'system_theme_settings') {
     // Save the current value for the background image if any.
-    $header_background = variable_get('dt_default_header_background', FALSE);
+    $header_background = variable_get('dt_header_background_default', FALSE);
+
     if ($header_background) {
-      $form_state['storage']['dt_default_header_background'] = $header_background;
+      $form_state['storage']['dt_header_background_default'] = $header_background;
     }
+
+    // Check the value for the overrides.
+    $overrides = variable_get('dt_header_background_per_content_type', FALSE);
 
     // Header Background.
     $form['header'] = array(
@@ -176,7 +184,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       '#group' => 'europa',
     );
 
-    $form['header']['default_header_background'] = array(
+    $form['header']['dt_header_background_default'] = array(
       '#type' => 'managed_file',
       '#title' => t('Default image for the header background'),
       '#upload_validators' => array(
@@ -186,7 +194,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       ),
       '#progress_message' => t('Uploading the image'),
       '#progress_indicator' => 'throbber',
-      '#default_value' => variable_get('dt_default_header_background', FALSE),
+      '#default_value' => variable_get('dt_header_background_default', FALSE),
       '#required' => FALSE,
       '#upload_location' => 'public://',
       '#weight' => 0,
@@ -194,33 +202,97 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
     );
 
+    $form['header']['per_content_type'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Would you like to be able to override the default value on a content type basis?'),
+      '#default_value' => variable_get('dt_header_background_per_content_type', FALSE),
+    );
+
+    $form['header']['overrides'] = array(
+      '#type' => 'fieldset',
+      '#prefix' => '<div id="dt_header_background_overrides">',
+      '#suffix' => '</div>',
+      '#states' => array(
+        'visible' => array(
+          ':input[name="per_content_type"]' => array('checked' => TRUE),
+        ),
+      ),
+    );
+
+    dt_header_background_per_content_type($form, $form_state);
+
     $form['#submit'][] = "_dt_header_background_theme_settings_submit";
   }
+}
+
+function dt_header_background_per_content_type(&$form, &$form_state) {
+  // Get a list of the existing content type.
+  $content_types = node_type_get_types();
+  $i = 1;
+  foreach ($content_types as $machine_name => $content_type) {
+    if (field_info_instance('node', 'field_core_header_image', $machine_name) !== NULL) {
+      $form['header']['overrides']['dt_header_background_' . $machine_name] = array(
+        '#type' => 'managed_file',
+        '#title' => t('Default image for the header background for the %ct content type', array('%ct' => $content_type->name)),
+        '#upload_validators' => array(
+          'file_validate_is_image' => array(),
+          'file_validate_extensions' => array('png jpg jpeg gif'),
+          'file_validate_image_resolution' => array('0', '2400x900'),
+        ),
+        '#progress_message' => t('Uploading the image'),
+        '#progress_indicator' => 'throbber',
+        '#default_value' => variable_get('dt_header_background_' . $machine_name, FALSE),
+        '#required' => FALSE,
+        '#upload_location' => 'public://',
+        '#weight' => $i,
+        '#theme' => 'theme_image_widget',
+        '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
+      );
+
+      $i++;
+    }
+  }
+
+  $form_state['rebuild'] = TRUE;
+  return $form['header']['overrides'];
 }
 
 /**
  * Custom submit function for the theme setting form.
  */
 function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
-  // User uploaded a new image or there is already a value.
-  $fid = $form_state['values']['default_header_background'] == 0 ? FALSE : $form_state['values']['default_header_background'];
-  // We store the previous valuee to be able to delete the css file.
-  $prev = isset($form_state['storage']['default_header_background']) ? $form_state['storage']['default_header_background'] : FALSE;
+  // Relevant inputs.
+  $keys = preg_grep('#dt_header_background_(.*?)#', array_keys($form_state['values']));
+
+  foreach ($keys as $key) {
+    $ct = str_replace('dt_header_background_', '', $key);
+    // User uploaded a new image or there is already a value.
+    $fids[$ct] = $form_state['values'][$key] == 0 ? FALSE : $form_state['values'][$key];
+    // We store the previous value to be able to delete the css file.
+    $prevs[$ct] = isset($form_state['storage'][$key]) ? $form_state['storage'][$key] : FALSE;
+  }
+
   // If there is a value and it changed in this submission, prepare everything.
-  if ($fid) {
-    if ($fid != $prev) {
-      _dt_header_background_set_default_header_background($fid);
+  foreach ($fids as $ct => $fid) {
+    if ($fid) {
+      if ($fids[$ct] != $prevs[$ct]) {
+        _dt_header_background_set_default_header_background($ct, $fid);
+      }
+    }
+    // There's no default header background.
+    else {
+      // Let's check if it has been removed in this submission.
+      if ($prevs[$ct]) {
+        $file = new stdClass();
+        $file->fid = $prevs[$ct];
+        dt_header_background_file_delete($file);
+        file_usage_delete($file, 'dt_header_background');
+        variable_del($key);
+      }
     }
   }
-  // There's no default header background.
-  else {
-    // Let's check if it has been removed in this submission.
-    if ($prev) {
-      $file = new stdClass();
-      $file->fid = $prev;
-      dt_header_background_file_delete($file);
-      file_usage_delete($file, 'dt_header_background');
-      variable_del('dt_default_header_background');
-    }
+
+  if ($form_state['values']['per_content_type'] == 1) {
+    variable_set('dt_header_background_per_content_type', 1);
   }
 }

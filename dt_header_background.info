@@ -1,3 +1,7 @@
 name = DT Header Background
 description = Enables the header background functionality
 core = 7.x
+package = NextEuropa Digital Transformation
+version = 7.x-1.0
+project = dt_header_background
+

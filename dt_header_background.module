@@ -20,7 +20,8 @@ function dt_header_background_preprocess_node(&$variables) {
     else {
       $fid = variable_get('dt_default_header_background', FALSE);
     }
-    // Fid might be unexistent.
+
+    // Fid might be still unexistent.
     if ($fid) {
       // Set a variable available in the tpls.
       $variables['header_back'] = TRUE;
@@ -52,9 +53,17 @@ function _dt_header_background_set_default_header_background($fid = FALSE) {
   if (!$fid) {
     // Set the "default" image for the header background.
     $filepath = drupal_realpath(drupal_get_path('module', 'dt_header_background') . '/images/header_background_default.png');
+
     if (file_exists($filepath)) {
-      $data = file_get_contents($filepath);
-      $file = file_save_data($data, 'public://header_background_default.png', FILE_EXISTS_REPLACE);
+      $file = (object) array(
+        'uid' => 1,
+        'uri' => $filepath,
+        'filemime' => file_get_mimetype($filepath),
+        'status' => FILE_STATUS_PERMANENT,
+      );
+
+      // Copy the default image in the public folder.
+      $file = file_copy($file, 'public://');
       $fid = $file->fid;
       file_usage_add($file, 'dt_header_background', 'default', 1);
     }

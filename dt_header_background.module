@@ -296,7 +296,6 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
     }
   }
 
-  if ($form_state['values']['per_content_type'] == 1) {
-    variable_set('dt_header_background_per_content_type', 1);
-  }
+  $override = $form_state['values']['per_content_type'] == 1 ? TRUE : FALSE;
+  variable_set('dt_header_background_per_content_type', $override);
 }

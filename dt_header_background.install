@@ -31,6 +31,9 @@ function dt_header_background_disable() {
  * Implements hook_uninstall().
  */
 function dt_header_background_uninstall() {
+  // Delete the variables created by this module.
+  variable_del('dt_header_background_default');
+  variable_del('dt_header_background_per_content_type');
   // Get a list of the existing content type.
   $content_types = node_type_get_types();
   foreach ($content_types as $machine_name => $content_type) {
@@ -39,6 +42,4 @@ function dt_header_background_uninstall() {
       variable_del('dt_header_background_' . $machine_name);
     }
   }
-
-  variable_del('dt_header_background_per_content_type');
 }

@@ -257,7 +257,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
     // Add the default to the storage if needed.
     $default = variable_get('dt_header_background_default', FALSE);
     if ($default) {
-       $form_state['storage']['dt_header_background_default'] = $default;
+      $form_state['storage']['dt_header_background_default'] = $default;
     }
 
     $form['#submit'][] = "_dt_header_background_theme_settings_submit";
@@ -280,7 +280,7 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
 
     if ($fids[$ct]) {
       if ($fids[$ct] != $prevs[$ct]) {
-        _dt_header_background_set_default_header_background($ct, $fid);
+        _dt_header_background_set_default_header_background($ct, $fids[$ct]);
       }
     }
     // There's no default header background.

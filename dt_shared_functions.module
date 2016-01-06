@@ -308,7 +308,7 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
  * except for the entity reference fields (or other non language aware fields).
  */
 function dt_shared_functions_field_language_alter(&$display_language, $context) {
-  if (variable_get('locale_field_language_fallback', TRUE)  && entity_translation_enabled($context['entity_type'])) {
+  if (variable_get('locale_field_language_fallback', TRUE) && $context['entity_type'] == 'node' && entity_translation_enabled($context['entity_type'])) {
     // To reduce load, we only do it for the current node. We dont use the
     // menu_get_object('node') here to save some resources, instead we use and
     // check the arg().

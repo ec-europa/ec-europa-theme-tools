@@ -13,7 +13,7 @@ function dt_header_background_preprocess_node(&$variables) {
   if (isset($node->field_core_header_image) && $variables['view_mode'] == 'full') {
     // Check if have a value for the field.
     $header_back = field_get_items('node', $node, 'field_core_header_image');
-    // Get the fid form the value or check for a default value.
+    // Get the fid from the value or check for a default value.
     if ($header_back) {
       $fid = $header_back[0]['fid'];
     }

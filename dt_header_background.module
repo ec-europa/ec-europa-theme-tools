@@ -27,9 +27,14 @@ function dt_header_background_preprocess_node(&$variables) {
 
     // Fid might be still unexistent.
     if ($fid) {
+      $dir = 'public://css/header-backgrounds/';
+      $uri = $dir . 'header_background_' . $fid . '.css';
+      if (!file_exists($uri)) {
+        // Prepare and store the css file.
+        _dt_header_background_handle_header_background(NULL, $fid);
+      }
       // Set a variable available in the tpls.
       $variables['header_back'] = TRUE;
-      $dir = 'public://css/header-backgrounds/';
       // Add the css to the page.
       $uri = $dir . 'header_background_' . $fid . '.css';
       drupal_add_css($uri, array('group' => CSS_THEME, 'every_page' => FALSE));
@@ -79,8 +84,6 @@ function _dt_header_background_set_default_header_background($ct = FALSE, $fid =
   }
 
   variable_set('dt_header_background_' . $ct, $fid);
-  // Prepare and store the css file.
-  _dt_header_background_handle_header_background(NULL, $fid);
 }
 
 /**

@@ -24,7 +24,7 @@ function dt_header_background_install() {
  * Implements hook_disable().
  */
 function dt_header_background_disable() {
-  variable_set('dt_default_header_background', FALSE);
+  variable_set('dt_header_background_default', FALSE);
   drupal_set_message(t('DT Header Background feature is now disabled on your site.'));
 }
 
@@ -32,5 +32,5 @@ function dt_header_background_disable() {
  * Implements hook_uninstall().
  */
 function dt_header_background_uninstall() {
-  variable_del('dt_default_header_background');
+  variable_del('dt_header_background_default');
 }

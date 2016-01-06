@@ -296,6 +296,7 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
     }
   }
 
+  // Save the variable for the "overrides" checkbox.
   $override = $form_state['values']['per_content_type'] == 1 ? TRUE : FALSE;
   variable_set('dt_header_background_per_content_type', $override);
 }

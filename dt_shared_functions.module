@@ -286,3 +286,46 @@ function _dt_shared_functions_disable_anchors() {
     variable_set($target_settings, $theme_settings);
   }
 }
+
+/**
+ * Implements hook_module_implements_alter()
+ *
+ * This is used to make this module load later in the bootstrap process.
+ */
+function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'field_language_alter' && isset($implementations['dt_shared_functions'])) {
+    $group = $implementations['dt_shared_functions'];
+    unset($implementations['dt_shared_functions']);
+    $implementations['dt_shared_functions'] = $group;
+  }
+}
+
+/**
+ * Implements hook_field_language_alter().
+ *
+ * Alters the language of translatable fields to be forced to use the content
+ * language. This makes sure the content only shows the language requested,
+ * except for the entity reference fields (or other non language aware fields).
+ */
+function dt_shared_functions_field_language_alter(&$display_language, $context) {
+  if (variable_get('locale_field_language_fallback', TRUE)  && entity_translation_enabled($context['entity_type'])) {
+    // To reduce load, we only do it for the current node. We dont use the
+    // menu_get_object('node') here to save some resources, instead we use and
+    // check the arg().
+    $entity_nid = is_numeric(arg(1)) ? arg(1) : FALSE;
+    // Make the checks.
+    if ($entity_nid && $entity_nid == $context['entity']->nid) {
+      // Loop over the fields being displayed.
+      foreach ($display_language as $field_name => &$field_language) {
+        // If the field language is not the same as the content, but is set to
+        // be translatable, we set it to the content language.
+        if ($field_language <> $context['language'] && $field_info = field_info_field($field_name)) {
+          // We have field information, let's make our checks.
+          if ($field_info['translatable']) {
+            $field_language = $context['language'];
+          }
+        }
+      }
+    }
+  }
+}

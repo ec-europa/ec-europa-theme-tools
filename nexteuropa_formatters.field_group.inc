@@ -221,6 +221,7 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
       $label_element = isset($group->format_settings['instance_settings']['label_element']) ? $group->format_settings['instance_settings']['label_element'] : 'h2';
       $attributes = isset($group->format_settings['instance_settings']['attributes']) ? ' ' . $group->format_settings['instance_settings']['attributes'] : '';
       $layout = isset($group->format_settings['instance_settings']['layout']) && $group->format_settings['instance_settings']['layout'] !== '';
+      $modifier = isset($group->format_settings['instance_settings']['modifier']) && $group->format_settings['instance_settings']['modifier'] !== '';
 
       if ($show_label) {
         $label = '<' . $label_element . '><span>' . check_plain($group->label) . '</span></' . $label_element . '>';
@@ -260,6 +261,13 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
             $add['#suffix'] = '</div></div>';
             break;
         }
+      }
+      elseif ($group->format_settings['instance_settings']['modifier'] == 'section__group--full-width') {
+        $add['#prefix'] = '<div ' . $attributes . ' class="section__group' . $modifier_and_classes . '"><div>';
+        if ($show_label) {
+          $add['#prefix'] .= $label;
+        }
+        $add['#suffix'] = '</div></div>';
       }
       else {
         $add['#prefix'] = '<div ' . $attributes . ' class="section__group' . $modifier_and_classes . '">';

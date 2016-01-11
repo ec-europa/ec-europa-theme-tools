@@ -288,7 +288,7 @@ function _dt_shared_functions_disable_anchors() {
 }
 
 /**
- * Implements hook_module_implements_alter()
+ * Implements hook_module_implements_alter().
  *
  * This is used to make this module load later in the bootstrap process.
  */
@@ -298,6 +298,15 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
     unset($implementations['dt_shared_functions']);
     $implementations['dt_shared_functions'] = $group;
   }
+}
+
+/**
+ * Helper function to get the readable language from a language code.
+ */
+function _dt_shared_functions_get_language_obj($langcode) {
+  $languages = locale_language_list();
+
+  return isset($languages[$langcode]) ? $languages[$langcode] : NULL;
 }
 
 /**

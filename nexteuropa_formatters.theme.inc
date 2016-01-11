@@ -126,7 +126,7 @@ function theme_nexteuropa_file_translations($variables) {
         'aria-controls' => array('file__translations-' . $nid),
         'title' => t('Click to see translations'),
       ),
-      '#title' => t("All languages @count", array('@count' => $files_count)),
+      '#title' => t("All languages (@count)", array('@count' => $files_count)),
     );
     // Attaching the link.
     $output .= render($link);

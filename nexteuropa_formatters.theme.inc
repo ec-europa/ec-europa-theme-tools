@@ -145,6 +145,8 @@ function theme_nexteuropa_file_translations($variables) {
       $language = isset($languages[$lang]) ? $languages[$lang] : NULL;;
       $file_info = reset($file);
       $file_object = file_load($file_info['fid']);
+      // Add our language.
+      $file_object->language = $lang;
       $file_object->filename = t('@language version', array('@language' => $language));
       $file_url = array(
         'path' => file_create_url($file_info['uri']),

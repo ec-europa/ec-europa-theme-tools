@@ -106,6 +106,7 @@ function theme_nexteuropa_file_translations($variables) {
     $output = '<div class="file__translations">';
     // Building the link.
     $link = array(
+      '#href' => '',
       '#type' => 'link',
       '#attached' => array(
         'js' => array(
@@ -137,6 +138,7 @@ function theme_nexteuropa_file_translations($variables) {
 
     // Building the list.
     $list = array(
+      'title' => NULL,
       'items' => array(),
       'type' => 'ul',
       'attributes' => array(

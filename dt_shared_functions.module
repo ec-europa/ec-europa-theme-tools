@@ -288,7 +288,7 @@ function _dt_shared_functions_disable_anchors() {
 }
 
 /**
- * Implements hook_module_implements_alter()
+ * Implements hook_module_implements_alter().
  *
  * This is used to make this module load later in the bootstrap process.
  */

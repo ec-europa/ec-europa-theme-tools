@@ -97,6 +97,10 @@ function theme_nexteuropa_file_translations($variables) {
   $files_count = isset($variables['node']->field_core_file) ? count($variables['node']->field_core_file) : 0;
 
   if ($files_count > 1) {
+    // Remove one from the count, if the current language is in the list.
+    if (isset($variables['node']->field_core_file[$variables['node']->language])) {
+      $files_count -= 1;
+    }
     $files = $variables['node']->field_core_file;
     $nid = $variables['node']->nid;
     $output = '<div class="file__translations">';
@@ -140,6 +144,10 @@ function theme_nexteuropa_file_translations($variables) {
         'id' => array('file__translations-' . $nid),
       ),
     );
+
+    // Before we start listing translations, we unset our source language.
+    unset($files[$variables['node']->language]);
+
     foreach ($files as $lang => $file) {
       $languages = locale_language_list();
       $language = isset($languages[$lang]) ? $languages[$lang] : NULL;;

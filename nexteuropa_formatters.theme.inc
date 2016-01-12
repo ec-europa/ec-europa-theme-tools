@@ -164,7 +164,7 @@ function theme_nexteuropa_file_translations($variables) {
           ),
         ),
       );
-      $file_markup = _europa_file_markup($file_object, $file_url, 'file--bare');
+      $file_markup = _europa_file_markup($file_object, $file_url, 'file--bare', TRUE);
       $list['items'][] = array(
         'class' => array('file__translations-item'),
         'data' => $file_markup,

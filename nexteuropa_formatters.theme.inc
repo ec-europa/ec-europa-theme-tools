@@ -99,7 +99,7 @@ function theme_nexteuropa_file_translations($variables) {
   if ($files_count > 1) {
     // Remove one from the count, if the current language is in the list.
     if (isset($variables['node']->field_core_file[$variables['node']->language])) {
-      $files_count -= 1;
+      $files_count--;
     }
     $files = $variables['node']->field_core_file;
     $nid = $variables['node']->nid;

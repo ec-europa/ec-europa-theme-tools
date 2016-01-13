@@ -301,6 +301,15 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
 }
 
 /**
+ * Helper function to get the readable language from a language code.
+ */
+function _dt_shared_functions_get_language_obj($langcode) {
+  $languages = locale_language_list();
+
+  return isset($languages[$langcode]) ? $languages[$langcode] : NULL;
+}
+
+/**
  * Implements hook_field_language_alter().
  *
  * Alters the language of translatable fields to be forced to use the content

@@ -77,3 +77,10 @@ function template_preprocess_views_view_nexteuropa_listing(&$variables) {
     }
   }
 }
+
+/**
+ * Implements template_preprocess_hook().
+ */
+function template_preprocess_views_view_nexteuropa_context_nav(&$variables) {
+
+}

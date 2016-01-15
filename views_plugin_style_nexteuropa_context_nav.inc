@@ -23,4 +23,5 @@ class views_plugin_style_nexteuropa_context_nav extends views_plugin_style {
     parent::options_form($form, $form_state);
 
   }
+
 }

@@ -1,14 +1,15 @@
 <?php
+
 /**
  * @file
- * View template to contextual navigation.
+ * Default simple view template to display a list of rows.
  *
  * @ingroup views_templates
  */
 ?>
 <span class="context-nav__label">Part of collections:</span>
 <div class="context-nav__items">
-  <span class="context-nav__item">
-    <a href="http://ec.europa.eu/europeaid/about-development-and-cooperation-europeaid_en">International Cooperation and Development</a>
-  </span>
+  <?php foreach ($rows as $id => $row): ?>
+    <?php print $row; ?>
+  <?php endforeach; ?>
 </div>

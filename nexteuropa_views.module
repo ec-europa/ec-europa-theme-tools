@@ -82,5 +82,15 @@ function template_preprocess_views_view_nexteuropa_listing(&$variables) {
  * Implements template_preprocess_hook().
  */
 function template_preprocess_views_view_nexteuropa_context_nav(&$variables) {
+  $view = $variables['view'];
+  $rows = $variables['rows'];
 
+  $style_plugin = $view->style_plugin;
+  $style_plugin_options = $style_plugin->options;
+  $row_plugin = $style_plugin->row_plugin;
+
+  $variables['use_trimming'] = '';
+  if (!empty($style_plugin_options['use_trimming'])) {
+    $variables['use_trimming'] = ' ' . $style_plugin_options['use_trimming'];
+  }
 }

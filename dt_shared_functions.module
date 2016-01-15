@@ -318,6 +318,12 @@ function _dt_shared_functions_get_language_obj($langcode) {
  */
 function dt_shared_functions_field_language_alter(&$display_language, $context) {
   if (variable_get('locale_field_language_fallback', TRUE) && $context['entity_type'] == 'node' && entity_translation_enabled($context['entity_type'])) {
+    // Define our content language.
+    $content_language = $context['language'];
+    // Overwrite it if we manage to get a different content language.
+    if ($lang = entity_translation_get_existing_language($context['entity_type'], $context['entity'])) {
+      $content_language = $lang;
+    }
     // To reduce load, we only do it for the current node. We dont use the
     // menu_get_object('node') here to save some resources, instead we use and
     // check the arg().
@@ -328,7 +334,7 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
       foreach ($display_language as $field_name => &$field_language) {
         // If the field language is not the same as the content, but is set to
         // be translatable, we set it to the content language.
-        if ($field_language <> $context['language'] && $field_info = field_info_field($field_name)) {
+        if ($field_language <> $content_language && $field_info = field_info_field($field_name)) {
           // We have field information, let's make our checks.
           if ($field_info['translatable']) {
             $field_language = $context['language'];

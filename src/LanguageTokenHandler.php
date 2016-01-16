@@ -22,24 +22,30 @@ class LanguageTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHandler
    * {@inheritdoc}
    */
   public function hookTokens($type, $tokens, array $data = array(), array $options = array()) {
+    global $language;
     $replacements = array();
-
+    // Our tokens.
     if ($type == self::TOKEN_TYPE) {
       foreach ($tokens as $name => $original) {
-        if ($name == self::CONTENT_LANGUAGE || $name == self::INTERFACE_LANGUAGE) {
+        switch ($name) {
+          case self::CONTENT_LANGUAGE :
+            if($node = menu_get_object()) {
+              // If we can load our node, we will use that for our language.
+              $language_token_value = _dt_shared_functions_content_language($node);
+            }
+            else {
+              // On other cases we fall back to interface..
+              $language_token_value = $language->language;
+            }
+            // Set the replacement.
+            $replacements[$original] = $language_token_value;
+            break;
 
-          if ($node = menu_get_object() && $name == self::CONTENT_LANGUAGE) {
-            // If we can load our node, we will use that for our language.
-            $language_token_value = _dt_shared_functions_content_language($node);
-          }
-          else {
-            global $language;
-            // On other cases we fall back to interface..
+          case self::INTERFACE_LANGUAGE :
             $language_token_value = $language->language;
-          }
-
-          // Set the replacement.
-          $replacements[$original] = $language_token_value;
+            // Set the replacement.
+            $replacements[$original] = $language_token_value;
+            break;
         }
       }
     }

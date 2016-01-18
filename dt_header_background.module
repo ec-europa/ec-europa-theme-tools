@@ -184,7 +184,7 @@ function dt_header_background_file_delete($file) {
 function _dt_header_background_clear_css() {
   $uri = 'public://css/header-backgrounds/header_background*.css';
   $dir = drupal_realpath($uri);
-  // Remove all the  css that this module has generated content of the folder.
+  // Remove all the css files that this module has generated.
   $deleted_files = 0;
   $not_deleted = 0;
   foreach (glob($dir) as $file) {
@@ -304,7 +304,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       '#type' => 'submit',
       '#value' => 'Remove existing css files',
       '#prefix' => '<div id="header-reset">',
-      '#suffix' => '<div class="description">' . t("Remove all the css if needed.") . '</div></div>',
+      '#suffix' => '<div class="description">' . t("Remove all the css files if needed.") . '</div></div>',
       '#ajax' => array(
         'callback' => '_dt_header_background_clear_css',
         'event' => 'click',

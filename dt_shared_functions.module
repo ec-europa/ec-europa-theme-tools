@@ -54,7 +54,7 @@ function dt_shared_functions_translated_menu_link_alter(&$item, $map) {
     $data['node'] = entity_load_single('node', $nid);
     // This should be done by the token_menu module, actually.
     $options['language'] = $language;
-    $item['title'] = token_replace($item['title'], $data, $options);
+    $item['link_title'] = token_replace($item['title'], $data, $options);
   }
 }
 

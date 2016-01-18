@@ -130,10 +130,19 @@ function _dt_header_background_handle_header_background($entity_wrapper = NULL, 
       if (!empty($style_names_breakpoint)) {
         // We base on the multiplier.
         sort($style_names_breakpoint);
+
         foreach ($style_names_breakpoint as $style_name) {
-          // Build an array mapping the breakpoints media queries and the
-          // image url.
-          $mapping[$breakpoints[$name]->breakpoint][] = image_style_url($style_name, $file->uri);
+          // Well, image_style_url returned value would have been enough...
+          $style_url = image_style_url($style_name, $file->uri);
+          // Get also the uri to generate the image.
+          $style_path = image_style_path($style_name, $file->uri);
+          // Create the image since we're going to call it from a relative path.
+          $thumb = image_style_create_derivative(image_style_load($style_name), $file->uri, $style_path);
+          // And that's just the way to retrieve an absolute, but relative path.
+          $url = parse_url($style_url);
+          $url_path = $url['path'] . '?' . $url['query'];
+          // Build an array mapping the breakpoints media queries and the image.
+          $mapping[$breakpoints[$name]->breakpoint][] = $url_path;
         }
       }
       // Create the css rules for each breakpoint.
@@ -167,6 +176,40 @@ function dt_header_background_file_delete($file) {
   if (file_exists($file)) {
     unlink($file);
   }
+}
+
+/**
+ * Helper function to delete all the generated css files.
+ */
+function _dt_header_background_clear_css() {
+  $uri = 'public://css/header-backgrounds/header_background*.css';
+  $dir = drupal_realpath($uri);
+  // Remove all the  css that this module has generated content of the folder.
+  $deleted_files = 0;
+  $not_deleted = 0;
+  foreach (glob($dir) as $file) {
+    if (is_writable($file)) {
+      unlink($file);
+      $deleted_files++;
+    }
+    else {
+      $not_deleted++;
+    }
+  }
+
+  // Build the message to return.
+  $markup = t('%deleted_files Css files have been deleted', array('%deleted_files' => $deleted_files));
+  // If some files has not been deleted because of permissions, warn the user.
+  if ($not_deleted > 0) {
+    $markup .= t('while %not_deleted files could not be deleted because of permission issues, check with your administrator, please.', array('%not_deleted' => $not_deleted));
+  }
+  // Return an information about deletion.
+  $form['reset'] = array(
+    '#type' => 'markup',
+    '#markup' => $markup,
+  );
+
+  return $form['reset'];
 }
 
 /**
@@ -256,6 +299,20 @@ function dt_header_background_form_alter(&$form, &$form_state) {
 
       $i++;
     }
+
+    $form['header']['reset'] = array(
+      '#type' => 'submit',
+      '#value' => 'Remove existing css files',
+      '#prefix' => '<div id="header-reset">',
+      '#suffix' => '<div class="description">' . t("Remove all the css if needed.") . '</div></div>',
+      '#ajax' => array(
+        'callback' => '_dt_header_background_clear_css',
+        'event' => 'click',
+        'wrapper' => 'header-reset',
+        'effect' => 'fade',
+        'method' => 'replace',
+      ),
+    );
 
     // Add the default to the storage if needed.
     $default = variable_get('dt_header_background_default', FALSE);

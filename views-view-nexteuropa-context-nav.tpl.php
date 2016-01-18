@@ -7,7 +7,7 @@
  * @ingroup views_templates
  */
 ?>
-<span class="context-nav__label"><?php echo t('Part of collections:'); ?></span>
+<span class="context-nav__label"><?php print $navigation_title; ?></span>
 <div class="context-nav__items">
   <?php foreach ($rows as $row): ?>
     <span class="context-nav__item">

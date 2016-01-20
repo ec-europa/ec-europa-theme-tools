@@ -26,11 +26,29 @@ class DtParentCircular extends Exception {}
 
 /**
  * Implements hook_token_info().
+ *
+ * Here we define our token "group" so we do not have to define it anymore in
+ * the handlers.
  */
 function dt_shared_functions_token_info() {
-  $token_info = array();
-  nexteuropa_token_get_handler('language_handler')->hookTokenInfoAlter($token_info);
-  return $token_info;
+  $info['types'][_dt_shared_function_get_token_type()] = array(
+    'name' => t('Dt tokens'),
+    'description' => t('Dt custom tokens'),
+  );
+  return $info;
+}
+
+/**
+ * Helper function to return the token group.
+ *
+ * We predefine this in a helper so that we can use it in multiple files, and in
+ * case it ever changes, we can do it in a centralized location.
+ *
+ * @return string
+ *   The name of the token group we use.
+ */
+function _dt_shared_function_get_token_type() {
+  return 'dt_tokens';
 }
 
 /**
@@ -39,6 +57,8 @@ function dt_shared_functions_token_info() {
 function dt_shared_functions_nexteuropa_token_token_handlers() {
   return array(
     'language_handler' => '\Drupal\dt_shared_functions\LanguageTokenHandler',
+    'publish_date_handler' => '\Drupal\dt_shared_functions\PublishdateTokenHandler',
+    'update_date_handler' => '\Drupal\dt_shared_functions\UpdatedateTokenHandler',
   );
 }
 

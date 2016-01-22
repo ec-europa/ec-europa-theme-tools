@@ -401,7 +401,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             foreach ($items as $delta => $item) {
               // Classes.
               $classes = _nexteuropa_formatters_field_formatter_view_classes($formatter);
-              // Title of the link, can be the custom one or the entity title.
+              // @codingStandardsIgnoreLine.
               $label = $settings['link_title'] != '' ? t($settings['link_title']) : $item['entity']->title;
               // Whether to force or not the language of the link.
               $force = isset($settings['force_language_default']) && $settings['force_language_default'];

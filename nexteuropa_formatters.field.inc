@@ -154,7 +154,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
       '#default_value' => $settings['link_title'],
     );
     $element['force_language_default'] = array(
-      '#title' => t('Force the link to point to the default langauge.'),
+      '#title' => t('Force the link to point to the default language.'),
       '#type' => 'checkbox',
       '#default_value' => $settings['force_language_default'],
     );

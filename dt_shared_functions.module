@@ -344,3 +344,65 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
     }
   }
 }
+
+/**
+ * Helper function to create translations from source.
+ */
+function _dt_shared_function_copy_translation() {
+  $fields_to_fix = array(
+    'departments' => array(
+      'source' => 'Departments',
+      'target' => 'Related departments',
+      'context' => '',
+    ),
+    'topics' => array(
+      'source' => 'Topics',
+      'target' => 'Related topics',
+      'context' => '',
+    ),
+  );
+
+  foreach ($fields_to_fix as $key => $field) {
+
+    // Get the target_id.
+    $query_1 = "SELECT lid FROM locales_source WHERE source='" . $field['target'] . "' AND context='" . $field['context'] . "'";
+    $result_1 = db_query($query_1);
+    if (count($result_1) == 1) {
+      foreach ($result_1 as $record) {
+        $target_id = $record->lid;
+      }
+
+      // Get the source_id.
+      $query_2 = "SELECT lid FROM locales_source WHERE source='" . $field['source'] . "' AND context='" . $field['context'] . "'";
+      $result_2 = db_query($query_2);
+      if (count($result_2) == 1) {
+        foreach ($result_2 as $record) {
+          $source_id = $record->lid;
+        }
+
+        $query_3 = "SELECT * FROM locales_target WHERE lid = $target_id";
+        $result_3 = db_query($query_3);
+        $counter = 0;
+        foreach ($result_3 as $key) {
+          $counter++;
+        }
+
+        if ($counter == 0) {
+          $query_4 = "SELECT * FROM locales_target WHERE lid = $source_id";
+          $result_4 = db_query($query_4);
+          foreach ($result_4 as $record) {
+            $insert_query = "INSERT INTO
+          locales_target
+          (lid, translation, language)
+          VALUES
+          ($target_id, '$record->translation', '$record->language')";
+            db_query($insert_query);
+            $insert_query = NULL;
+          }
+        }
+      }
+    }
+    unset($result);
+    unset($query);
+  }
+}

@@ -399,17 +399,17 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             $lang = language_default();
             $settings = $display['settings'];
             foreach ($items as $delta => $item) {
-              // Clasees.
+              // Classes.
               $classes = _nexteuropa_formatters_field_formatter_view_classes($formatter);
               // Title of the link, can be the custom one or the entity title.
-              $label = $settings['link_title'] != '' ? $settings['link_title'] : $item['entity']->title;
+              $label = $settings['link_title'] != '' ? t($settings['link_title']) : $item['entity']->title;
               // Whether to force or not the language of the link.
               $force = isset($settings['force_language_default']) && $settings['force_language_default'];
 
               if (!$force) {
                 $element[$delta] = array(
                   '#type' => 'link',
-                  '#title' => t($label),
+                  '#title' => $label,
                   '#href' => 'node/' . $items[$delta]['target_id'],
                   '#options' => array(
                     'attributes' => array(
@@ -420,7 +420,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               }
               else {
                 $element[$delta] = array(
-                  '#markup' => l(t($label), 'node/' . $items[$delta]['target_id'], array('language' => $lang, 'attributes' => array('class' => $classes))),
+                  '#markup' => l($label, 'node/' . $items[$delta]['target_id'], array('language' => $lang, 'attributes' => array('class' => $classes))),
                 );
               }
             }

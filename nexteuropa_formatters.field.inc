@@ -342,8 +342,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
       case 'telephone':
         foreach ($items as $delta => $item) {
-          // Make the phone value a link, when its possible.
-          $telf = (dt_core_phonetohtml($item['safe_value'])) ? dt_core_phonetohtml($item['safe_value']) : $item['safe_value'];
+          // Make the phone value a link, if possible.
+          $telf = (dt_shared_function_phonetohtml($item['safe_value'])) ? dt_shared_function_phonetohtml($item['safe_value']) : $item['safe_value'];
           $element[$delta] = array(
             '#markup' => $telf,
           );

@@ -380,6 +380,12 @@ function _dt_shared_function_copy_translation() {
       'source_context' => '',
       'target_context' => '',
     ),
+    'team-page' => array(
+      'source' => 'team page',
+      'target' => 'Team page',
+      'source_context' => '',
+      'target_context' => '',
+    ),
   );
 
   foreach ($fields_to_fix as $key => $field) {

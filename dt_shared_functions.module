@@ -405,4 +405,3 @@ function dt_shared_function_phonetohtml($tel) {
 
   return $htmlphone;
 }
-

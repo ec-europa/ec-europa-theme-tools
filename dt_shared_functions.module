@@ -43,6 +43,67 @@ function dt_shared_functions_nexteuropa_token_token_handlers() {
 }
 
 /**
+ * Implements hook_translated_menu_link_alter().
+ */
+function dt_shared_functions_translated_menu_link_alter(&$item, $map) {
+  global $language;
+  $tokenize = isset($item['options']['menu_token_data']['node']['options']['id']);
+
+  if ($tokenize) {
+    $nid = $item['options']['menu_token_data']['node']['options']['id'];
+    $data['node'] = entity_load_single('node', $nid);
+    // This should be done by the token_menu module, actually.
+    $options['language'] = $language;
+    $item['link_title'] = token_replace($item['title'], $data, $options);
+  }
+}
+
+/**
+ * Helper function to delete menu, menu links, taxonomies.
+ */
+function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
+  switch ($type) {
+    case 'menu':
+      if ($op == 'items') {
+        menu_delete_links($name);
+      }
+      else {
+        menu_delete(array('menu_name' => $name));
+      }
+      break;
+
+    case 'vocabulary':
+      if ($op == 'items') {
+        $voc = taxonomy_vocabulary_machine_name_load($name);
+        if (!empty($voc)) {
+          $terms = taxonomy_get_tree($voc->vid);
+          foreach ($terms as $term) {
+            taxonomy_term_delete($term->tid);
+          }
+        }
+      }
+      else {
+        $voc = taxonomy_vocabulary_machine_name_load($name);
+        if (!empty($voc)) {
+          taxonomy_vocabulary_delete($voc->vid);
+        }
+      }
+      break;
+
+    case 'node':
+      $node_type = array($name);
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', $node_type, 'IN');
+      $result = $query->execute();
+      foreach ($result['node'] as $node) {
+        node_delete($node->nid);
+      }
+      break;
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  *
  * Alters the exposed form to include some additional logic.

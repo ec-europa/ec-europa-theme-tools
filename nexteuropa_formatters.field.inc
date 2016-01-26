@@ -39,6 +39,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ),
       'settings' => array(
         'link_title' => '',
+        'force_language_default' => 0,
       ),
     ),
     'link_button_primary' => array(
@@ -151,6 +152,11 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
       '#title' => t('Title'),
       '#type' => 'textfield',
       '#default_value' => $settings['link_title'],
+    );
+    $element['force_language_default'] = array(
+      '#title' => t('Force the link to point to the default language.'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['force_language_default'],
     );
   }
 
@@ -392,19 +398,33 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             break;
 
           case 'entityreference':
+            $lang = language_default();
             $settings = $display['settings'];
             foreach ($items as $delta => $item) {
-              $label = $settings['link_title'] != '' ? $settings['link_title'] : $item['entity']->title;
-              $element[$delta] = array(
-                '#type' => 'link',
-                '#title' => $label,
-                '#href' => 'node/' . $items[$delta]['target_id'],
-                '#options' => array(
-                  'attributes' => array(
-                    'class' => _nexteuropa_formatters_field_formatter_view_classes($formatter),
+              // Classes.
+              $classes = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+              // @codingStandardsIgnoreLine.
+              $label = $settings['link_title'] != '' ? t($settings['link_title']) : $item['entity']->title;
+              // Whether to force or not the language of the link.
+              $force = isset($settings['force_language_default']) && $settings['force_language_default'];
+
+              if (!$force) {
+                $element[$delta] = array(
+                  '#type' => 'link',
+                  '#title' => $label,
+                  '#href' => 'node/' . $items[$delta]['target_id'],
+                  '#options' => array(
+                    'attributes' => array(
+                      'class' => $classes,
+                    ),
                   ),
-                ),
-              );
+                );
+              }
+              else {
+                $element[$delta] = array(
+                  '#markup' => l($label, 'node/' . $items[$delta]['target_id'], array('language' => $lang, 'attributes' => array('class' => $classes))),
+                );
+              }
             }
             break;
         }

@@ -433,7 +433,7 @@ function _dt_shared_functions_contactphone_patterns() {
       'explain' => 'Country code missing or in wrong format, ex:+32',
     ),
     'telephone' => array(
-      'pattern' => '/^(\+[0-9]{2,3}\s?)((([0-9]{1,4})\s?)+)(\s?\(([^)]+)\))?$/',
+      'pattern' => '/^(\+[0-9]{2,3}\s+)((([0-9]{1,4})\s?)+)(\s?\(([^)]+)\))?$/',
       'return_key' => 2,
       'required' => 1,
       'explain' => 'Phone number is missing or with wrong format (+cc r xxx xx xx (description))',
@@ -455,23 +455,24 @@ function _dt_shared_functions_contactphone_patterns() {
  */
 function dt_shared_function_phonetohtml($tel) {
   $data = trim($tel);
-  foreach (_dt_shared_functions_contactphone_patterns() as $pattern => $pattern_values) {
-    preg_match($pattern_values['pattern'], $data, $matches);
+  // Load the array containing our regular expressions and loop to convert them into a link.
+  foreach (_dt_shared_functions_contactphone_patterns() as $regexp_index => $regexp_values) {
+    preg_match($regexp_values['pattern'], $data, $matches);
     // Something is wrong with the phone value and can't be displayed correctly.
-    if (!isset($matches[$pattern_values['return_key']]) && isset($pattern_values['required'])) {
+    if (!isset($matches[$regexp_values['return_key']]) && isset($regexp_values['required'])) {
       return FALSE;
     }
     else {
-      if (isset($matches[$pattern_values['return_key']])) {
-        $phone[$pattern] = trim($matches[$pattern_values['return_key']]);
+      if (isset($matches[$regexp_values['return_key']])) {
+        $phone[$regexp_index] = trim($matches[$regexp_values['return_key']]);
       }
       else {
-        $phone[$pattern] = '';
+        $phone[$regexp_index] = '';
       }
     }
   }
   // Create the href tag with phone link.
-  $htmlphone = '<a href="tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']) . '">'
+  $htmlphone = '<a href="tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']) . '" class="field--telephone">'
     . $phone['country_prefix'] . ' ' . $phone['telephone'] . '</a> ' . $phone['phone_label'];
 
   return $htmlphone;

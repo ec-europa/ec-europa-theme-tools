@@ -450,8 +450,8 @@ function _dt_shared_functions_contactphone_patterns() {
  * @param string $tel
  *   String containing phone number.
  *
- * @return array|bool
- *   Returns string or False.
+ * @return string
+ *   Returns formatted value or the source one.
  */
 function dt_shared_function_phonetohtml($tel) {
   $data = trim($tel);
@@ -460,7 +460,7 @@ function dt_shared_function_phonetohtml($tel) {
     preg_match($regexp_values['pattern'], $data, $matches);
     // Something is wrong with the phone value and can't be displayed correctly.
     if (!isset($matches[$regexp_values['return_key']]) && isset($regexp_values['required'])) {
-      return FALSE;
+      return $tel;
     }
     else {
       if (isset($matches[$regexp_values['return_key']])) {
@@ -471,11 +471,19 @@ function dt_shared_function_phonetohtml($tel) {
       }
     }
   }
-  // Create the href tag with phone link.
-  $htmlphone = '<a href="tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']) . '" class="field--telephone">'
-    . $phone['country_prefix'] . ' ' . $phone['telephone'] . '</a> ' . $phone['phone_label'];
 
-  return $htmlphone;
+  // Create the href tel: value.
+  $tel = 'tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']);
+  // This defines the element telephone in the component field.
+  $classes = array('class' => 'field__telephone');
+  // This will be the link title.
+  $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
+  // Build the link
+  $htmlphone = l($title, $tel, array('attributes' => $classes));
+  // The full element.
+  $markup = $htmlphone . ' ' . $phone['phone_label'];
+
+  return $markup;
 }
 
 /**

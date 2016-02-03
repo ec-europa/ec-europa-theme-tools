@@ -26,8 +26,9 @@
           $navBarList = $('.inpage-nav__list', $navBar),
           $selector = '.inpage-nav',
           $selectorMobile = '.inpage-nav__navbar-wrapper',
-          $topOffset = GetOffset('.inpage-nav__wrapper', 'top'),
+          $topOffset = GetOffsetTop($('.inpage-nav__wrapper')),
           $screenWidth = $(window).width(),
+          $screenWidthOriginal = $(window).width(),
           $body = $('body');
 
         // Add the navbar.
@@ -41,7 +42,7 @@
         });
 
         // Hide if clicked outside.
-        $('.inpage-nav__navbar', $navBar).click(function(e) {
+        $('.inpage-nav__navbar', $navBar).click(function() {
           $('#inpage-navigation-list').collapse('hide');
         });
 
@@ -51,15 +52,19 @@
         // When we resize the window we should recalculate the top. We use the onresize here as the jquery.resize function
         // can be unregistered.
         window.onresize = function() {
-          $topOffset = GetOffset('.inpage-nav__wrapper', 'top');
+          // New width.
           $screenWidth = $(window).width();
+          // Only when the screen width has changed, we should recalculate the top offset.
+          if ($screenWidthOriginal !== $screenWidth) {
+            $topOffset = GetOffsetTop($('.inpage-nav__wrapper').closest('.col-md-3'));
+          }
           // Reinitialize the scroll function.
           TriggerScroll($screenWidth, $topOffset, $selectorMobile, $selector, $navBar, $navBarCurrent);
           // Reset scrollspy.
           $body.scrollspy('refresh');
         };
 
-        $(window).scroll(function () {
+        $(window).on('scroll', function () {
           TriggerScroll($screenWidth, $topOffset, $selectorMobile, $selector, $navBar, $navBarCurrent);
         });
       });
@@ -113,7 +118,7 @@
         $fullElement = $(selector).closest('.inpage-nav__wrapper'),
         $parentWidth = $(selector).closest('.block__content').width();
 
-    if (GetOffset('.inpage-nav__wrapper', 'bottom') <= $bottomLimit) {
+    if (GetOffsetBottom('.inpage-nav__wrapper') <= $bottomLimit) {
       $fullElement.css({
         'position': 'fixed',
         'bottom': $bottomLimit + 'px',
@@ -132,12 +137,12 @@
 
   }
 
-  function GetOffset(selector, side) {
-    var $element = $(selector).offset();
-    if (side == 'bottom') {
-      return $(document).height() - $(window).scrollTop() - $(selector).outerHeight();
-    }
-    return $element.top;
+  function GetOffsetTop($element) {
+    return $element.offset().top;
+  }
+
+  function GetOffsetBottom(selector) {
+    return parseFloat($(document).height() - $(window).scrollTop() - $(selector).outerHeight())
   }
 
 })(jQuery);

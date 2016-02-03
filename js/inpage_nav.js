@@ -36,7 +36,7 @@
         $navBarList.addClass('nav inpage-nav__list--navbar');
 
         // Scrollspy setup.
-        $(document).scrollspy({
+        $body.scrollspy({
           target: '.is-scrollspy-target'
         });
 
@@ -69,7 +69,7 @@
   function TriggerScroll(screenWidth, topOffset, selectorMobile, selector, $navBar, $navBarCurrent) {
     // Check resolution behaviour.
     if (screenWidth <= 991) {
-      InpageToggle(selectorMobile, selector, $navBar, 'mobile');
+      InpageToggle(selectorMobile, selector, 'mobile');
       InpageUnfix(selector);
       // Add the navbar if needed.
       if ($(window).scrollTop() > topOffset) {
@@ -83,7 +83,7 @@
       }
     }
     else {
-      InpageToggle(selectorMobile, selector, $navBar, 'desktop');
+      InpageToggle(selectorMobile, selector, 'desktop');
       if ($(window).scrollTop() > topOffset) {
         InpageFix(selector);
       }
@@ -93,7 +93,7 @@
     }
   }
 
-  function InpageToggle(mobile, desktop, $navBar, state) {
+  function InpageToggle(mobile, desktop, state) {
     if (state == 'desktop') {
       $(desktop).show();
       $(mobile).hide();
@@ -104,13 +104,13 @@
   }
 
   function InpageUnfix(selector) {
-    $(selector).css({
+    $(selector).closest('.inpage-nav__wrapper').css({
       'position': 'relative'
     });
   }
 
   function InpageFix(selector) {
-    $(selector).css({
+    $(selector).closest('.inpage-nav__wrapper').css({
       'position': 'fixed',
       'top': 0,
       'width': $(selector).closest('.block__content').width() + 'px'

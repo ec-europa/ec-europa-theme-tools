@@ -26,7 +26,7 @@
           $navBarList = $('.inpage-nav__list', $navBar),
           $selector = '.inpage-nav',
           $selectorMobile = '.inpage-nav__navbar-wrapper',
-          $topOffset = GetOffsetTop('.inpage-nav__wrapper'),
+          $topOffset = GetOffset('.inpage-nav__wrapper', 'top'),
           $screenWidth = $(window).width(),
           $body = $('body');
 
@@ -51,7 +51,7 @@
         // When we resize the window we should recalculate the top. We use the onresize here as the jquery.resize function
         // can be unregistered.
         window.onresize = function() {
-          $topOffset = GetOffsetTop('.inpage-nav__wrapper');
+          $topOffset = GetOffset('.inpage-nav__wrapper', 'top');
           $screenWidth = $(window).width();
           // Reinitialize the scroll function.
           TriggerScroll($screenWidth, $topOffset, $selectorMobile, $selector, $navBar, $navBarCurrent);
@@ -104,21 +104,39 @@
   }
 
   function InpageUnfix(selector) {
-    $(selector).closest('.inpage-nav__wrapper').css({
-      'position': 'relative'
-    });
+    $(selector).closest('.inpage-nav__wrapper').removeAttr("style");
   }
 
   function InpageFix(selector) {
-    $(selector).closest('.inpage-nav__wrapper').css({
-      'position': 'fixed',
-      'top': 0,
-      'width': $(selector).closest('.block__content').width() + 'px'
-    });
+    var $footer = $('.footer'),
+        $bottomLimit = $footer.outerHeight() + $('.footer-top').outerHeight(),
+        $fullElement = $(selector).closest('.inpage-nav__wrapper'),
+        $parentWidth = $(selector).closest('.block__content').width();
+
+    if (GetOffset('.inpage-nav__wrapper', 'bottom') <= $bottomLimit) {
+      $fullElement.css({
+        'position': 'fixed',
+        'bottom': $bottomLimit + 'px',
+        'top': 'auto',
+        'width': $parentWidth + 'px'
+      });
+    }
+    else {
+      $fullElement.css({
+        'position': 'fixed',
+        'bottom': 'auto',
+        'top': 0,
+        'width': $parentWidth + 'px'
+      });
+    }
+
   }
 
-  function GetOffsetTop(selector) {
+  function GetOffset(selector, side) {
     var $element = $(selector).offset();
+    if (side == 'bottom') {
+      return $(document).height() - $(window).scrollTop() - $(selector).outerHeight();
+    }
     return $element.top;
   }
 

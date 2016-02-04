@@ -7,22 +7,26 @@
 /**
  * No source field Exception.
  */
-class DtSharedSourceFieldError extends Exception {}
+class DtSharedSourceFieldError extends Exception {
+}
 
 /**
  * No destionation field Exception.
  */
-class DtSharedDestinationFieldError extends Exception {}
+class DtSharedDestinationFieldError extends Exception {
+}
 
 /**
  * Fields are of same tye Exception.
  */
-class DtSharedFieldTypeAreNotSame extends Exception {}
+class DtSharedFieldTypeAreNotSame extends Exception {
+}
 
 /**
  * Circular reference Exception.
  */
-class DtParentCircular extends Exception {}
+class DtParentCircular extends Exception {
+}
 
 /**
  * Implements hook_token_info().
@@ -60,6 +64,67 @@ function dt_shared_functions_nexteuropa_token_token_handlers() {
     'publish_date_handler' => '\Drupal\dt_shared_functions\PublishdateTokenHandler',
     'update_date_handler' => '\Drupal\dt_shared_functions\UpdatedateTokenHandler',
   );
+}
+
+/**
+ * Implements hook_translated_menu_link_alter().
+ */
+function dt_shared_functions_translated_menu_link_alter(&$item, $map) {
+  global $language;
+  $tokenize = isset($item['options']['menu_token_data']['node']['options']['id']);
+
+  if ($tokenize) {
+    $nid = $item['options']['menu_token_data']['node']['options']['id'];
+    $data['node'] = entity_load_single('node', $nid);
+    // This should be done by the token_menu module, actually.
+    $options['language'] = $language;
+    $item['link_title'] = token_replace($item['title'], $data, $options);
+  }
+}
+
+/**
+ * Helper function to delete menu, menu links, taxonomies.
+ */
+function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
+  switch ($type) {
+    case 'menu':
+      if ($op == 'items') {
+        menu_delete_links($name);
+      }
+      else {
+        menu_delete(array('menu_name' => $name));
+      }
+      break;
+
+    case 'vocabulary':
+      if ($op == 'items') {
+        $voc = taxonomy_vocabulary_machine_name_load($name);
+        if (!empty($voc)) {
+          $terms = taxonomy_get_tree($voc->vid);
+          foreach ($terms as $term) {
+            taxonomy_term_delete($term->tid);
+          }
+        }
+      }
+      else {
+        $voc = taxonomy_vocabulary_machine_name_load($name);
+        if (!empty($voc)) {
+          taxonomy_vocabulary_delete($voc->vid);
+        }
+      }
+      break;
+
+    case 'node':
+      $node_type = array($name);
+      $query = new EntityFieldQuery();
+      $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', $node_type, 'IN');
+      $result = $query->execute();
+      foreach ($result['node'] as $node) {
+        node_delete($node->nid);
+      }
+      break;
+  }
 }
 
 /**
@@ -362,5 +427,170 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
         }
       }
     }
+  }
+}
+
+/**
+ * Helper function for contact phone fields.
+ *
+ * This function returns an array that will help
+ * in validation/visualization of parts of
+ * phone number number fields.
+ *
+ * @return array
+ *   return arrays
+ */
+function _dt_shared_functions_contactphone_patterns() {
+  $patterns = array(
+    'phone_label' => array(
+      'pattern' => '/\s?\(([^)]+)\)$/',
+      'return_key' => 0,
+    ),
+    'country_prefix' => array(
+      'pattern' => '/^(\+[0-9]{2,3}\s?)/',
+      'return_key' => 0,
+      'required' => TRUE,
+      'explain' => 'Country code missing or in wrong format, ex:+32',
+    ),
+    'telephone' => array(
+      'pattern' => '/^(\+[0-9]{2,3}\s+)((([0-9]{1,4})\s?)+)(\s?\(([^)]+)\))?$/',
+      'return_key' => 2,
+      'required' => 1,
+      'explain' => 'Phone number is missing or with wrong format (+cc r xxx xx xx (description))',
+    ),
+  );
+  return $patterns;
+}
+
+/**
+ * Generates "<a href=tel:" tag for the contact phone field.
+ *
+ * If in the generation it fails it will return false.
+ *
+ * @param string $tel
+ *   String containing phone number.
+ *
+ * @return string
+ *   Returns formatted value or the source one.
+ */
+function dt_shared_function_phonetohtml($tel) {
+  $data = trim($tel);
+  // Load the array containing our regular expressions and loop to convert them into a link.
+  foreach (_dt_shared_functions_contactphone_patterns() as $regexp_index => $regexp_values) {
+    preg_match($regexp_values['pattern'], $data, $matches);
+    // Something is wrong with the phone value and can't be displayed correctly.
+    if (!isset($matches[$regexp_values['return_key']]) && isset($regexp_values['required'])) {
+      return $tel;
+    }
+    else {
+      if (isset($matches[$regexp_values['return_key']])) {
+        $phone[$regexp_index] = trim($matches[$regexp_values['return_key']]);
+      }
+      else {
+        $phone[$regexp_index] = '';
+      }
+    }
+  }
+
+  // Create the href tel: value.
+  $tel = 'tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']);
+  // This defines the element telephone in the component field.
+  $classes = array('class' => 'field__telephone');
+  // This will be the link title.
+  $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
+  // Build the link
+  $htmlphone = l($title, $tel, array('attributes' => $classes));
+  // The full element.
+  $markup = $htmlphone . ' ' . $phone['phone_label'];
+
+  return $markup;
+}
+
+/**
+ * Helper function to create translations from source.
+ */
+function _dt_shared_function_copy_translation() {
+  $fields_to_fix = array(
+    'departments' => array(
+      'source' => 'Departments',
+      'target' => 'Related departments',
+      'source_context' => '',
+      'target_context' => '',
+    ),
+    'topics' => array(
+      'source' => 'Topics',
+      'target' => 'Related topics',
+      'source_context' => '',
+      'target_context' => '',
+    ),
+    'timeline' => array(
+      'source' => 'Show timeline',
+      'target' => 'Show all timeline',
+      'source_context' => '',
+      'target_context' => '',
+    ),
+    'responsibilities' => array(
+      'source' => 'Responsibilities',
+      'target' => 'Responsibilities',
+      'source_context' => '',
+      'target_context' => 'body:biography:label',
+    ),
+    'team' => array(
+      'source' => 'Team',
+      'target' => 'Team',
+      'source_context' => '',
+      'target_context' => '',
+    ),
+    'team-page' => array(
+      'source' => 'team page',
+      'target' => 'Team page',
+      'source_context' => '',
+      'target_context' => '',
+    ),
+  );
+
+  foreach ($fields_to_fix as $key => $field) {
+
+    // Get the target_id.
+    $query_1 = "SELECT lid FROM locales_source WHERE source='" . $field['target'] . "' AND context='" . $field['target_context'] . "'";
+    $result_1 = db_query($query_1);
+    if (count($result_1) == 1) {
+      foreach ($result_1 as $record) {
+        $target_id = $record->lid;
+      }
+
+      // Get the source_id.
+      $query_2 = "SELECT lid FROM locales_source WHERE source='" . $field['source'] . "' AND context='" . $field['source_context'] . "'";
+      $result_2 = db_query($query_2);
+      if (count($result_2) == 1) {
+        foreach ($result_2 as $record) {
+          $source_id = $record->lid;
+        }
+
+        $query_3 = "SELECT * FROM locales_target WHERE lid = $target_id";
+        $result_3 = db_query($query_3);
+        $counter = 0;
+        foreach ($result_3 as $key) {
+          $counter++;
+        }
+
+        if ($counter == 0) {
+          $query_4 = "SELECT * FROM locales_target WHERE lid = $source_id";
+          $result_4 = db_query($query_4);
+          foreach ($result_4 as $record) {
+            $translation = addslashes($record->translation);
+            $insert_query = "INSERT INTO
+          locales_target
+          (lid, translation, language)
+          VALUES
+          ($target_id, '$translation', '$record->language')";
+            db_query($insert_query);
+            $insert_query = NULL;
+          }
+        }
+      }
+    }
+    unset($result);
+    unset($query);
   }
 }

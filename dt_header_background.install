@@ -13,14 +13,6 @@ function dt_header_background_enable() {
 }
 
 /**
- * Implements hook_install().
- */
-function dt_header_background_install() {
-  // Set the default header background image.
-  _dt_header_background_set_default_header_background();
-}
-
-/**
  * Implements hook_disable().
  */
 function dt_header_background_disable() {

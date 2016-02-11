@@ -151,7 +151,7 @@ function dt_shared_functions_ajax_render_alter(&$commands) {
  * @throws \DtSharedFieldTypeAreNotSame
  *   Exception when source and destination are not the same field type.
  */
-function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name) {
+function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name, $append = FALSE) {
   // Source and destination field info.
   $source_field_info = field_info_field($source_field_name);
   $destination_field_info = field_info_field($destination_field_name);
@@ -200,7 +200,17 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
       $entity_wrapper = entity_metadata_wrapper($entity_type, $entity);
 
       // Check the source field for value.
-      if (
+      if ($append
+        && isset($entity_wrapper->$source_field_name)
+        && $entity_wrapper->$source_field_name->value()) {
+        // Append the data.
+        $newdata = array_merge($entity_wrapper->$destination_field_name->value(), $entity_wrapper->$source_field_name->value());
+        // Set the new data.
+        $entity_wrapper->$destination_field_name = $newdata;
+        // And save the entity.
+        $entity_wrapper->save();
+      }
+      elseif (
         isset($entity_wrapper->$source_field_name)
         && $entity_wrapper->$source_field_name->value()
         && $entity_wrapper->$destination_field_name->value() == NULL

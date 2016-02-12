@@ -39,8 +39,8 @@ class PublishdateTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHand
             if ($node_object->__isset('field_core_date_published')) {
               $date_published = $node_object->field_core_date_published->value();
             }
-            $replacements[$original]  = (!empty($date_published)) ? format_date($date_published, 'custom', 'd/m/Y') :
-              format_date($node_object->created->value(), 'custom', 'd/m/Y') ;
+            $replacements[$original] = (!empty($date_published)) ? format_date($date_published, 'custom', 'd/m/Y') :
+              format_date($node_object->created->value(), 'custom', 'd/m/Y');
           }
         }
       }

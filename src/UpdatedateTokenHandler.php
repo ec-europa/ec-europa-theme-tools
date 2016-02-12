@@ -39,8 +39,8 @@ class UpdatedateTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHandl
             if ($node_object->__isset('field_core_date_updated')) {
               $date_updated = $node_object->field_core_date_updated->value();
             }
-            $replacements[$original]  = (!empty($date_updated)) ? format_date($date_updated, 'custom', 'd/m/Y') :
-              format_date($node_object->changed->value(), 'custom', 'd/m/Y') ;
+            $replacements[$original] = (!empty($date_updated)) ? format_date($date_updated, 'custom', 'd/m/Y') :
+              format_date($node_object->changed->value(), 'custom', 'd/m/Y');
           }
         }
       }

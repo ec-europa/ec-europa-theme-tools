@@ -36,24 +36,11 @@ class PublishdateTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHand
             // Init our date.
             $date_published = NULL;
 
-            // Try to get the date. __isset mostly returns true, therefor we do
-            // a second check and not an else statement.
             if ($node_object->__isset('field_core_date_published')) {
               $date_published = $node_object->field_core_date_published->value();
             }
-
-            // Fall back to entity creation date.
-            if (is_null($date_published)) {
-              $date_published = $node_object->created->value();
-            }
-
-            // Set the replacement.
-            if (isset($date_published) && !is_null($date_published)) {
-              // Format it for output.
-              $date_published = format_date($date_published, 'custom', 'd/m/Y');
-              // Add it to our replacement array.
-              $replacements[$original] = $date_published;
-            }
+            $replacements[$original]  = (!empty($date_published)) ? format_date($date_published, 'custom', 'd/m/Y') :
+              format_date($node_object->created->value(), 'custom', 'd/m/Y') ;
           }
         }
       }

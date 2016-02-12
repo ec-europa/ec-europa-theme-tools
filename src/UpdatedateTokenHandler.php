@@ -36,24 +36,11 @@ class UpdatedateTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHandl
             // Init our date.
             $date_updated = NULL;
 
-            // Try to get the date. __isset mostly returns true, therefor we do
-            // a second check and not an else statement.
             if ($node_object->__isset('field_core_date_updated')) {
               $date_updated = $node_object->field_core_date_updated->value();
             }
-
-            // Fall back to entity creation date.
-            if (is_null($date_updated)) {
-              $date_updated = $node_object->changed->value();
-            }
-
-            // Set the replacement.
-            if (isset($date_updated) && !is_null($date_updated)) {
-              // Format it for output.
-              $date_updated = format_date($date_updated, 'custom', 'd/m/Y');
-              // Add it to our replacement array.
-              $replacements[$original] = $date_updated;
-            }
+            $replacements[$original]  = (!empty($date_updated)) ? format_date($date_updated, 'custom', 'd/m/Y') :
+              format_date($node_object->changed->value(), 'custom', 'd/m/Y') ;
           }
         }
       }

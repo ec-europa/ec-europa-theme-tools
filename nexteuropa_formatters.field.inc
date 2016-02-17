@@ -6,7 +6,12 @@
  */
 
 global $_nexteuropa_formatters_listing_view_modes;
-$_nexteuropa_formatters_listing_view_modes = array('title', 'meta', 'teaser');
+$_nexteuropa_formatters_listing_view_modes = array(
+  'title',
+  'meta',
+  'teaser',
+  'image_label',
+);
 
 /**
  * Implements hook_field_formatter_info().

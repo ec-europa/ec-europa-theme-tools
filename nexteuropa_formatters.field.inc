@@ -30,6 +30,14 @@ function nexteuropa_formatters_field_formatter_info() {
         'contextual_date' => '',
       ),
     ),
+    'tags' => array(
+      'label' => t('Tags (NextEuropa)'),
+      'field types' => array(
+        'taxonomy_term_reference',
+        'entityreference',
+        'link_field',
+      ),
+    ),
     'link_button_default' => array(
       'label' => t('Link button default'),
       'field types' => array(

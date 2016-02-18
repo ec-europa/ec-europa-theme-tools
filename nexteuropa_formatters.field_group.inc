@@ -224,9 +224,12 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
       $attributes = isset($instance_settings['attributes']) ? ' ' . $instance_settings['attributes'] : '';
       $layout = isset($instance_settings['layout']) && $instance_settings['layout'] !== '';
       $modifier = isset($instance_settings['modifier']) && $instance_settings['modifier'] !== '';
+      $custom_classes = isset($instance_settings['classes']) && $instance_settings['classes'] !== '';
 
       if ($show_label) {
-        $label = '<' . $label_element . '><span>' . check_plain($group->label) . '</span></' . $label_element . '>';
+        // @todo: Change approach when ready: https://www.drupal.org/node/1175102.
+        $translatable_label = check_plain(t($group->label, array(), array('langcode' => $group->label_language)));
+        $label = '<' . $label_element . '><span>' . $translatable_label . '</span></' . $label_element . '>';
       }
 
       $add = array(
@@ -237,11 +240,12 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
 
       // Add our modifiers and classes.
       $modifier_and_classes = '';
+
       // Add only those with data.
-      if (isset($instance_settings['modifier']) && $instance_settings['modifier'] !== '') {
+      if ($modifier) {
         $modifier_and_classes .= ' ' . $instance_settings['modifier'];
       }
-      if (isset($instance_settings['classes']) && $instance_settings['classes'] !== '') {
+      if ($custom_classes) {
         $modifier_and_classes .= ' ' . $instance_settings['classes'];
       }
 

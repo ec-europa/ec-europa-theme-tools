@@ -356,15 +356,31 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         switch ($field['type']) {
 
           case 'taxonomy_term_reference':
-
+            foreach ($items as $delta => $item) {
+              $term = taxonomy_term_load($item['tid']);
+              $link_url = isset($term->legacy) ? $term->legacy : url('taxonomy/term/' . $item['tid']);
+              $element[$delta] = _nexteuropa_formatters_tags_item_link($term->name, $link_url);
+            }
             break;
 
           case 'entityreference':
+            $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
+            foreach ($items as $delta => $item) {
+              if ($label = $handler->getLabel($item['entity'])) {
+                if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
+                  $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
+                  $element[$delta] = _nexteuropa_formatters_tags_item_link($label, $link_url);
+                }
+                else {
+                  $element[$delta] = array('#markup' => check_plain($label));
+                }
+              }
+            }
+            break;
+
           case 'link_field':
             foreach ($items as $delta => $item) {
-              $element[$delta] = array(
-                '#markup' => '<span class="tags__item">Link</span>',
-              );
+              $element[$delta] = _nexteuropa_formatters_tags_item_link($item['title'], $item['url']);
             }
             break;
         }
@@ -490,6 +506,32 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
     }
   }
   return $element;
+}
+
+/**
+ * Helper function returns render array of type link for a tag item.
+ *
+ * @param string $item_title
+ *   The title of the link.
+ * @param string $item_link
+ *    The href value of the link.
+ *
+ * @see theme_link()
+ *
+ * @return array
+ *    Render array constructing a link.
+ */
+function _nexteuropa_formatters_tags_item_link($item_title, $item_link) {
+  return array(
+    '#type' => 'link',
+    '#title' => $item_title,
+    '#href' => $item_link,
+    '#options' => array(
+      'attributes' => array(
+        'class' => array('tags__item'),
+      ),
+    ),
+  );
 }
 
 /**

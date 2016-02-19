@@ -30,7 +30,7 @@ function nexteuropa_formatters_field_formatter_info() {
         'contextual_date' => '',
       ),
     ),
-    'tags' => array(
+    'nexteuropa_tags' => array(
       'label' => t('Tags (NextEuropa)'),
       'field types' => array(
         'taxonomy_term_reference',
@@ -265,6 +265,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
   $element = array();
   if (!empty($items)) {
     $formatter = $display['type'];
+
     switch ($formatter) {
       case 'context_nav_item':
         $layout_field_settings = ds_get_field_settings($entity_type, $entity->type, 'full');
@@ -333,19 +334,34 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               if ($date_updated = $node_wrapper->field_core_date_updated->value()) {
                 $element[$delta] = array(
                   '#markup' => '<span class="context-nav__item">' .
-                  format_date(strtotime($item['value']), 'ec_date_j_f_y') . ' ' .
-                  t('(last update on: @date)',
-                  array('@date' => format_date($date_updated, 'ec_date_j_f_y'))) .
-                  '</span>',
+                    format_date(strtotime($item['value']), 'ec_date_j_f_y') . ' ' .
+                    t('(last update on: @date)',
+                      array('@date' => format_date($date_updated, 'ec_date_j_f_y'))) .
+                    '</span>',
                 );
               }
               else {
                 $element[$delta] = array(
                   '#markup' => '<span class="context-nav__item">' .
-                  format_date(strtotime($item['value']), 'ec_date_j_f_y') .
-                  '</span>',
+                    format_date(strtotime($item['value']), 'ec_date_j_f_y') .
+                    '</span>',
                 );
               }
+            }
+            break;
+        }
+        break;
+
+      case 'nexteuropa_tags':
+        switch ($field['type']) {
+
+          case 'taxonomy_term_reference':
+          case 'entityreference':
+          case 'link_field':
+            foreach ($items as $delta => $item) {
+              $element[$delta] = array(
+                '#markup' => '<span class="tags__item">Link</span>',
+              );
             }
             break;
         }
@@ -742,28 +758,37 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
  * Implements hook_preprocess_field().
  */
 function nexteuropa_formatters_preprocess_field(&$variables) {
-  if (isset($variables['element']['#formatter']) && $variables['element']['#formatter'] == 'entityreference_entity_view') {
+  if (isset($variables['element']['#formatter'])) {
+
+    // Convenient access to the important elements of the $variables.
     $entity_type = $variables['element']['#entity_type'];
     $field_name  = $variables['element']['#field_name'];
     $bundle      = $variables['element']['#bundle'];
     $view_mode   = $variables['element']['#view_mode'];
 
-    // Fetch the instance settings and default display settings.
-    $info = field_info_instance($entity_type, $field_name, $bundle);
-    $formatter_settings = $info['display']['default']['settings'];
-    if (isset($info['display'][$view_mode]['settings'])) {
-      $formatter_settings = $info['display'][$view_mode]['settings'] + $formatter_settings;
-    }
-    // Make the setting available in the field template.
-    $variables['nexteuropa_listing_columns'] = $formatter_settings['nexteuropa_listing_columns'];
-    $variables['nexteuropa_listing_modifier'] = $formatter_settings['nexteuropa_listing_modifier'];
-    $variables['nexteuropa_listing_wrapper_modifier'] = $formatter_settings['nexteuropa_listing_wrapper_modifier'];
+    switch ($variables['element']['#formatter']) {
 
-    // Attach file translations to the render array of every field requiring it.
-    if ($formatter_settings['show_translations'] == 1) {
-      foreach ($variables['items'] as $item_key => $item) {
-        $variables['items'][$item_key]['#suffix'] = _nexteuropa_formatters_attach_translations($item);
-      }
+      case 'entityreference_entity_view':
+
+        // Fetch the instance settings and default display settings.
+        $info = field_info_instance($entity_type, $field_name, $bundle);
+        $formatter_settings = $info['display']['default']['settings'];
+        if (isset($info['display'][$view_mode]['settings'])) {
+          $formatter_settings = $info['display'][$view_mode]['settings'] + $formatter_settings;
+        }
+        // Make the setting available in the field template.
+        $variables['nexteuropa_listing_columns'] = $formatter_settings['nexteuropa_listing_columns'];
+        $variables['nexteuropa_listing_modifier'] = $formatter_settings['nexteuropa_listing_modifier'];
+        $variables['nexteuropa_listing_wrapper_modifier'] = $formatter_settings['nexteuropa_listing_wrapper_modifier'];
+
+        // Attach file translations when required.
+        if ($formatter_settings['show_translations'] == 1) {
+          foreach ($variables['items'] as $item_key => $item) {
+            $variables['items'][$item_key]['#suffix'] = _nexteuropa_formatters_attach_translations($item);
+          }
+        }
+        break;
+
     }
   }
 }

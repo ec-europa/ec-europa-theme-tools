@@ -217,14 +217,21 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
       break;
 
     case 'section_group':
-      $show_label = isset($group->format_settings['instance_settings']['show_label']) ? $group->format_settings['instance_settings']['show_label'] : 0;
-      $label_element = isset($group->format_settings['instance_settings']['label_element']) ? $group->format_settings['instance_settings']['label_element'] : 'h2';
-      $attributes = isset($group->format_settings['instance_settings']['attributes']) ? ' ' . $group->format_settings['instance_settings']['attributes'] : '';
-      $layout = isset($group->format_settings['instance_settings']['layout']) && $group->format_settings['instance_settings']['layout'] !== '';
-      $modifier = isset($group->format_settings['instance_settings']['modifier']) && $group->format_settings['instance_settings']['modifier'] !== '';
+      $instance_settings = $group->format_settings['instance_settings'];
+
+      $show_label = isset($instance_settings['show_label']) ? $instance_settings['show_label'] : 0;
+      $label_element = isset($instance_settings['label_element']) ? $instance_settings['label_element'] : 'h2';
+      $attributes = isset($instance_settings['attributes']) ? ' ' . $instance_settings['attributes'] : '';
+      $layout = isset($instance_settings['layout']) && $instance_settings['layout'] !== '';
+      $modifier = isset($instance_settings['modifier']) && $instance_settings['modifier'] !== '';
+      $custom_classes = isset($instance_settings['classes']) && $instance_settings['classes'] !== '';
 
       if ($show_label) {
-        $label = '<' . $label_element . '><span>' . check_plain($group->label) . '</span></' . $label_element . '>';
+        // @todo: Change approach when ready: https://www.drupal.org/node/1175102.
+        // @codingStandardsIgnoreStart
+        $translatable_label = check_plain(t($group->label, array(), array('langcode' => $group->label_language)));
+        // @codingStandardsIgnoreEnd
+        $label = '<' . $label_element . '><span>' . $translatable_label . '</span></' . $label_element . '>';
       }
 
       $add = array(
@@ -235,16 +242,17 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
 
       // Add our modifiers and classes.
       $modifier_and_classes = '';
+
       // Add only those with data.
-      if (isset($group->format_settings['instance_settings']['modifier']) && $group->format_settings['instance_settings']['modifier'] !== '') {
-        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['modifier'];
+      if ($modifier) {
+        $modifier_and_classes .= ' ' . $instance_settings['modifier'];
       }
-      if (isset($group->format_settings['instance_settings']['classes']) && $group->format_settings['instance_settings']['classes'] !== '') {
-        $modifier_and_classes .= ' ' . $group->format_settings['instance_settings']['classes'];
+      if ($custom_classes) {
+        $modifier_and_classes .= ' ' . $instance_settings['classes'];
       }
 
       if ($layout) {
-        switch ($group->format_settings['instance_settings']['layout']) {
+        switch ($instance_settings['layout']) {
           case 'col-md-8':
             $add['#prefix'] = '<div ' . $attributes . ' class="section__group row' . $modifier_and_classes . '"><div class="col-md-8">';
             if ($show_label) {
@@ -262,7 +270,7 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
             break;
         }
       }
-      elseif ($group->format_settings['instance_settings']['modifier'] == 'section__group--full-width') {
+      elseif ($instance_settings['modifier'] == 'section__group--full-width') {
         $add['#prefix'] = '<div ' . $attributes . ' class="section__group' . $modifier_and_classes . '"><div>';
         if ($show_label) {
           $add['#prefix'] .= $label;

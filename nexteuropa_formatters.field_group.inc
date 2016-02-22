@@ -228,7 +228,9 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
 
       if ($show_label) {
         // @todo: Change approach when ready: https://www.drupal.org/node/1175102.
+        // @codingStandardsIgnoreStart
         $translatable_label = check_plain(t($group->label, array(), array('langcode' => $group->label_language)));
+        // @codingStandardsIgnoreEnd
         $label = '<' . $label_element . '><span>' . $translatable_label . '</span></' . $label_element . '>';
       }
 

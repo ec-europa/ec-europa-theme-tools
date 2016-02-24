@@ -493,9 +493,9 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
       case 'entity_reference_section':
         // Preconfigure entityreference_field_formatter_view().
         // section__item
-        $new_display = $display;
-        $new_display['type'] = 'entityreference_entity_view';
-        $element = entityreference_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $new_display);
+        $display['type'] = 'entityreference_entity_view';
+        $display['settings']['use_content_language'] = TRUE;
+        $element = entityreference_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display);
         foreach ($element as $delta => $item) {
           $key_of_node = key($element[$delta]['node']);
           $element[$delta]['node'][$key_of_node]['#prefix'] = '<div class="section__item">';

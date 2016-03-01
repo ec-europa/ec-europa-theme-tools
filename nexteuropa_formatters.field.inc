@@ -109,6 +109,7 @@ function nexteuropa_formatters_field_formatter_info() {
         'entityreference',
       ),
       'settings' => array(
+        'use_content_language' => TRUE,
         'view_mode' => 'default',
         'links' => TRUE,
       ),
@@ -155,6 +156,14 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
       module_load_include('inc', 'date', 'date_admin');
       $element[] = date_default_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
     }
+  }
+
+  if ($display['type'] == 'entity_reference_section') {
+    $element['use_content_language'] = array(
+      '#title' => t('Use the content language for referenced items.'),
+      '#type' => 'checkbox',
+      '#default_value' => $settings['use_content_language'],
+    );
   }
 
   if ($display['type'] == 'link_button_default' && $field['type'] == 'entityreference') {
@@ -494,7 +503,6 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         // Preconfigure entityreference_field_formatter_view().
         // section__item
         $display['type'] = 'entityreference_entity_view';
-        $display['settings']['use_content_language'] = TRUE;
         $element = entityreference_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display);
         foreach ($element as $delta => $item) {
           $key_of_node = key($element[$delta]['node']);

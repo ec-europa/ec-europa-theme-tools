@@ -96,12 +96,9 @@ function nexteuropa_formatters_field_formatter_info() {
         'taxonomy_term_reference',
       ),
     ),
-    'link_listing_title' => array(
+    'listing_title' => array(
       'label' => t('Listing title'),
-      'field types' => array(
-        'link_field',
-        'taxonomy_term_reference',
-      ),
+      'field types' => array('text'),
     ),
     'entity_reference_section' => array(
       'label' => t('Entity reference section group'),
@@ -212,6 +209,7 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
       return 'btn btn-default';
 
     case 'link_listing_title':
+    case 'listing_title':
       return 'listing__title';
 
     case 'entity_reference_section':
@@ -407,6 +405,15 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           $element[$delta] = array(
             '#markup' => $telf,
           );
+        }
+        break;
+
+      case 'listing_title':
+        $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+        foreach ($items as $delta => $item) {
+         $element[$delta] = array(
+            '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
+          ); 
         }
         break;
 

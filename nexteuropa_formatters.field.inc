@@ -411,9 +411,9 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
       case 'listing_title':
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
-         $element[$delta] = array(
+          $element[$delta] = array(
             '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
-          ); 
+          );
         }
         break;
 

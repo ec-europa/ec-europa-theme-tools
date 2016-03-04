@@ -72,12 +72,22 @@
   };
 
   function TriggerScroll(screenWidth, topOffset, selectorMobile, selector, $navBar, $navBarCurrent) {
+    var $menu = $('.site-menu'),
+        menuHeight = $menu.height(),
+        menuIsOpen = $menu.hasClass('collapse in'),
+        scrollTop = $(window).scrollTop();
+
+    // If the menu is open, take into account the height difference.
+    if (menuIsOpen) {
+      scrollTop -= menuHeight;
+    }
+
     // Check resolution behaviour.
     if (screenWidth <= 991) {
       InpageToggle(selectorMobile, selector, 'mobile');
       InpageUnfix(selector);
       // Add the navbar if needed.
-      if ($(window).scrollTop() > topOffset) {
+      if (scrollTop > topOffset) {
         Drupal.behaviors.inpage_navigation.currentTitle($navBar, $navBarCurrent);
         $(selectorMobile).show();
         $(selector).hide();
@@ -89,7 +99,7 @@
     }
     else {
       InpageToggle(selectorMobile, selector, 'desktop');
-      if ($(window).scrollTop() > topOffset) {
+      if (scrollTop > topOffset) {
         InpageFix(selector);
       }
       else {

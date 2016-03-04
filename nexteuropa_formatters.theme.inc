@@ -97,8 +97,10 @@ function theme_nexteuropa_file_translations($variables) {
   $files_count = isset($variables['node']->field_core_file) ? count($variables['node']->field_core_file) : 0;
 
   if ($files_count > 1) {
+    $displayed_langcode = entity_translation_get_existing_language($variables['node']->type, $variables['node']);
+
     // Remove one from the count, if the current language is in the list.
-    if (isset($variables['node']->field_core_file[$variables['node']->language])) {
+    if (isset($variables['node']->field_core_file[$displayed_langcode])) {
       $files_count--;
     }
     $files = $variables['node']->field_core_file;
@@ -148,7 +150,7 @@ function theme_nexteuropa_file_translations($variables) {
     );
 
     // Before we start listing translations, we unset our source language.
-    unset($files[$variables['node']->language]);
+    unset($files[$displayed_langcode]);
 
     foreach ($files as $lang => $file) {
       $languages = locale_language_list();

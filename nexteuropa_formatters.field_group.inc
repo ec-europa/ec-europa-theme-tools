@@ -126,7 +126,7 @@ function nexteuropa_formatters_field_group_format_settings($group) {
         '#description' => t('E.g. name="anchor"'),
         '#weight' => 3,
       );
-      
+  
       $form['instance_settings']['modifier'] = array(
         '#title' => t('Modifiers'),
         '#type' => 'select',

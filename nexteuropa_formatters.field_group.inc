@@ -108,22 +108,25 @@ function nexteuropa_formatters_field_group_format_settings($group) {
         '#title' => t('Show label'),
         '#type' => 'select',
         '#options' => array(0 => t('No'), 1 => t('Yes')),
-        '#default_value' => isset($group->format_settings['instance_settings']['show_label']) ? $group->format_settings['instance_settings']['show_label'] : $formatter['instance_settings']['show_label'],
+        '#default_value' => isset($group->format_settings['instance_settings']['show_label']) ? $group->format_settings['instance_settings']['show_label'] : '',
         '#weight' => 1,
       );
+
       $form['instance_settings']['label_element'] = array(
         '#title' => t('Label element'),
         '#type' => 'textfield',
-        '#default_value' => isset($group->format_settings['instance_settings']['label_element']) ? $group->format_settings['instance_settings']['label_element'] : $formatter['instance_settings']['label_element'],
+        '#default_value' => isset($group->format_settings['instance_settings']['label_element']) ? $group->format_settings['instance_settings']['label_element'] : '',
         '#weight' => 2,
       );
+
       $form['instance_settings']['attributes'] = array(
         '#title' => t('Attributes'),
         '#type' => 'textfield',
-        '#default_value' => isset($group->format_settings['instance_settings']['attributes']) ? $group->format_settings['instance_settings']['attributes'] : $formatter['instance_settings']['attributes'],
+        '#default_value' => isset($group->format_settings['instance_settings']['attributes']) ? $group->format_settings['instance_settings']['attributes'] : '',
         '#description' => t('E.g. name="anchor"'),
         '#weight' => 3,
       );
+      
       $form['instance_settings']['modifier'] = array(
         '#title' => t('Modifiers'),
         '#type' => 'select',
@@ -136,6 +139,7 @@ function nexteuropa_formatters_field_group_format_settings($group) {
         '#default_value' => isset($group->format_settings['instance_settings']['modifier']) ? $group->format_settings['instance_settings']['modifier'] : '',
         '#weight' => 4,
       );
+
       $form['instance_settings']['layout'] = array(
         '#title' => t('Extra Layout'),
         '#type' => 'select',

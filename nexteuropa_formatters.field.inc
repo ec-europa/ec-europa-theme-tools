@@ -650,6 +650,7 @@ function nexteuropa_formatters_field_formatter_info_alter(&$info) {
     'nexteuropa_listing_columns' => 'default',
     'nexteuropa_listing_modifier' => '',
     'nexteuropa_listing_wrapper_modifier' => '',
+    'nexteuropa_listing_item_modifier' => '',
   );
   $info['link_listing_title']['settings'] += array(
     'nexteuropa_title_listing_modifier' => '',
@@ -711,6 +712,13 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
       '#type' => 'textfield',
       '#title' => t('BEM: Listing Wrapper Modifier'),
       '#default_value' => $settings['nexteuropa_listing_wrapper_modifier'],
+      '#description' => t('Class names separated by spaces.'),
+    );
+
+    $settings_form['nexteuropa_listing_item_modifier'] = array(
+      '#type' => 'textfield',
+      '#title' => t('BEM: Listing item Modifier'),
+      '#default_value' => $settings['nexteuropa_listing_item_modifier'],
       '#description' => t('Class names separated by spaces.'),
     );
   }
@@ -797,6 +805,13 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
       }
       $summary .= t('BEM: Listing Wrapper Modifier: %wrapper_modifier', array('%wrapper_modifier' => $settings['nexteuropa_listing_wrapper_modifier']));
     }
+
+    if (isset($settings['nexteuropa_listing_item_modifier']) && !empty($settings['nexteuropa_listing_item_modifier'])) {
+      if (!empty($summary)) {
+        $summary .= '<br />';
+      }
+      $summary .= t('BEM: Listing Item Modifier: %item_modifier', array('%item_modifier' => $settings['nexteuropa_listing_item_modifier']));
+    }
   }
   elseif ($context['instance']['display'][$context['view_mode']]['type'] == 'link_listing_title') {
     $display = $context['instance']['display'][$context['view_mode']];
@@ -845,6 +860,7 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
         $variables['nexteuropa_listing_columns'] = $formatter_settings['nexteuropa_listing_columns'];
         $variables['nexteuropa_listing_modifier'] = $formatter_settings['nexteuropa_listing_modifier'];
         $variables['nexteuropa_listing_wrapper_modifier'] = $formatter_settings['nexteuropa_listing_wrapper_modifier'];
+        $variables['nexteuropa_listing_item_modifier'] = $formatter_settings['nexteuropa_listing_item_modifier'];
 
         // Attach file translations when required.
         if ($formatter_settings['show_translations'] == 1) {

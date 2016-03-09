@@ -196,7 +196,7 @@ function _nexteuropa_formatters_field_component_listing($variables, $config) {
   $wrapper_class = $config['modifier'] == 'default' ? '' : ' listing__wrapper--' . $config['layout'];
   $wrapper_class .= ' ' . trim($config['wrapper_modifier']);
   $item_class = "listing__item";
-  $item_class .=  !empty($config['item_modifier']) ? ' ' . trim($config['item_modifier']) : '';
+  $item_class .= !empty($config['item_modifier']) ? ' ' . trim($config['item_modifier']) : '';
 
   $columns_num = 1;
   if ($config['layout'] == 'two-columns') {
@@ -237,7 +237,6 @@ function _nexteuropa_formatters_field_component_listing($variables, $config) {
           break;
 
         default:
-        kpr($item);
           $rendered_item = drupal_render($item);
           break;
       }

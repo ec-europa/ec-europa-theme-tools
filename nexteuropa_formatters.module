@@ -68,7 +68,9 @@ function _nexteuropa_formatters_get_context_nav_wrapper($label, $add_expander = 
 }
 
 /**
- * Override of theme_field().
+ * Custom theme overriding function.
+ *
+ * @see nexteuropa_formatters_theme_registry_alter().
  */
 function nexteuropa_formatters_theme_field_override($variables) {
   $element = $variables['element'];

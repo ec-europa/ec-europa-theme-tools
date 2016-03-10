@@ -8,6 +8,13 @@ require_once 'nexteuropa_formatters.field.inc';
 require_once 'nexteuropa_formatters.field_group.inc';
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function nexteuropa_formatters_theme_registry_alter(&$registry) {
+  $registry['field']['function'] = 'nexteuropa_formatters_theme_field_override';
+}
+
+/**
  * Implements hook_theme().
  */
 function nexteuropa_formatters_theme($existing, $type, $theme, $path) {
@@ -63,7 +70,7 @@ function _nexteuropa_formatters_get_context_nav_wrapper($label, $add_expander = 
 /**
  * Override of theme_field().
  */
-function nexteuropa_formatters_field($variables) {
+function nexteuropa_formatters_theme_field_override($variables) {
   $element = $variables['element'];
   $field_type = isset($element['#field_type']) ? $element['#field_type'] : NULL;
 

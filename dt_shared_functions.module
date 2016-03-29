@@ -29,6 +29,46 @@ class DtParentCircular extends Exception {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function dt_shared_functions_views_api() {
+  return ['api' => 3.0];
+}
+
+/**
+ * Implements hook_views_plugins().
+ */
+function dt_shared_functions_views_plugins() {
+  return [
+    'display_extender' => [
+      'dt_shared_views_config' => [
+        'title' => t('Digital Transformation config'),
+        'handler' => 'views_plugin_dt_shared_functions_views_config',
+        'enabled' => TRUE,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Custom function returning additional views configuration.
+ */
+function _dt_shared_functions_additional_views_config() {
+  $settings = [
+    'dt_shared_functions_views_config_title' => [
+      'title' => t('Title'),
+      'type' => 'textfield',
+      'description' => t('The title to display in the counter result.'),
+      'required' => FALSE,
+    ],
+  ];
+
+  module_invoke_all('dt_shared_functions_views_config', $settings);
+
+  return $settings;
+}
+
+/**
  * Implements hook_token_info().
  *
  * Here we define our token "group" so we do not have to define it anymore in
@@ -151,7 +191,6 @@ function dt_shared_functions_ajax_render_alter(&$commands) {
   $commands[] = ajax_command_invoke('.js-showonsubmit', 'show');
 }
 
-
 /**
  * Copy values from source to destination filed.
  *
@@ -222,7 +261,8 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
       // Check the source field for value.
       if ($append
         && isset($entity_wrapper->$source_field_name)
-        && $entity_wrapper->$source_field_name->value()) {
+        && $entity_wrapper->$source_field_name->value()
+      ) {
         // Append the data.
         $newdata = array_merge($entity_wrapper->$destination_field_name->value(), $entity_wrapper->$source_field_name->value());
         // Set the new data.

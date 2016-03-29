@@ -5,6 +5,8 @@ package = NextEuropa
 version = 7.x-1.0
 project = nexteuropa
 
+files[] = views/views_plugin_dt_shared_functions_views_config.inc
+
 registry_autoload[] = PSR-4
 
 dependencies[] = views

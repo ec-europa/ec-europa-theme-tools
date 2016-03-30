@@ -8,6 +8,7 @@
  * Class to define a style plugin handler.
  */
 class views_plugin_style_nexteuropa_context_nav extends views_plugin_style_default {
+
   /**
    * Definition.
    */

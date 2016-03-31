@@ -17,7 +17,7 @@
  * @param array $settings
  *   Argument by reference containing the settings.
  */
-function hook_dt_shared_functions_views_config(&$settings) {
+function hook_dt_shared_functions_views_config_alter(&$settings) {
   $settings['dt_shared_functions_views_config_title'] = [
     'title' => t('Title'),
     'type' => 'textfield',

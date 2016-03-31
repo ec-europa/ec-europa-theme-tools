@@ -63,7 +63,7 @@ function _dt_shared_functions_additional_views_config() {
     ],
   ];
 
-  module_invoke_all('dt_shared_functions_views_config', $settings);
+  drupal_alter('dt_shared_functions_views_config', $settings);
 
   return $settings;
 }

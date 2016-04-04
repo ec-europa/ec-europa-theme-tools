@@ -437,6 +437,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 '#field' => $instance,
                 '#display' => $display,
               );
+              $bar = 'foo';
             }
             break;
 
@@ -856,11 +857,22 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
         if (isset($info['display'][$view_mode]['settings'])) {
           $formatter_settings = $info['display'][$view_mode]['settings'] + $formatter_settings;
         }
+
         // Make the setting available in the field template.
-        $variables['nexteuropa_listing_columns'] = $formatter_settings['nexteuropa_listing_columns'];
-        $variables['nexteuropa_listing_modifier'] = $formatter_settings['nexteuropa_listing_modifier'];
-        $variables['nexteuropa_listing_wrapper_modifier'] = $formatter_settings['nexteuropa_listing_wrapper_modifier'];
-        $variables['nexteuropa_listing_item_modifier'] = $formatter_settings['nexteuropa_listing_item_modifier'];
+        $settings = [
+          'nexteuropa_listing_columns',
+          'nexteuropa_listing_modifier',
+          'nexteuropa_listing_wrapper_modifier',
+          'nexteuropa_listing_item_modifier',
+        ];
+        foreach ($settings as $setting) {
+          $variables[$setting] = isset($formatter_settings[$setting]) ? $formatter_settings[$setting] : '';
+        }
+
+        // Default the settings.
+        if (!isset($formatter_settings['show_translations'])) {
+          $formatter_settings['show_translations'] = 0;
+        }
 
         // Attach file translations when required.
         if ($formatter_settings['show_translations'] == 1) {

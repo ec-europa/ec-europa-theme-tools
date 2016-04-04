@@ -133,6 +133,7 @@ function nexteuropa_formatters_field_group_format_settings($group) {
         '#options' => array(
           '' => t('None'),
           'section__group--full-width' => t('Full width'),
+          'section__group--no-margin' => t('No margins'),
           'section__group--highlight-grey' => t('Highlight Grey'),
           'section__group--highlight-yellow' => t('Highlight Yellow'),
         ),

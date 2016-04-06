@@ -129,6 +129,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
     // Handling nexteuropa_formatters custom cases.
     switch ($element['#formatter']) {
       case 'context_nav_item':
+      case 'listing_title':
         $output = '';
 
         // Render the items.

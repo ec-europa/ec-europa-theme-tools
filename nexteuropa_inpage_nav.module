@@ -7,82 +7,286 @@
 define('NEXTEUROPA_INPAGE_NAV_DEPTH', 'h2');
 
 /**
- * Implements hook_init().
+ * Implements hook_theme().
  */
-function nexteuropa_inpage_nav_init() {
-  // Build the anchors.
-  if (!path_is_admin(current_path())) {
-    _nexteuropa_inpage_nav_markup_anchor();
+function nexteuropa_inpage_nav_theme() {
+  return [
+    'inpage_nav_block' => [
+      'template' => 'inpage_nav_block',
+      'path' => drupal_get_path('module', 'nexteuropa_inpage_nav') . '/templates',
+      'variables' => [
+        'title' => '',
+        'links' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ds_fields_info().
+ */
+function nexteuropa_inpage_nav_ds_fields_info($entity_type) {
+  $fields = [];
+
+  if ($entity_type == 'node') {
+    $fields['node']['in_page_navigation'] = [
+      'title' => t('Inpage navigation'),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'function' => '_nexteuropa_inpage_nav_render_tmp',
+    ];
+  }
+
+  return $fields;
+}
+
+/**
+ * Helper function that acts as a placeholder for the inpage nav.
+ *
+ * @param array $field
+ *   All information on the field and its parent entity.
+ *
+ * @return string
+ *   Space, to have it render.
+ */
+function _nexteuropa_inpage_nav_render_tmp($field) {
+  return ' ';
+}
+
+/**
+ * Implements nexteuropa_inpage_nav_node_view_alter().
+ *
+ * When we request the inpage navigation, we add a pre render function.
+ */
+function nexteuropa_inpage_nav_node_view_alter(&$build) {
+  if (isset($build['in_page_navigation'])) {
+    $build['#pre_render'][] = '_nexteuropa_inpage_nav_build_inpage_nav';
   }
 }
 
 /**
- * Implements hook_block_info().
+ * Function to render the inpage navigation.
+ *
+ * @param array $anchors
+ *   The list of anchors to use.
+ *
+ * @return string
+ *   Rendered inpage navigation markup.
  */
-function nexteuropa_inpage_nav_block_info() {
-  $blocks = array();
-  $blocks['inline_navigation']['info'] = t('In-page Navigation');
-  return $blocks;
-}
-
-/**
- * Implements hook_block_view().
- */
-function nexteuropa_inpage_nav_block_view($delta = '') {
-  $block = array();
-
-  // Get our static variable.
-  $anchors = &drupal_static('_nexteuropa_inpage_nav_markup_anchor');
-
-  if (is_array($anchors) && $delta === "inline_navigation") {
+function _nexteuropa_inpage_nav_render($anchors) {
+  if (is_array($anchors)) {
     // Initialize the block.
-    $block['content'] = array();
     $items = array();
 
-    // Also lets try to use the cached node object.
-    if (isset($anchors['node'])) {
-      $node_title = $anchors['node_title'];
-    }
-    else {
-      $node = menu_get_object();
-      $node_title = $node->title;
-    }
-    // Loop our anchors.
-    foreach ($anchors['anchorlist'] as $heading) {
+    // Loop our anchors. But we should replace possible bad parts from the id.
+    foreach ($anchors as $heading) {
       $items[] = '<a href="#' . $heading['id'] . '" class="inpage_nav__list-item">' . $heading['label'] . '</a>';
     }
 
     // Include js.
     drupal_add_js(drupal_get_path('module', 'nexteuropa_inpage_nav') . '/js/inpage_nav.js');
-    drupal_add_js(array('inpage_navigation' => array('node_title' => $node_title)), 'setting');
+    drupal_add_js(array('inpage_navigation' => array('node_title' => 'test title')), 'setting');
 
-    $block['subject'] = t('Page Contents');
+    // Render config for the links.
     $variables = array(
       'items' => $items,
       'attributes' => array(
         'class' => 'nav inpage-nav__list',
       ),
     );
-    $block['content'] = '<div class="inpage-nav is-scrollspy-target">' . theme('item_list', $variables) . '</div>';
-  }
 
-  return $block;
+    // Render config for the full block.
+    $render_config = array(
+      '#theme' => 'inpage_nav_block',
+      '#links' => theme('item_list', $variables),
+      '#title' => t('Page Contents'),
+    );
+
+    return drupal_render($render_config);
+  }
 }
 
 /**
- * Helper: returns the list of heading anchors in the markup.
+ * Pre render function for inpage navigation.
+ *
+ * This will call required function to build the inpage navigation.
+ *
+ * @param array $element
+ *   Render array for the entity.
+ *
+ * @return array
+ *   Modified render array for the entity.
  */
-function _nexteuropa_inpage_nav_markup_anchor() {
-  // Create static.
-  $anchors = &drupal_static('_nexteuropa_inpage_nav_markup_anchor');
-  // If $anchors is not yet an array we parse it.
-  if (!is_array($anchors) && $node = menu_get_object('node')) {
-    $render_array = node_view($node);
-    $markup = drupal_render($render_array);
+function _nexteuropa_inpage_nav_build_inpage_nav($element) {
+  // Get the anchors.
+  $anchors = _nexteuropa_inpage_nav_get_anchors($element);
+
+  // If we are able to build the markup. Then we should return it in the correct
+  // place.
+  if (!empty($anchors)) {
+    $element['in_page_navigation'][0]['#markup'] = _nexteuropa_inpage_nav_render($anchors);
+    return $element;
   }
-  else {
-    return FALSE;
+
+  // If we cannot render it, we unset it.
+  unset($element['in_page_navigation']);
+  return $element;
+}
+
+/**
+ * Helper function to parse a render array into an anchor list.
+ *
+ * @param array $element
+ *   Render array for the entity.
+ *
+ * @return array
+ *   The anchors that can be used for rendering.
+ */
+function _nexteuropa_inpage_nav_get_anchors($element) {
+  $ordered_array = [];
+  // Rebuild the full array to be in the correct order.
+  foreach ($element['#groups'] as $group => $content) {
+
+    // Reinitiaze.
+    $instance_settings = NULL;
+    $childs = [];
+
+    // Check the children.
+    foreach ($content->children as $field) {
+      $anchors = [];
+      if (isset($element[$field])) {
+        // In case of a text summary we parse the code as well.
+        if ($element[$field]['#field_type'] == 'text_with_summary') {
+          foreach ($element[$field]['#items'] as $item) {
+            $anchors = isset($item['value']) ? _nexteuropa_inpage_nav_get_anchors_from_markup($item['value']) : NULL;
+          }
+        }
+
+        // Add it to the child array.
+        if (!empty($anchors)) {
+          $child_has_anchors = TRUE;
+          $childs[$field] = [
+            'weight' => intval($element[$field]['#weight']),
+            'anchors' => $anchors,
+          ];
+        }
+        else {
+          $child_has_anchors = FALSE;
+        }
+
+        // Remove it so we dont render it again.
+        unset($element[$field]);
+      }
+    }
+
+    // If there is children, we add it to our array.
+    if (isset($child_has_anchors)) {
+      // See if there is a label. We should always add the group, but it might
+      // not have a label.
+      if (isset($content->format_settings['instance_settings'])) {
+        $instance_settings = $content->format_settings['instance_settings'];
+        // A few things must match to be sure about the label.
+        if (
+          $instance_settings['show_label'] &&
+          $instance_settings['label_element'] == 'h2'
+          && strpos($instance_settings['attributes'], 'id=') !== FALSE
+        ) {
+          // Set our label array.
+          $label = [
+            'ref' => str_replace(['id=', '"'], '', $instance_settings['attributes']),
+            'label' => isset($content->format_settings['label']) ? $content->format_settings['label'] : $content->label,
+          ];
+        }
+      }
+
+      // We have to types that can validate it being added.
+      $chech_anchor_parent = $child_has_anchors == FALSE && isset($label);
+      $chech_anchor_child = $child_has_anchors == TRUE;
+
+      // If one passes, we know we are having an anchor.
+      if ($chech_anchor_parent || $chech_anchor_child) {
+        // Make sure that we already sort the childs.
+        if (count($childs > 1)) {
+          usort($childs, '_nexteuropa_inpage_nav_sort_by_weight');
+        }
+        // Add the group to our array, including label and child.
+        $ordered_array[$group] = [
+          'group' => $group,
+          'weight' => intval($content->weight),
+          'children' => $childs,
+          'heading' => isset($label) ? $label : '',
+        ];
+      }
+
+      // We should reset this.
+      unset($child_has_anchors);
+      unset($label);
+    }
   }
+
+  // Check the remaining items, and add them to the array.
+  foreach ($element as $field) {
+    if (is_array($field) && isset($field['#weight']) && $field['#access'] && $field['#theme'] == 'field') {
+      // Check ds expert setting.
+      foreach (module_implements('nexteuropa_inpage_nav_add') as $module) {
+        // Calling all modules implementing hook_hook_name and
+        // Returning results than pushing them into the $result array:
+        $heading = module_invoke($module, 'nexteuropa_inpage_nav_add', $field, $element);
+        if (is_array($heading)) {
+          $ordered_array[$field['#field_name']] = [
+            'weight' => $field['#weight'],
+            'heading' => $heading,
+            'children' => '',
+          ];
+        }
+      }
+    }
+  }
+
+  // Sort the array by weight.
+  usort($ordered_array, '_nexteuropa_inpage_nav_sort_by_weight');
+
+  // Initialize our anchors.
+  $anchors = [];
+
+  // Parse the fresh array to a simple version.
+  foreach ($ordered_array as $item) {
+    if (is_array($item['heading'])) {
+      $anchor = [
+        'id' => $item['heading']['ref'],
+        'label' => $item['heading']['label'],
+      ];
+      array_push($anchors, $anchor);
+    }
+    if (is_array($item['children'])) {
+      foreach ($item['children'] as $child) {
+        foreach ($child['anchors'] as $anchor) {
+          array_push($anchors, $anchor);
+        }
+      }
+    }
+  }
+
+  return $anchors;
+}
+
+/**
+ * Usort function to sort by weight.
+ */
+function _nexteuropa_inpage_nav_sort_by_weight($a, $b) {
+  return $a['weight'] - $b['weight'];
+}
+
+
+/**
+ * Helper function to get anchors from a piece of markup.
+ *
+ * @param string $markup
+ *   The markup to be checked.
+ *
+ * @return array
+ *   Array of anchors.
+ */
+function _nexteuropa_inpage_nav_get_anchors_from_markup($markup) {
   // Initialize our array.
   $inpage_nav_list = array();
   // Looking for:
@@ -91,6 +295,7 @@ function _nexteuropa_inpage_nav_markup_anchor() {
   $pattern = "/<" . NEXTEUROPA_INPAGE_NAV_DEPTH . ".*?id=\"(.[^\"]*)\".*?>(.[^\<]*)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">|<div.[^<]?id=\"(.[^\"]*)\".*?><" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">(.*?)<\/" . NEXTEUROPA_INPAGE_NAV_DEPTH . ">/i";
 
   preg_match_all($pattern, $markup, $matches);
+
   foreach ($matches[1] as $i => $id) {
     $inpage_nav_list[] = array(
       'id' => $matches[1][$i] . $matches[3][$i],
@@ -98,23 +303,5 @@ function _nexteuropa_inpage_nav_markup_anchor() {
     );
   }
 
-  // Return the data.
-  $anchors = array(
-    'anchorlist' => $inpage_nav_list,
-    'node_title' => $node->title,
-  );
-}
-
-/**
- * Implements hook_theme().
- *
- * Used to wrap the items in a specific class BEM way.
- */
-function nexteuropa_inpage_nav_theme() {
-  return array(
-    'inpage_nav_block' => array(
-      'template' => "templates/" . 'inpage_nav_block',
-      'vars' => NULL,
-    ),
-  );
+  return $inpage_nav_list;
 }

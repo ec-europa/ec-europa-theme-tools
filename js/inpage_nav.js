@@ -126,7 +126,7 @@
     var $footer = $('.footer'),
         $bottomLimit = $footer.outerHeight() + $('.footer-top').outerHeight(),
         $fullElement = $(selector).closest('.inpage-nav__wrapper'),
-        $parentWidth = $(selector).closest('.block__content').width();
+        $parentWidth = $(selector).closest('.inpage-nav__wrapper').parent().width();
 
     if (GetOffsetBottom('.inpage-nav__wrapper') <= $bottomLimit) {
       $fullElement.css({

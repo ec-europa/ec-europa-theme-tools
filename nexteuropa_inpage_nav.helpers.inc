@@ -169,7 +169,6 @@ function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
       else {
         $label = $field['#title'];
       }
-      $bar = 'foo';
       // We can already set the full anchor now..
       $anchors[] = [
         'id' => str_replace(['id=', '"'], '', $ds_field['formatter_settings']['ft']['lb-at']),

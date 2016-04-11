@@ -4,7 +4,7 @@
  * Theme file for inpage nav.
  */
 ?>
-<div class="inpage-nav__wrapper">
+<div class="section inpage-nav__wrapper">
   <?php if ($title): ?>
     <h3 class="block__title inpage-nav__block-title"><?php echo $title; ?></h3>
   <?php endif; ?>

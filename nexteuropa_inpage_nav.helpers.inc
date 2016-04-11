@@ -108,6 +108,9 @@ function _nexteuropa_inpage_nav_build_inpage_nav($element) {
  *
  * @param array $field_group
  *   The array containging field group information.
+ *
+ * @return mixed
+ *   Array of anchors or false if none.
  */
 function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
   // A few things must match to be sure about the label.
@@ -136,6 +139,9 @@ function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
  *   The array containing field information.
  * @param array $ds_field
  *   The array containing  ds_field information.
+ *
+ * @return mixed
+ *   Array of anchors or false if none.
  */
 function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
   $anchors = [];

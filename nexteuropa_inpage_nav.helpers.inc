@@ -278,7 +278,6 @@ function _nexteuropa_inpage_nav_sort_by_weight($a, $b) {
   return $a['weight'] - $b['weight'];
 }
 
-
 /**
  * Helper function to get anchors from a piece of markup.
  *

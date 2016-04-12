@@ -115,7 +115,7 @@ function _nexteuropa_inpage_nav_build_inpage_nav($element) {
 function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
   // A few things must match to be sure about the label.
   if (
-    isset($field_group->format_settings['instance_settings']) &&
+    isset($field_group->format_settings['instance_settings']['show_label']) &&
     $field_group->format_settings['instance_settings']['show_label'] &&
     $field_group->format_settings['instance_settings']['label_element'] == NEXTEUROPA_INPAGE_NAV_DEPTH &&
     strpos($field_group->format_settings['instance_settings']['attributes'], 'id=') !== FALSE
@@ -146,7 +146,7 @@ function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
 function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
   $anchors = [];
   // In case of a text summary we parse the code as well.
-  if ($field['#field_type'] == 'text_with_summary') {
+  if (in_array($field['#field_type'], ['text_with_summary', 'text_long'])) {
     // Loop over all the items as it might be multi value.
     foreach ($field['#items'] as $item) {
       $anchors += isset($item['value']) ? _nexteuropa_inpage_nav_get_anchors_from_markup($item['value']) : NULL;
@@ -154,8 +154,8 @@ function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
   }
   // We should also check for the Label.
   if (isset($field['#label_display']) && $field['#label_display'] <> 'hidden') {
-    // This is our master check, as we alway require an ID to be able to display
-    // anchor links. Also the element should be H2.
+    // This is our master check, as we always require an ID to be able to
+    // display anchor links. Also the element should be H2.
     if (
       isset($ds_field['formatter_settings']['ft']['lb-at']) &&
       strpos($ds_field['formatter_settings']['ft']['lb-at'], 'id=') !== FALSE &&
@@ -202,7 +202,7 @@ function _nexteuropa_inpage_nav_get_anchors($element) {
   $ordered_array = [];
   // Rebuild the full array to be in the correct order.
   foreach ($element['#groups'] as $group => $content) {
-    // Reinitiaze.
+    // Reinitialize.
     $childs = [];
     $has_child = FALSE;
 

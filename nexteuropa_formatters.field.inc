@@ -283,7 +283,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $layout_field_settings = ds_get_field_settings($entity_type, $entity->type, 'full');
         $field_name = $field['field_name'];
         if (isset($layout_field_settings[$field_name]['formatter_settings']['ft']['lb'])) {
-          $label_altered = $layout_field_settings[$field_name]['formatter_settings']['ft']['lb'];
+          // @codingStandardsIgnoreLine
+          $label_altered = t($layout_field_settings[$field_name]['formatter_settings']['ft']['lb']);
         }
         $wrapper_label = (isset($label_altered) ? $label_altered : $instance['label']);
 

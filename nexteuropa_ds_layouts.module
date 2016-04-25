@@ -59,6 +59,25 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     'is_nexteuropa' => TRUE,
   );
 
+  $layouts['ne_bootstrap_3_9_advanced_top_conditional'] = array(
+    'label' => t('NE Bootstrap: 3-9(12) advanced top conditional'),
+    'path' => $path . '/layouts/ne_bootstrap_3_9_advanced_top_conditional',
+    'regions' => array(
+      'left_header' => t('Left Header'),
+      'right_header' => t('Right Header'),
+      'top_top' => t('Top'),
+      'top_middle_left' => t('Top middle left'),
+      'top_middle_right' => t('Top middle right'),
+      'top_bottom_left' => t('Top bottom left'),
+      'top_bottom_right' => t('Top bottom right'),
+      'left' => t('Left'),
+      'central' => t('Middle'),
+    ),
+    'form' => TRUE,
+    'image' => TRUE,
+    'is_nexteuropa' => TRUE,
+  );
+
   $layouts['ne_bootstrap_1col_stacked'] = array(
     'label' => t('NE Bootstrap: 1col stacked'),
     'path' => $path . '/layouts/ne_bootstrap_1col_stacked',

@@ -188,6 +188,52 @@ function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
 }
 
 /**
+ * This function goes over the element recursively and adds them to child array.
+ *
+ * @param array $childs
+ *   Passed by reference, the childs.
+ * @param bool $has_child
+ *   Passed by reference, parameter indicating childs.
+ * @param array $children
+ *   The children to check for.
+ * @param array $element
+ *   The main element.
+ * @param bool $parent
+ *   The parent if any.
+ */
+function _nexteuropa_inpage_nav_recursive_anchors(&$childs, &$has_child, $children, $element, $parent = NULL) {
+  // Check the children.
+  foreach ($children as $field) {
+    // Get our specific ds field settings and pass them.
+    $ds_field = isset($ds_field_settings[$field]) ? $ds_field_settings[$field] : NULL;
+    // If we were able to get a label from the helper we append them to the
+    // childs array.
+    if (isset($element[$field])) {
+      $has_child = TRUE;
+      if ($field_anchor = _nexteuropa_inpage_nav_get_field_anchors($element[$field], $ds_field)) {
+        $childs[$field] = $field_anchor;
+      }
+    }
+
+    // If we have a subgroup.
+    if (isset($childs[$parent]) && $label = _nexteuropa_inpage_nav_get_field_group_anchor($element['#groups'][$field])) {
+      // The weight should be the sub field minus one as it should come
+      // above children.
+      $childs[$field] = [
+        'weight' => $childs[$parent]['weight'] - 1,
+        'anchors' => [$label],
+      ];
+    }
+
+    unset($element[$field]);
+
+    if (substr($field, 0, 6) == 'group_') {
+      _nexteuropa_inpage_nav_recursive_anchors($childs, $has_child, $element['#groups'][$field]->children, $element, $field);
+    }
+  }
+}
+
+/**
  * Helper function to parse a render array into an anchor list.
  *
  * @param array $element
@@ -202,25 +248,17 @@ function _nexteuropa_inpage_nav_get_anchors($element) {
   $ordered_array = [];
   // Rebuild the full array to be in the correct order.
   foreach ($element['#groups'] as $group => $content) {
+
+    // Skip those with a parent.
+    if (!empty($element['#groups'][$group]->parent_name)) {
+      continue;
+    }
+
     // Reinitialize.
     $childs = [];
     $has_child = FALSE;
 
-    // Check the children.
-    foreach ($content->children as $field) {
-      // Get our specific ds field settings and pass them.
-      $ds_field = isset($ds_field_settings[$field]) ? $ds_field_settings[$field] : NULL;
-      // If we were able to get a label from the helper we append them to the
-      // childs array.
-      if (isset($element[$field])) {
-        $has_child = TRUE;
-        if ($field_anchor = _nexteuropa_inpage_nav_get_field_anchors($element[$field], $ds_field)) {
-          $childs[$field] = $field_anchor;
-        }
-      }
-      // Remove it from our array so that we do not test for it again later.
-      unset($element[$field]);
-    }
+    _nexteuropa_inpage_nav_recursive_anchors($childs, $has_child, $content->children, $element);
 
     // Get our field group label.
     $label = _nexteuropa_inpage_nav_get_field_group_anchor($content);

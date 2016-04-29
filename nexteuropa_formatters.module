@@ -308,6 +308,13 @@ function nexteuropa_formatters_ds_field_theme_functions_settings_form_alter_alte
     ],
     '#default_value' => isset($field_settings['meta_modifier']) ? $field_settings['meta_modifier'] : 'meta__item--type',
     '#description' => 'Select the modifier to use for the item. This modifier applies to each sub element.',
+    '#states' => [
+      'visible' => [
+        ':input[name$="[ft][func]"]' => [
+          'value' => 'theme_ds_field_nexteuropa_formatters_meta_item',
+        ],
+      ],
+    ],
   ];
 }
 
@@ -388,5 +395,5 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
  * Adds a new select option.
  */
 function nexteuropa_formatters_ds_field_theme_functions_info() {
-  return array('theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'));
+  return ['theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item')];
 }

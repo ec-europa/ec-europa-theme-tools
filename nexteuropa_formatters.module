@@ -290,3 +290,103 @@ function _nexteuropa_formatters_field_component_listing($variables, $config) {
 
   return $output;
 }
+
+/**
+ * Implements hook_ds_field_theme_functions_settings_form_alter().
+ *
+ * This will add an extra setting to the field formatter so that we can add an
+ * extra class.
+ */
+function nexteuropa_formatters_ds_field_theme_functions_settings_form_alter_alter(&$form, $field_settings) {
+  $form['ft']['meta_modifier'] = [
+    '#title' => 'Meta item modifier',
+    '#type' => 'select',
+    '#empty_option' => 'No modifier',
+    '#empty_value' => '',
+    '#options' => [
+      'meta__item--type' => 'type (meta__item--type)',
+    ],
+    '#default_value' => isset($field_settings['meta_modifier']) ? $field_settings['meta_modifier'] : 'meta__item--type',
+    '#description' => 'Select the modifier to use for the item. This modifier applies to each sub element.',
+  ];
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ *
+ * We need to modify the weight of our alter, to be done after the ds_extra
+ * as ds_extra always initializes an empty array (by design).
+ */
+function nexteuropa_formatters_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'ds_field_settings_alter') {
+    $group = $implementations['nexteuropa_formatters'];
+    unset($implementations['nexteuropa_formatters']);
+    $implementations['nexteuropa_formatters'] = $group;
+  }
+}
+
+/**
+ * Implements hook_ds_field_settings_alter().
+ *
+ * This will be triggered after a view mode form has been submitted. It will
+ * make sure that our custom settings are stored in the $field_settings array.
+ */
+function nexteuropa_formatters_ds_field_settings_alter(&$field_settings, $form, &$form_state) {
+  foreach ($form_state['formatter_settings'] as $field => $setting) {
+    if (
+      isset($form_state['formatter_settings'][$field]['ft']['func']) &&
+      $form_state['formatter_settings'][$field]['ft']['func'] == 'theme_ds_field_nexteuropa_formatters_meta_item'
+    ) {
+      $field_settings[$field]['formatter_settings']['ft']['meta_modifier'] = $form_state['formatter_settings'][$field]['ft']['meta_modifier'];
+    }
+  }
+}
+
+/**
+ * This is a basic theme_ds_field implementation.
+ *
+ * It's name is required to start with theme_ds_field and is defined in
+ * nexteuropa_formatters_ds_field_theme_functions_info. It will modify the
+ * output of the field before it is passed to the render function.
+ *
+ * This will only be called for our meta_item setting.
+ *
+ * @param array $variables
+ *   The array containing information for the field.
+ *
+ * @return string
+ *   The rendered output.
+ */
+function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
+  // Default classes.
+  $classes = ['meta__item'];
+
+  // Check if we have extra classes.
+  if ($variables['ds-config']['meta_modifier']) {
+    $classes = array_merge($classes, explode(' ', $variables['ds-config']['meta_modifier']));
+  }
+
+  // Our default render array.
+  $subrender = [
+    '#prefix' => '<span class="' . implode(' ', $classes) . '">',
+    '#suffix' => '</span>',
+  ];
+
+  // Build the output.
+  $output = '';
+  foreach ($variables['items'] as $item) {
+    $item_render = $subrender + ['#markup' => drupal_render($item)];
+    $output .= drupal_render($item_render);
+  }
+
+  return $output;
+}
+
+/**
+ * Implements hook_ds_field_theme_functions_info().
+ *
+ * Adds a new select option.
+ */
+function nexteuropa_formatters_ds_field_theme_functions_info() {
+  return array('theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'));
+}

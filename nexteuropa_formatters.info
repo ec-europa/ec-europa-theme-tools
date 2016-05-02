@@ -4,3 +4,4 @@ package = "Nexteuropa Digital Transformation"
 core = 7.x
 
 dependencies[] = field_group
+dependencies[] = ds_extras

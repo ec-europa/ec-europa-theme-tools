@@ -11,21 +11,33 @@ function nexteuropa_ds_fields_ds_fields_info($entity_type) {
   $fields = array();
 
   $fields['comment_count'] = array(
-
-    // title: title of the field.
     'title' => t('Comments count'),
-
     'field_type' => DS_FIELD_TYPE_FUNCTION,
     'function' => '_nexteuropa_ds_fields_token_replace',
-
-    // properties: can have different keys.
     'properties' => array(
       'value' => '[node:comment-count] comments',
     ),
   );
 
+  // A simple field containing a floating hr.
+  $amount_of_lines = 2;
+  for ($i = 1; $i <= $amount_of_lines; $i++) {
+    $fields['hr_' . $i] = array(
+      'title' => t('Horizontal line (@line)', ['@line' => $i]),
+      'field_type' => DS_FIELD_TYPE_FUNCTION,
+      'function' => '_nexteuropa_ds_fields_hr',
+    );
+  }
+
   return array('node' => $fields);
 
+}
+
+/**
+ * Custom function to return a simple hr element in a field.
+ */
+function _nexteuropa_ds_fields_hr($field) {
+  return '<hr class="hr--fullwidth">';
 }
 
 /**

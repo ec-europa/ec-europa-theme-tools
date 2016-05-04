@@ -202,6 +202,10 @@ function dt_shared_functions_ajax_render_alter(&$commands) {
  *   Source field name, like: field_core_link.
  * @param string $destination_field_name
  *   Destination field, like: field_core_links.
+ * @param bool $append
+ *   If we should append or replace.
+ * @param bool $clear
+ *   If true, then the old value will be set empty.
  *
  * @throws \DtSharedSourceFieldError
  *   Exception when no source field with the given name.
@@ -210,7 +214,7 @@ function dt_shared_functions_ajax_render_alter(&$commands) {
  * @throws \DtSharedFieldTypeAreNotSame
  *   Exception when source and destination are not the same field type.
  */
-function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name, $append = FALSE) {
+function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name, $append = FALSE, $clear = FALSE) {
   // Source and destination field info.
   $source_field_info = field_info_field($source_field_name);
   $destination_field_info = field_info_field($destination_field_name);
@@ -267,6 +271,10 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
         $newdata = array_merge($entity_wrapper->$destination_field_name->value(), $entity_wrapper->$source_field_name->value());
         // Set the new data.
         $entity_wrapper->$destination_field_name = $newdata;
+        // If our clear parameter is true, we have to delete the old data.
+        if ($clear) {
+          $entity_wrapper->$source_field_name = NULL;
+        }
         // And save the entity.
         $entity_wrapper->save();
       }
@@ -290,6 +298,11 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
           // Take the first item of array.
           $entity_wrapper->$destination_field_name = array($entity_wrapper->$source_field_name->value());
         }
+        // If our clear parameter is true, we have to delete the old data.
+        if ($clear) {
+          $entity_wrapper->$source_field_name = NULL;
+        }
+        // Save the entity.
         $entity_wrapper->save();
       }
     }

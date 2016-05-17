@@ -4,6 +4,8 @@
  * This file contains the shared functions between dt_core and cwt_core.
  */
 
+module_load_include('inc', 'dt_shared_functions', 'dt_shared_functions.theme');
+
 /**
  * No source field Exception.
  */
@@ -51,6 +53,44 @@ function dt_shared_functions_views_plugins() {
 }
 
 /**
+ * Implements hook_facetapi_widgets().
+ *
+ * This will add our custom formatter to the facet api.
+ */
+function dt_shared_functions_facetapi_widgets() {
+  return [
+    'dt_facetapi_checkbox_links' => [
+      'handler' => [
+        'label' => t('DT Links with checkboxes'),
+        'class' => 'DtFacetapiWidgetCheckboxLinks',
+        'query types' => ['term', 'date'],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * Our custom listing formatter.
+ */
+function dt_shared_functions_theme() {
+  return [
+    'dt_shared_functions_facet_item_list' => [
+      'variables' => [
+        'items' => [],
+        'title' => NULL,
+        'type' => 'div',
+        'sub_type' => 'div',
+        'attributes' => [],
+        'prefix' => '',
+        'suffix' => '',
+      ],
+    ],
+  ];
+}
+
+/**
  * Custom function returning additional views configuration.
  */
 function _dt_shared_functions_additional_views_config() {
@@ -66,6 +106,43 @@ function _dt_shared_functions_additional_views_config() {
   drupal_alter('dt_shared_functions_views_config', $settings);
 
   return $settings;
+}
+
+/**
+ * Implements hook_block_info_alter().
+ */
+function dt_shared_functions_block_info_alter(&$blocks, $theme, $code_blocks) {
+  // Parse our facetapi blocks.
+  if (isset($blocks['facetapi'])) {
+    _dt_shared_functions_facet_block_config($blocks['facetapi']);
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function dt_shared_functions_block_view_alter(&$data, $block) {
+  if ($block->module == 'facetapi') {
+    $data['content']['#attributes']['class'][] = 'filters__filter';
+  }
+}
+
+/**
+ * Custom function to modify facet block information.
+ */
+function _dt_shared_functions_facet_block_config(&$blocks) {
+  // Get our delta map.
+  $map = facetapi_get_delta_map();
+
+  // Loop over the blocks.
+  foreach ($blocks as &$block) {
+    if (isset($map[$block['delta']]) && $block_info = facetapi_parse_delta($map[$block['delta']])) {
+      // We need to have an identifier.
+      if (isset($block_info[2])) {
+        drupal_alter('dt_shared_functions_facet_block', $block, $block_info[2]);
+      }
+    }
+  }
 }
 
 /**

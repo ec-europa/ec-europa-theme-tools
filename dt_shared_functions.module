@@ -107,6 +107,13 @@ function dt_shared_functions_nexteuropa_token_token_handlers() {
 }
 
 /**
+ * Implements hook_nexteuropa_token_token_handlers_alter().
+ */
+function dt_shared_functions_nexteuropa_token_token_handlers_alter(array &$handlers) {
+  $handlers['url_entity_handler'] = '\Drupal\dt_shared_functions\DttUrlTokenHandler';
+}
+
+/**
  * Implements hook_translated_menu_link_alter().
  */
 function dt_shared_functions_translated_menu_link_alter(&$item, $map) {

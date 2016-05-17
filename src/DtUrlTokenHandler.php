@@ -2,17 +2,17 @@
 
 /**
  * @file
- * Contains \Drupal\dt_shared_functions\DttUrlTokenHandler.
+ * Contains \Drupal\dt_shared_functions\DtUrlTokenHandler.
  */
 
 namespace Drupal\dt_shared_functions;
 
 /**
- * Class DttUrlTokenHandler.
+ * Class DtUrlTokenHandler.
  *
  * @package Drupal\dt_shared_functions
  */
-class DttUrlTokenHandler extends \Drupal\nexteuropa_token\Entity\UrlTokenHandler {
+class DtUrlTokenHandler extends \Drupal\nexteuropa_token\Entity\UrlTokenHandler {
 
   /**
    * {@inheritdoc}

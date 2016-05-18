@@ -101,6 +101,12 @@ function _dt_shared_functions_additional_views_config() {
       'description' => t('The title to display in the counter result.'),
       'required' => FALSE,
     ],
+    'dt_shared_functions_views_config_extra_exposed' => [
+      'title' => t('This view is used as secondary exposed filter'),
+      'type' => 'checkbox',
+      'description' => t('If set to true, this view is used as a secondary exposed filter.'),
+      'required' => FALSE,
+    ],
   ];
 
   drupal_alter('dt_shared_functions_views_config', $settings);
@@ -115,15 +121,6 @@ function dt_shared_functions_block_info_alter(&$blocks, $theme, $code_blocks) {
   // Parse our facetapi blocks.
   if (isset($blocks['facetapi'])) {
     _dt_shared_functions_facet_block_config($blocks['facetapi']);
-  }
-}
-
-/**
- * Implements hook_block_view_alter().
- */
-function dt_shared_functions_block_view_alter(&$data, $block) {
-  if ($block->module == 'facetapi') {
-    $data['content']['#attributes']['class'][] = 'filters__filter';
   }
 }
 
@@ -255,6 +252,26 @@ function dt_shared_functions_form_views_exposed_form_alter(&$form, &$form_state)
     if (isset($form['reset']) && !empty($form['reset'])) {
       $form['reset']['#attributes']['class'][] = 'js-hide';
       $form['reset']['#attributes']['class'][] = 'js-showonsubmit';
+    }
+  }
+  // If the form has a secondary. We can modify it.
+  foreach ($form_state['view']->display as $key => $display) {
+    if ($key <> 'default' && $key <> $form_state['view']->current_display) {
+      if (isset($display->handler->options['dt_shared_functions_views_config_extra_exposed']) && $display->handler->options['dt_shared_functions_views_config_extra_exposed']) {
+        // Remove the exposed filters from the main form. If they are exposed.
+        foreach ($display->display_options['filters'] as $filter => $filter_options) {
+          if ($filter_options['exposed']) {
+            if (isset($form['#info']['filter-' . $filter])) {
+              $form['#info']['filter-' . $filter]['label'] = '';
+              $form['#info']['filter-' . $filter]['description'] = '';
+            }
+            // Visually hide it in the first form. We use pre and suffix here as
+            // that will hide the complete element and not just the field.
+            $form[$filter]['#prefix'] = '<div class="element-invisible">';
+            $form[$filter]['#suffix'] = '</div>';
+          }
+        }
+      }
     }
   }
 }

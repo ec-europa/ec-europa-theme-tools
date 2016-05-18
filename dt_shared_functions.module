@@ -242,6 +242,18 @@ function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
 }
 
 /**
+ * Implements hook_facetapi_facet_info_alter().
+ *
+ * This modification is required for using the database search. If we are not
+ * doing this, errors will appear.
+ */
+function dt_shared_functions_facetapi_facet_info_alter(array &$facet_info, array $searcher_info) {
+  if (!isset($facet_info['bundle']['name'])) {
+    unset($facet_info['bundle']);
+  }
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  *
  * Alters the exposed form to include some additional logic.

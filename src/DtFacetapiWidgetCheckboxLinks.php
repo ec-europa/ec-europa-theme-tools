@@ -110,8 +110,9 @@ class DtFacetapiWidgetCheckboxLinks extends FacetapiWidgetLinks {
 
       // Checkbox state.
       $checkbox_identifier = drupal_clean_css_identifier($variables['text']);
+      $url = url(current_path(), ['query' => $item['#query']]);
       $checkbox_state = $item['#active'] == 1 ? ' checked="checked"' : '';
-      $row['prefix'] = '<input type="checkbox"' . $checkbox_state . ' class="facetapi-checkbox-trigger" id="' . $checkbox_identifier . '"><label for="' . $checkbox_identifier . '"></label>';
+      $row['prefix'] = '<input name="facets" value="'.$url.'" type="checkbox"' . $checkbox_state . ' class="" id="' . $checkbox_identifier . '"><label for="' . $checkbox_identifier . '"></label>';
 
       // Add the row to the item list.
       $items[] = $row;

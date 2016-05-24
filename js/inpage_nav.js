@@ -151,7 +151,7 @@
   }
 
   function GetOffsetBottom(selector) {
-    return parseFloat($(document).height() - $(window).scrollTop() - $(selector).outerHeight())
+    return parseFloat($(document).height() - $(window).scrollTop() - ($(selector).outerHeight() + 75))
   }
 
 })(jQuery);

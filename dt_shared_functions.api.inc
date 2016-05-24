@@ -25,31 +25,3 @@ function hook_dt_shared_functions_views_config_alter(&$settings) {
     'required' => FALSE,
   ];
 }
-
-/**
- * This hook allows you to alter the configuration of facet blocks.
- *
- * For this hook to take effect, a cache clear is required.
- *
- * @param array $blocks
- *   The array of facet blocks. Passed by reference.
- * @param string $block_identifier
- *   The identifying string of the block.
- */
-function hook_dt_shared_functions_facet_block_alter(&$blocks, $block_identifier) {
-  // Based on the block idetnifier we change the title.
-  switch ($block_identifier) {
-    case 'field_core_location:country':
-      $block_title = t('Country');
-      break;
-
-    case 'status':
-      $block_title = '<none>';
-      break;
-  }
-
-  // Modify block title if it's set.
-  if (isset($block_title)) {
-    $block['title'] = $block_title;
-  }
-}

@@ -29,7 +29,8 @@
           $topOffset = GetOffsetTop($('.inpage-nav__wrapper')),
           $screenWidth = $(window).width(),
           $screenWidthOriginal = $(window).width(),
-          $body = $('body');
+          $body = $('body'),
+          $bodyHeight = $body.height();
 
         // Add the navbar.
         $body.append($navBar);
@@ -65,22 +66,20 @@
         };
 
         $(window).on('scroll', function () {
+          if ($bodyHeight != $body.height()) {
+            var $newHeight = $body.height();
+            $topOffset -= $bodyHeight - $newHeight;
+            $bodyHeight = $newHeight;
+          }
           TriggerScroll($screenWidth, $topOffset, $selectorMobile, $selector, $navBar, $navBarCurrent);
         });
+
       });
     }
   };
 
   function TriggerScroll(screenWidth, topOffset, selectorMobile, selector, $navBar, $navBarCurrent) {
-    var $menu = $('.site-menu'),
-        menuHeight = $menu.height(),
-        menuIsOpen = $menu.hasClass('collapse in'),
-        scrollTop = $(window).scrollTop();
-
-    // If the menu is open, take into account the height difference.
-    if (menuIsOpen) {
-      scrollTop -= menuHeight;
-    }
+    var scrollTop = $(window).scrollTop();
 
     // Check resolution behaviour.
     if (screenWidth <= 991) {
@@ -152,7 +151,7 @@
   }
 
   function GetOffsetBottom(selector) {
-    return parseFloat($(document).height() - $(window).scrollTop() - $(selector).outerHeight())
+    return parseFloat($(document).height() - $(window).scrollTop() - ($(selector).outerHeight() + 75))
   }
 
 })(jQuery);

@@ -115,6 +115,13 @@ function nexteuropa_formatters_field_formatter_info() {
       'label' => t('Telephone link'),
       'field types' => array('text'),
     ),
+    'bold_last' => array(
+      'label' => t('Bold last word'),
+      'field types' => array(
+        'taxonomy_term_reference',
+        'text',
+      ),
+    ),
   );
 }
 
@@ -275,6 +282,7 @@ function nexteuropa_formatters_field_formatter_prepare_view($entity_type, $entit
  */
 function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
+
   if (!empty($items)) {
     $formatter = $display['type'];
 
@@ -525,8 +533,29 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           $element['#suffix'] = '</div>';
         }
         break;
+
+      case 'bold_last':
+        switch ($field['type']) {
+          case 'taxonomy_term_reference':
+            foreach ($items as $delta => $item) {
+              $term = taxonomy_term_load($item['tid']);
+              $name_split = explode(' ', $term->name);
+              $last_index = count($name_split) - 1;
+              $name_split[$last_index] = '<strong>' . ($name_split[$last_index]) . '</strong>';
+              $element[$delta] = array('#markup' => implode(' ', $name_split));
+            }
+            break;
+
+          case 'text':
+            foreach ($items as $delta => $item) {
+              $element[$delta] = array('#markup' => $item['safe_value']);
+            }
+            break;
+        }
+        break;
     }
   }
+
   return $element;
 }
 

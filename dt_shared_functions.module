@@ -664,3 +664,33 @@ function _dt_shared_function_copy_translation() {
     unset($query);
   }
 }
+
+/**
+ * Implements hook_form_alter().
+ */
+function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'system_theme_settings') {
+    // Build the form.
+    $form['dt'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('DTT settings'),
+      '#weight' => -100,
+    );
+
+    $form['dt']['dt_latest_visibility'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Would you like to show the latest block when it is available?'),
+      '#default_value' => variable_get('dt_latest_visibility', TRUE),
+    );
+
+    $form['#submit'][] = "_dt_shared_functions_theme_settings_submit";
+  }
+}
+
+/**
+ * Custom submit function for the theme setting form.
+ */
+function _dt_shared_functions_theme_settings_submit(&$form, &$form_state) {
+  $override = $form_state['values']['dt_latest_visibility'] == 1 ? TRUE : FALSE;
+  variable_set('dt_latest_visibility', $override);
+}

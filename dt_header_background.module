@@ -5,20 +5,45 @@
  */
 
 /**
+ * Implements hook_dt_header_background_info().
+ */
+function dt_header_background_dt_header_background_info() {
+  return [
+    [
+      'view_mode' => 'full',
+      'content_type' => '*',
+    ],
+  ];
+}
+
+/**
  * Implements template_preprocess_node().
  */
 function dt_header_background_preprocess_node(&$variables) {
-  $node = $variables['node'];
+  // Our checking value.
+  $add_header = FALSE;
+
+  // Check the modules, if we have a match we can stop.
+  foreach (module_implements('dt_header_background_info') as $module) {
+    // The hook returns an array, so we have to check each of them.
+    foreach (module_invoke($module, 'dt_header_background_info') as $implementation) {
+      if ($implementation['view_mode'] == $variables['view_mode'] && ($implementation['content_type'] == '*' || $implementation['content_type'] == $variables['type'])) {
+        $add_header = TRUE;
+        break;
+      }
+    }
+  }
+
   // If we have the field and if we are viewing the node's page.
-  if (isset($node->field_core_header_image) && $variables['view_mode'] == 'full') {
+  if ($add_header && isset($variables['node']->field_core_header_image)) {
     // Check if have a value for the field.
-    $header_back = field_get_items('node', $node, 'field_core_header_image');
+    $header_back = field_get_items('node', $variables['node'], 'field_core_header_image');
     // Get the fid from the value or check for a default value.
     if ($header_back) {
       $fid = $header_back[0]['fid'];
     }
     else {
-      $ct = $node->type;
+      $ct = $variables['node']->type;
       $fid = variable_get('dt_header_background_' . $ct, FALSE);
       if (!$fid) {
         $fid = variable_get('dt_header_background_default', FALSE);
@@ -49,7 +74,8 @@ function dt_header_background_workbench_moderation_transition($node) {
   // Create the Entity wrapper and handle the header background image.
   $entity_wrapper = entity_metadata_wrapper('node', $node);
   if (isset($node->field_core_header_image)
-    && NULL !== $entity_wrapper->field_core_header_image->value()) {
+    && NULL !== $entity_wrapper->field_core_header_image->value()
+  ) {
     _dt_header_background_handle_header_background($entity_wrapper);
   }
 }

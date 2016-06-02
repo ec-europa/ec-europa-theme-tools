@@ -91,7 +91,7 @@ function theme_nexteuropa_bem_item_list($variables) {
  *   Accepts: $variables['node']->field_core_file.
  *
  * @return string
- *   Markup of transleations.
+ *   Markup of translations.
  */
 function theme_nexteuropa_file_translations($variables) {
   $files_count = isset($variables['node']->field_core_file) ? count($variables['node']->field_core_file) : 0;
@@ -103,8 +103,10 @@ function theme_nexteuropa_file_translations($variables) {
     if (isset($variables['node']->field_core_file[$displayed_langcode])) {
       $files_count--;
     }
+
     $files = $variables['node']->field_core_file;
     $nid = $variables['node']->nid;
+
     $output = '<div class="file__translations">';
     // Building the link.
     $link = array(
@@ -127,7 +129,7 @@ function theme_nexteuropa_file_translations($variables) {
         'html' => TRUE,
       ),
       '#attributes' => array(
-        'class' => array('file__translations-control', 'pull-right'),
+        'class' => array('file__translations-control'),
         'data-toggle' => array('collapse'),
         'aria-expanded' => array('false'),
         'aria-controls' => array('file__translations-' . $nid),
@@ -144,7 +146,7 @@ function theme_nexteuropa_file_translations($variables) {
       'items' => array(),
       'type' => 'ul',
       'attributes' => array(
-        'class' => array('collapse', 'pull-right', 'file__translations-list'),
+        'class' => array('collapse', 'file__translations-list'),
         'id' => array('file__translations-' . $nid),
       ),
     );
@@ -174,6 +176,7 @@ function theme_nexteuropa_file_translations($variables) {
         'data' => $file_markup,
       );
     }
+
     $show_helptext = FALSE;
     if ($show_helptext) {
       $list['items'][] = array(
@@ -185,7 +188,9 @@ function theme_nexteuropa_file_translations($variables) {
 
     $output .= theme_item_list($list);
     $output .= '</div>';
+
     return $output;
   }
+
   return '';
 }

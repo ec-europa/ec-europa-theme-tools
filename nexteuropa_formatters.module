@@ -390,10 +390,61 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
 }
 
 /**
+ * This is a basic theme_ds_field implementation.
+ *
+ * It's name is required to start with theme_ds_field and is defined in
+ * nexteuropa_formatters_ds_field_theme_functions_info. It will modify the
+ * output of the field before it is passed to the render function.
+ *
+ * This will only be called for our section_item setting.
+ *
+ * @param array $variables
+ *   The array containing information for the field.
+ *
+ * @return string
+ *   The rendered output.
+ */
+function theme_ds_field_nexteuropa_formatters_section_item($variables) {
+  // Default classes.
+  //
+  $classes = ['section__group', 'section--row-three', 'section--navigation'];
+
+  // Check if we have extra classes.
+  if ($variables['ds-config']['meta_modifier']) {
+    $classes = array_merge($classes, explode(' ', $variables['ds-config']['meta_modifier']));
+  }
+
+  // Our default render array.
+  $item_wrapper = [
+    '#prefix' => '<div class="section__item">',
+    '#suffix' => '</div>',
+  ];
+
+  // Build the output.
+  $output = '';
+  foreach ($variables['items'] as $item) {
+    $item_render = $item_wrapper + ['#markup' => drupal_render($item)];
+    $output .= drupal_render($item_render);
+  }
+
+  $main_wrapper = [
+    '#markup' => $output,
+    '#prefix' => '<div class="section"><div class="' . implode(' ', $classes) . '">',
+    '#suffix' => '</div></div>',
+  ];
+
+  return drupal_render($main_wrapper);
+}
+
+
+/**
  * Implements hook_ds_field_theme_functions_info().
  *
  * Adds a new select option.
  */
 function nexteuropa_formatters_ds_field_theme_functions_info() {
-  return ['theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item')];
+  return [
+    'theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'),
+    'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)')
+  ];
 }

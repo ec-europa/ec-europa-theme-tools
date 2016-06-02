@@ -1,32 +1,34 @@
 <?php
 /**
  * @file
- * Display Suite NE Bootstrap Two Columns Stacked.
+ * Display Suite NE Bootstrap structured content.
  */
-
-  // Add sidebar classes so that we can apply the correct width in css.
-  // Second block is needed to activate display suite support on forms.
 ?>
 
-<<?php print $layout_wrapper; print $layout_attributes; ?> class="<?php print $classes; ?>">
-  <?php if (isset($title_suffix['contextual_links'])): ?>
-    <?php print render($title_suffix['contextual_links']); ?>
+<div class="listing listing--navigation">
+
+  <a href="<?php print url($node->path['source']); ?>" class="listing__item-link">
+    <h2 class="listing__section-title">
+      <?php print $title; ?>
+    </h2>
+
+    <?php if ($description && !$children): ?>
+      <p class="listing__description">
+        <?php print $description; ?>
+      </p>
+    <?php endif; ?>
+  </a>
+
+  <?php if ($children): ?>
+    <?php print $children; ?>
   <?php endif; ?>
 
-  <<?php print $title_wrapper; ?> class="column-main <?php print $title_wrapper; ?>">
-  <?php print $title; ?>
-  </<?php print $title_wrapper; ?>>
+  <?php if (($children || $description) && $links): ?>
+    <hr class="listing__separator">
+  <?php endif; ?>
 
-  <<?php print $main_wrapper; ?> class="column-main <?php print $main_classes; ?>">
-  <?php print $main; ?>
-  </<?php print $main_wrapper; ?>>
-
-  <<?php print $links_wrapper; ?> class="column-main <?php print $links_wrapper; ?>">
+  <?php if ($links): ?>
     <?php print $links; ?>
-  </<?php print $links_wrapper; ?>>
+  <?php endif; ?>
 
-</<?php print $layout_wrapper ?>>
-
-<?php if (!empty($drupal_render_children)): ?>
-  <?php print $drupal_render_children ?>
-<?php endif; ?>
+</div>

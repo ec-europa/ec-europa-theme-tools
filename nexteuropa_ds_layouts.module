@@ -142,5 +142,19 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     'is_nexteuropa' => TRUE,
   );
 
+  $layouts['ne_1col_section_item'] = array(
+    'label' => t('NE: 1col section item'),
+    'path' => $path . '/layouts/ne_1col_section_item',
+    'regions' => array(
+      'title' => t('Title'),
+      'description' => t('Description'),
+      'children' => t('Children'),
+      'links' => t('Links'),
+    ),
+    'form' => TRUE,
+    'image' => TRUE,
+    'is_nexteuropa' => TRUE,
+  );
+
   return $layouts;
 }

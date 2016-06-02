@@ -406,7 +406,6 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
  */
 function theme_ds_field_nexteuropa_formatters_section_item($variables) {
   // Default classes.
-  //
   $classes = ['section__group', 'section--row-three', 'section--navigation'];
 
   // Check if we have extra classes.
@@ -436,7 +435,6 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
   return drupal_render($main_wrapper);
 }
 
-
 /**
  * Implements hook_ds_field_theme_functions_info().
  *
@@ -445,6 +443,6 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
 function nexteuropa_formatters_ds_field_theme_functions_info() {
   return [
     'theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'),
-    'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)')
+    'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
   ];
 }

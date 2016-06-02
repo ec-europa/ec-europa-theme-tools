@@ -127,8 +127,8 @@ function nexteuropa_formatters_field_formatter_info() {
       'field types' => array(
         'entityreference',
         'link_field',
-      )
-    )
+      ),
+    ),
   );
 }
 
@@ -301,7 +301,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $options = [
           'attributes' => [
             'class' => [
-              'listing__title'
+              'listing__title',
             ],
           ],
         ];
@@ -318,9 +318,9 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             foreach ($items as $delta => $item) {
               if ($label = $handler->getLabel($item['entity'])) {
                 if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
-                  // Check if it is a legacy link
+                  // Check if it is a legacy link.
                   $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
-                  // Add the default options;
+                  // Add the default options.
                   $uri['options'] += $options;
                   // Format the link.
                   $render_array['#markup'] = l($label, $link_url, $uri['options']);
@@ -343,6 +343,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             break;
         }
         break;
+
       case 'context_nav_item':
         $layout_field_settings = ds_get_field_settings($entity_type, $entity->type, 'full');
         $field_name = $field['field_name'];

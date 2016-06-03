@@ -166,7 +166,7 @@ function theme_nexteuropa_file_translations($variables) {
         'path' => file_create_url($file_info['uri']),
         'options' => array(
           'attributes' => array(
-            'class' => array('file__btn', 'btn'),
+            'class' => array('file__btn', 'btn', 'btn--condensed'),
           ),
         ),
       );

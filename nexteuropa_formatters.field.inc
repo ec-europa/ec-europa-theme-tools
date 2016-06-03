@@ -122,6 +122,13 @@ function nexteuropa_formatters_field_formatter_info() {
         'text',
       ),
     ),
+    'structured_content_links' => array(
+      'label' => t('Structured content links'),
+      'field types' => array(
+        'entityreference',
+        'link_field',
+      ),
+    ),
   );
 }
 
@@ -287,6 +294,56 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
     $formatter = $display['type'];
 
     switch ($formatter) {
+      // Formatter for the structured content view mode.
+      case 'structured_content_links':
+
+        // Default link config.
+        $options = [
+          'attributes' => [
+            'class' => [
+              'listing__title',
+            ],
+          ],
+        ];
+
+        // Default render array.
+        $render_array = [
+          '#prefix' => '<div class="listing__item">',
+          '#suffix' => '</div>',
+        ];
+
+        switch ($field['type']) {
+          case 'entityreference':
+            $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
+            foreach ($items as $delta => $item) {
+              if ($label = $handler->getLabel($item['entity'])) {
+                if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
+                  // Check if it is a legacy link.
+                  $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
+                  // Add the default options.
+                  $uri['options'] += $options;
+                  // Format the link.
+                  $render_array['#markup'] = l($label, $link_url, $uri['options']);
+                  // Add the render array to the element.
+                  $element[$delta] = $render_array;
+                }
+              }
+            }
+            break;
+
+          case 'link_field':
+            foreach ($items as $delta => $item) {
+              // Merge the default options with the item attributes.
+              $options['attributes'] += $item['attributes'];
+              // Build the link and add it to the render array.
+              $render_array['#markup'] = l($item['title'], $item['url'], $options);
+              // Add the render array to the element.
+              $element[$delta] = $render_array;
+            }
+            break;
+        }
+        break;
+
       case 'context_nav_item':
         $layout_field_settings = ds_get_field_settings($entity_type, $entity->type, 'full');
         $field_name = $field['field_name'];

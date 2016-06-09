@@ -52,6 +52,9 @@ function dt_shared_functions_views_plugins() {
 
 /**
  * Custom function returning additional views configuration.
+ *
+ * @return array
+ *   Array of extra settings for views.
  */
 function _dt_shared_functions_additional_views_config() {
   $settings = [
@@ -308,6 +311,8 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
  *
  * @param string $field_name
  *   Machine name of field.
+ *
+ * @todo: remove or refactor.
  */
 function _dt_shared_fix_field_language($field_name) {
   // Default language.
@@ -342,6 +347,12 @@ function _dt_shared_fix_field_language($field_name) {
 
 /**
  * Get the final content language after applying translations and fallbacks.
+ *
+ * @param object $node
+ *   The node object to get the language for.
+ *
+ * @return string
+ *   The language of the content.
  */
 function _dt_shared_functions_content_language($node) {
   // Load potential relevant languages in the correct fallback order.
@@ -365,6 +376,9 @@ function _dt_shared_functions_content_language($node) {
 
 /**
  * Get the languages that are applicable in the right order of fallback.
+ *
+ * @return array
+ *   List of languages in their order.
  */
 function _dt_shared_functions_content_language_order() {
   global $language;
@@ -444,6 +458,12 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
 
 /**
  * Helper function to get the readable language from a language code.
+ *
+ * @param string $langcode
+ *   The langcode to get the language object for.
+ *
+ * @return object
+ *   The language object.
  */
 function _dt_shared_functions_get_language_obj($langcode) {
   $languages = locale_language_list();
@@ -495,7 +515,7 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
  * phone number number fields.
  *
  * @return array
- *   return arrays
+ *   Available patterns.
  */
 function _dt_shared_functions_contactphone_patterns() {
   $patterns = array(
@@ -566,6 +586,8 @@ function dt_shared_function_phonetohtml($tel) {
 
 /**
  * Helper function to create translations from source.
+ *
+ * @todo: remove or refactor.
  */
 function _dt_shared_function_copy_translation() {
   $fields_to_fix = array(

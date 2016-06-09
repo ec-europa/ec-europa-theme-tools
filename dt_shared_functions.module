@@ -532,7 +532,8 @@ function _dt_shared_functions_contactphone_patterns() {
  */
 function dt_shared_function_phonetohtml($tel) {
   $data = trim($tel);
-  // Load the array containing our regular expressions and loop to convert them into a link.
+  // Load the array containing our regular expressions and loop to convert them
+  // into a link.
   foreach (_dt_shared_functions_contactphone_patterns() as $regexp_index => $regexp_values) {
     preg_match($regexp_values['pattern'], $data, $matches);
     // Something is wrong with the phone value and can't be displayed correctly.
@@ -555,7 +556,7 @@ function dt_shared_function_phonetohtml($tel) {
   $classes = array('class' => 'field__telephone');
   // This will be the link title.
   $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
-  // Build the link
+  // Build the link.
   $htmlphone = l($title, $tel, array('attributes' => $classes));
   // The full element.
   $markup = $htmlphone . ' ' . $phone['phone_label'];

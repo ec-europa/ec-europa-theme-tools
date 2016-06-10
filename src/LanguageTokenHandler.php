@@ -1,18 +1,15 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dt_shared_functions\LanguageTokenHandler.
- */
-
 namespace Drupal\dt_shared_functions;
+
+use Drupal\nexteuropa_token\TokenAbstractHandler;
 
 /**
  * Class LanguageTokenHandler.
  *
  * @package Drupal\dt_shared_functions
  */
-class LanguageTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHandler {
+class LanguageTokenHandler extends TokenAbstractHandler {
 
   const CONTENT_LANGUAGE = 'dt_content_language';
   const INTERFACE_LANGUAGE = 'dt_interface_language';

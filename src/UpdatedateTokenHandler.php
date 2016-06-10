@@ -1,18 +1,15 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dt_shared_functions\LanguageTokenHandler.
- */
-
 namespace Drupal\dt_shared_functions;
+
+use Drupal\nexteuropa_token\TokenAbstractHandler;
 
 /**
  * Class UpdatedateTokenHandler.
  *
  * @package Drupal\dt_shared_functions
  */
-class UpdatedateTokenHandler extends \Drupal\nexteuropa_token\TokenAbstractHandler {
+class UpdatedateTokenHandler extends TokenAbstractHandler {
 
   const TOKEN_NAME = 'dt_update_date';
 

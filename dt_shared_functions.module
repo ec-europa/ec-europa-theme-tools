@@ -7,25 +7,25 @@
 /**
  * No source field Exception.
  */
-class DtSharedSourceFieldError extends Exception {
+class DtSharedFunctionsSourceFieldError extends Exception {
 }
 
 /**
  * No destionation field Exception.
  */
-class DtSharedDestinationFieldError extends Exception {
+class DtSharedFunctionsDestinationFieldError extends Exception {
 }
 
 /**
  * Fields are of same tye Exception.
  */
-class DtSharedFieldTypeAreNotSame extends Exception {
+class DtSharedFunctionsFieldTypeAreNotSame extends Exception {
 }
 
 /**
  * Circular reference Exception.
  */
-class DtParentCircular extends Exception {
+class DtSharedFunctionsParentCircular extends Exception {
 }
 
 /**
@@ -134,6 +134,13 @@ function dt_shared_functions_translated_menu_link_alter(&$item, $map) {
 
 /**
  * Helper function to delete menu, menu links, taxonomies.
+ *
+ * @param string $name
+ *   The name item.
+ * @param string $type
+ *   The type of the item.
+ * @param string $op
+ *   The operation to execute.
  */
 function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
   switch ($type) {
@@ -213,11 +220,11 @@ function dt_shared_functions_ajax_render_alter(&$commands) {
  * @param string $destination_field_name
  *   Destination field, like: field_core_links.
  *
- * @throws \DtSharedSourceFieldError
+ * @throws \DtSharedFunctionsSourceFieldError
  *   Exception when no source field with the given name.
- * @throws \DtSharedDestinationFieldError
+ * @throws \DtSharedFunctionsDestinationFieldError
  *   Exception when no destination field with the given name.
- * @throws \DtSharedFieldTypeAreNotSame
+ * @throws \DtSharedFunctionsFieldTypeAreNotSame
  *   Exception when source and destination are not the same field type.
  */
 function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name, $append = FALSE) {
@@ -227,21 +234,21 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
 
   // Error handling.
   if (!$source_field_info) {
-    throw new DtSharedSourceFieldError(
+    throw new DtSharedFunctionsSourceFieldError(
       t('There is not any %source (source field) with this name.', array(
         '%source' => $source_field_name,
       ))
     );
   }
   if (!$destination_field_info) {
-    throw new DtSharedDestinationFieldError(
+    throw new DtSharedFunctionsDestinationFieldError(
       t('There is not any %source (source field) with this name.', array(
         '%source' => $destination_field_name,
       ))
     );
   }
   if ($source_field_info['type'] != $destination_field_info['type']) {
-    throw new DtSharedFieldTypeAreNotSame(
+    throw new DtSharedFunctionsFieldTypeAreNotSame(
       t('%source (source) and %destination (destination) are not the same field type.', array(
         '%source' => $source_field_name,
         '%destination' => $destination_field_name,
@@ -670,7 +677,5 @@ function _dt_shared_function_copy_translation() {
         }
       }
     }
-    unset($result);
-    unset($query);
   }
 }

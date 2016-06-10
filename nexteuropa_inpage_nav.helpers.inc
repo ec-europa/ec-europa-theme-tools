@@ -64,7 +64,7 @@ function _nexteuropa_inpage_nav_render($anchors) {
             'type' => 'setting',
             'data' => [
               'inpage_navigation' => [
-                'node_title' => 'test title',
+                'node_title' => '',
               ],
             ],
           ],

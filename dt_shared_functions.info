@@ -2,9 +2,7 @@ name = Digital transformation shared functions
 description = This module contains shared functions between dt_core and cwt_core.
 core = 7.x
 package = NextEuropa
-version = 7.x-1.0
 php = 5.5
-project = nexteuropa
 
 files[] = views/views_plugin_dt_shared_functions_views_config.inc
 

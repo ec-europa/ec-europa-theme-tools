@@ -1,18 +1,15 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\dt_shared_functions\DtUrlTokenHandler.
- */
-
 namespace Drupal\dt_shared_functions;
+
+use Drupal\nexteuropa_token\Entity\UrlTokenHandler;
 
 /**
  * Class DtUrlTokenHandler.
  *
  * @package Drupal\dt_shared_functions
  */
-class DtUrlTokenHandler extends \Drupal\nexteuropa_token\Entity\UrlTokenHandler {
+class DtUrlTokenHandler extends UrlTokenHandler {
 
   /**
    * {@inheritdoc}

@@ -7,25 +7,25 @@
 /**
  * No source field Exception.
  */
-class DtSharedSourceFieldError extends Exception {
+class DtSharedFunctionsSourceFieldError extends Exception {
 }
 
 /**
  * No destionation field Exception.
  */
-class DtSharedDestinationFieldError extends Exception {
+class DtSharedFunctionsDestinationFieldError extends Exception {
 }
 
 /**
  * Fields are of same tye Exception.
  */
-class DtSharedFieldTypeAreNotSame extends Exception {
+class DtSharedFunctionsFieldTypeAreNotSame extends Exception {
 }
 
 /**
  * Circular reference Exception.
  */
-class DtParentCircular extends Exception {
+class DtSharedFunctionsParentCircular extends Exception {
 }
 
 /**
@@ -52,6 +52,9 @@ function dt_shared_functions_views_plugins() {
 
 /**
  * Custom function returning additional views configuration.
+ *
+ * @return array
+ *   Array of extra settings for views.
  */
 function _dt_shared_functions_additional_views_config() {
   $settings = [
@@ -131,6 +134,13 @@ function dt_shared_functions_translated_menu_link_alter(&$item, $map) {
 
 /**
  * Helper function to delete menu, menu links, taxonomies.
+ *
+ * @param string $name
+ *   The name item.
+ * @param string $type
+ *   The type of the item.
+ * @param string $op
+ *   The operation to execute.
  */
 function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
   switch ($type) {
@@ -226,11 +236,11 @@ function dt_shared_functions_ajax_render_alter(&$commands) {
  * @param bool $clear
  *   If true, then the old value will be set empty.
  *
- * @throws \DtSharedSourceFieldError
+ * @throws \DtSharedFunctionsSourceFieldError
  *   Exception when no source field with the given name.
- * @throws \DtSharedDestinationFieldError
+ * @throws \DtSharedFunctionsDestinationFieldError
  *   Exception when no destination field with the given name.
- * @throws \DtSharedFieldTypeAreNotSame
+ * @throws \DtSharedFunctionsFieldTypeAreNotSame
  *   Exception when source and destination are not the same field type.
  */
 function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name, $append = FALSE, $clear = FALSE) {
@@ -240,21 +250,21 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
 
   // Error handling.
   if (!$source_field_info) {
-    throw new DtSharedSourceFieldError(
+    throw new DtSharedFunctionsSourceFieldError(
       t('There is not any %source (source field) with this name.', array(
         '%source' => $source_field_name,
       ))
     );
   }
   if (!$destination_field_info) {
-    throw new DtSharedDestinationFieldError(
+    throw new DtSharedFunctionsDestinationFieldError(
       t('There is not any %source (source field) with this name.', array(
         '%source' => $destination_field_name,
       ))
     );
   }
   if ($source_field_info['type'] != $destination_field_info['type']) {
-    throw new DtSharedFieldTypeAreNotSame(
+    throw new DtSharedFunctionsFieldTypeAreNotSame(
       t('%source (source) and %destination (destination) are not the same field type.', array(
         '%source' => $source_field_name,
         '%destination' => $destination_field_name,
@@ -333,6 +343,8 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
  *
  * @param string $field_name
  *   Machine name of field.
+ *
+ * @todo: remove or refactor.
  */
 function _dt_shared_fix_field_language($field_name) {
   // Default language.
@@ -367,6 +379,12 @@ function _dt_shared_fix_field_language($field_name) {
 
 /**
  * Get the final content language after applying translations and fallbacks.
+ *
+ * @param object $node
+ *   The node object to get the language for.
+ *
+ * @return string
+ *   The language of the content.
  */
 function _dt_shared_functions_content_language($node) {
   // Load potential relevant languages in the correct fallback order.
@@ -390,6 +408,9 @@ function _dt_shared_functions_content_language($node) {
 
 /**
  * Get the languages that are applicable in the right order of fallback.
+ *
+ * @return array
+ *   List of languages in their order.
  */
 function _dt_shared_functions_content_language_order() {
   global $language;
@@ -469,6 +490,12 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
 
 /**
  * Helper function to get the readable language from a language code.
+ *
+ * @param string $langcode
+ *   The langcode to get the language object for.
+ *
+ * @return object
+ *   The language object.
  */
 function _dt_shared_functions_get_language_obj($langcode) {
   $languages = locale_language_list();
@@ -520,7 +547,7 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
  * phone number number fields.
  *
  * @return array
- *   return arrays
+ *   Available patterns.
  */
 function _dt_shared_functions_contactphone_patterns() {
   $patterns = array(
@@ -557,7 +584,8 @@ function _dt_shared_functions_contactphone_patterns() {
  */
 function dt_shared_function_phonetohtml($tel) {
   $data = trim($tel);
-  // Load the array containing our regular expressions and loop to convert them into a link.
+  // Load the array containing our regular expressions and loop to convert them
+  // into a link.
   foreach (_dt_shared_functions_contactphone_patterns() as $regexp_index => $regexp_values) {
     preg_match($regexp_values['pattern'], $data, $matches);
     // Something is wrong with the phone value and can't be displayed correctly.
@@ -580,7 +608,7 @@ function dt_shared_function_phonetohtml($tel) {
   $classes = array('class' => 'field__telephone');
   // This will be the link title.
   $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
-  // Build the link
+  // Build the link.
   $htmlphone = l($title, $tel, array('attributes' => $classes));
   // The full element.
   $markup = $htmlphone . ' ' . $phone['phone_label'];
@@ -590,6 +618,8 @@ function dt_shared_function_phonetohtml($tel) {
 
 /**
  * Helper function to create translations from source.
+ *
+ * @todo: remove or refactor.
  */
 function _dt_shared_function_copy_translation() {
   $fields_to_fix = array(
@@ -672,8 +702,6 @@ function _dt_shared_function_copy_translation() {
         }
       }
     }
-    unset($result);
-    unset($query);
   }
 }
 

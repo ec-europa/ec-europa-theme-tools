@@ -5,7 +5,7 @@
 
 (function ($) {
   Drupal.behaviors.inpage_navigation = {
-    currentTitle: function($navBar, $navBarCurrent) {
+    currentTitle: function ($navBar, $navBarCurrent) {
       // Clear title for In page nav navbar title if nothing selected.
       var currentItem = $("li.active > a", $navBar);
       if (currentItem.length == 0) {
@@ -42,7 +42,7 @@
         });
 
         // Hide if clicked outside.
-        $('.inpage-nav__navbar', $navBar).click(function() {
+        $('.inpage-nav__navbar', $navBar).click(function () {
           $('#inpage-navigation-list').collapse('hide');
         });
 
@@ -51,7 +51,7 @@
 
         // When we resize the window we should recalculate the top. We use the onresize here as the jquery.resize function
         // can be unregistered.
-        window.onresize = function() {
+        window.onresize = function () {
           // New width.
           $screenWidth = $(window).width();
           // Only when the screen width has changed, we should recalculate the top offset.

@@ -133,7 +133,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
         $output = '';
 
         // Render the items.
-        foreach ($variables['items'] as $delta => $item) {
+        foreach ($variables['items'] as $item) {
           $output .= drupal_render($item);
         }
         return $output;
@@ -146,7 +146,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
         }
         // Items list formatting.
         $output .= '<div class="tags__items"' . $variables['content_attributes'] . '>';
-        foreach ($variables['items'] as $delta => $item) {
+        foreach ($variables['items'] as $item) {
           $output .= drupal_render($item);
         }
         // Closing both tags and tags__items.
@@ -168,13 +168,13 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
   // Render the items.
   if ($variables['element']['#view_mode'] == 'title') {
-    foreach ($variables['items'] as $delta => $item) {
+    foreach ($variables['items'] as $item) {
       $output .= drupal_render($item);
     }
   }
   else {
     $output .= '<div class="field__items"' . $variables['content_attributes'] . '>';
-    foreach ($variables['items'] as $delta => $item) {
+    foreach ($variables['items'] as $item) {
       // We should pass along the parent object if we have access to it.
       if (isset($item['#file']) && isset($variables['element']['#object'])) {
         $item['#file']->entity = $variables['element']['#object'];
@@ -307,7 +307,7 @@ function nexteuropa_formatters_ds_field_theme_functions_settings_form_alter_alte
       'meta__item--type' => 'type (meta__item--type)',
     ],
     '#default_value' => isset($field_settings['meta_modifier']) ? $field_settings['meta_modifier'] : 'meta__item--type',
-    '#description' => 'Select the modifier to use for the item. This modifier applies to each sub element.',
+    '#description' => t('Select the modifier to use for the item. This modifier applies to each sub element.'),
     '#states' => [
       'visible' => [
         ':input[name$="[ft][func]"]' => [

@@ -503,7 +503,6 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 '#field' => $instance,
                 '#display' => $display,
               );
-              $bar = 'foo';
             }
             break;
 

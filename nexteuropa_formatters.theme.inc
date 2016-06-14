@@ -62,12 +62,13 @@ function theme_nexteuropa_bem_item_list($variables) {
       }
       if (count($children) > 0) {
         // Render nested list.
-        $data .= theme_nexteuropa_bem_item_list(array(
+        $render_variables = array(
           'items' => $children,
           'title' => NULL,
           'type' => $type,
           'attributes' => $attributes,
-        ));
+        );
+        $data .= theme('nexteuropa_bem_item_list', $render_variables);
       }
       if ($i == 1) {
         $attributes['class'][] = 'first';
@@ -186,7 +187,7 @@ function theme_nexteuropa_file_translations($variables) {
       );
     }
 
-    $output .= theme_item_list($list);
+    $output .= theme('item_list', $list);
     $output .= '</div>';
 
     return $output;

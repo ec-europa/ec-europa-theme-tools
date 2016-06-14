@@ -6,6 +6,8 @@
 
 /**
  * Class to define a style plugin handler.
+ *
+ * @codingStandardsIgnoreFile
  */
 class views_plugin_style_nexteuropa_listing extends views_plugin_style {
 

@@ -204,13 +204,11 @@ function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
 function _nexteuropa_inpage_nav_recursive_anchors(&$childs, &$has_child, $children, $element, $parent = NULL) {
   // Check the children.
   foreach ($children as $field) {
-    // Get our specific ds field settings and pass them.
-    $ds_field = isset($ds_field_settings[$field]) ? $ds_field_settings[$field] : NULL;
     // If we were able to get a label from the helper we append them to the
     // childs array.
     if (isset($element[$field])) {
       $has_child = TRUE;
-      if ($field_anchor = _nexteuropa_inpage_nav_get_field_anchors($element[$field], $ds_field)) {
+      if ($field_anchor = _nexteuropa_inpage_nav_get_field_anchors($element[$field])) {
         $childs[$field] = $field_anchor;
       }
     }

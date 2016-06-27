@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Contains all helper functions used in nexteuropa inpage nav.

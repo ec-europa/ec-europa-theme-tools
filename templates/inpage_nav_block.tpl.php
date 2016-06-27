@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Theme file for inpage nav.

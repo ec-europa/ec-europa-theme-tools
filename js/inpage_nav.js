@@ -7,7 +7,7 @@
   Drupal.behaviors.inpage_navigation = {
     currentTitle: function ($navBar, $navBarCurrent) {
       // Clear title for In page nav navbar title if nothing selected.
-      var currentItem = $("li.active > a", $navBar);
+      var currentItem = $('li.active > a', $navBar);
       if (currentItem.length == 0) {
         $navBarCurrent.text(Drupal.settings.inpage_navigation.node_title);
       }
@@ -118,7 +118,7 @@
   }
 
   function InpageUnfix(selector) {
-    $(selector).closest('.inpage-nav__wrapper').removeAttr("style");
+    $(selector).closest('.inpage-nav__wrapper').removeAttr('style');
   }
 
   function InpageFix(selector) {
@@ -143,15 +143,14 @@
         'width': $parentWidth + 'px'
       });
     }
-
   }
 
   function GetOffsetTop($element) {
-    return $element.offset().top;
+    return $element.offset().top - 30;
   }
 
   function GetOffsetBottom(selector) {
-    return parseFloat($(document).height() - $(window).scrollTop() - ($(selector).outerHeight() + 75))
+    return parseFloat($(document).height() - $(window).scrollTop() - ($(selector).outerHeight() + 75));
   }
 
 })(jQuery);

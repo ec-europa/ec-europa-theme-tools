@@ -308,8 +308,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
         // Default render array.
         $render_array = [
-          '#prefix' => '<div class="listing__item">',
-          '#suffix' => '</div>',
+          '#prefix' => '<li class="listing__item">',
+          '#suffix' => '</li>',
         ];
 
         switch ($field['type']) {
@@ -669,12 +669,12 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
         );
 
         if (isset($title_item_modifier) && $title_item_modifier !== '') {
-          $element[$delta]['#prefix'] = '<div class="listing__item ' . $title_item_modifier . '">';
-          $element[$delta]['#suffix'] = '</div>';
+          $element[$delta]['#prefix'] = '<li class="listing__item ' . $title_item_modifier . '">';
+          $element[$delta]['#suffix'] = '</li>';
         }
         else {
-          $element[$delta]['#prefix'] = '<div class="listing__item">';
-          $element[$delta]['#suffix'] = '</div>';
+          $element[$delta]['#prefix'] = '<li class="listing__item">';
+          $element[$delta]['#suffix'] = '</li>';
         }
         break;
 
@@ -696,20 +696,20 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
           '#display' => $display,
         );
 
-        if (isset($title_item_link_modifier) && $title_item_link_modifier !== '') {
+        if (isset($title_item_link_modifier) && !empty($title_item_link_modifier)) {
           $element[$delta]['#options']['attributes']['class'] = 'listing__item-link' . ' ' . $title_item_link_modifier;
         }
         else {
           $element[$delta]['#options']['attributes']['class'] = 'listing__item-link';
         }
 
-        if (isset($title_item_modifier) && $title_item_modifier !== '') {
-          $element[$delta]['#prefix'] = '<div class="listing__item ' . $title_item_modifier . '">';
-          $element[$delta]['#suffix'] = '</div>';
+        if (isset($title_item_modifier) && !empty($title_item_modifier)) {
+          $element[$delta]['#prefix'] = '<li class="listing__item ' . $title_item_modifier . '">';
+          $element[$delta]['#suffix'] = '</li>';
         }
         else {
-          $element[$delta]['#prefix'] = '<div class="listing__item">';
-          $element[$delta]['#suffix'] = '</div>';
+          $element[$delta]['#prefix'] = '<li class="listing__item">';
+          $element[$delta]['#suffix'] = '</li>';
         }
         break;
     }

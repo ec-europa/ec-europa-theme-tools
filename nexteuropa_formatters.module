@@ -199,8 +199,8 @@ function _nexteuropa_formatters_field_component_listing($variables, $config) {
     'modifier' => 'default',
     'wrapper_modifier' => '',
     'layout' => 'default',
-    'listing_wrapper_element' => 'div',
-    'item_wrapper_element' => 'div',
+    'listing_wrapper_element' => 'ul',
+    'item_wrapper_element' => 'li',
   );
 
   $modifier_class = ' ' . trim($config['modifier']);

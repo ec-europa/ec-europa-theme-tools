@@ -27,21 +27,22 @@ class LanguageTokenHandler extends TokenAbstractHandler {
         switch ($name) {
           case self::CONTENT_LANGUAGE:
             if ($node = menu_get_object()) {
+              $languages = language_list();
               // If we can load our node, we will use that for our language.
-              $language_token_value = _dt_shared_functions_content_language($node);
+              $content_language = _dt_shared_functions_content_language($node);
+              $language_token_value = $languages[$content_language];
             }
             else {
               // On other cases we fall back to interface..
-              $language_token_value = $language->language;
+              $language_token_value = $language;
             }
             // Set the replacement.
-            $replacements[$original] = $language_token_value;
+            $replacements[$original] = $language_token_value->prefix;
             break;
 
           case self::INTERFACE_LANGUAGE:
-            $language_token_value = $language->language;
             // Set the replacement.
-            $replacements[$original] = $language_token_value;
+            $replacements[$original] = $language->prefix;
             break;
         }
       }

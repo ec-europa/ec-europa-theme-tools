@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * View template to display a news carousel.

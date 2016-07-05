@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This file contains examples of hooks nexteuropa_inpage_nav can implement.

@@ -28,6 +28,8 @@ class DtSharedFunctionsFieldTypeAreNotSame extends Exception {
 class DtSharedFunctionsParentCircular extends Exception {
 }
 
+include_once 'dt_shared_functions.accessibility.inc';
+
 /**
  * Implements hook_views_api().
  */

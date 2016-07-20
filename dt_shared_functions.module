@@ -61,10 +61,10 @@ function dt_shared_functions_views_plugins() {
 function _dt_shared_functions_additional_views_config() {
   $settings = [
     'dt_shared_functions_views_config_title' => [
-      'title' => t('Title'),
-      'type' => 'textfield',
-      'description' => t('The title to display in the counter result.'),
-      'required' => FALSE,
+      '#title' => t('Title'),
+      '#type' => 'textfield',
+      '#description' => t('The title to display in the counter result.'),
+      '#required' => FALSE,
     ],
   ];
 

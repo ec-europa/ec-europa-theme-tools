@@ -39,7 +39,7 @@ class views_plugin_dt_shared_functions_views_config extends views_plugin_display
     $options['digital_transformation'] = [
       'category' => 'digital_transformation',
       'title' => t('Digital transformation settings'),
-      'value' => t('Configure (%summary)', ['%summary' => $this->get_current_config_summary()]),
+      'value' => t('Configure'),
     ];
   }
 
@@ -49,15 +49,11 @@ class views_plugin_dt_shared_functions_views_config extends views_plugin_display
   function options_form(&$form, &$form_state) {
     if ($form_state['section'] == 'digital_transformation') {
       $form['#title'] .= t('Digital transformation specific settings');
-
+      // Preserve the custom settings form.
+      $form += _dt_shared_functions_additional_views_config();
       foreach (_dt_shared_functions_additional_views_config() as $key => $config) {
-        $form[$key] = [
-          '#title' => $config['title'],
-          '#type' => $config['type'],
-          '#description' => $config['description'],
-          '#required' => $config['required'],
-          '#default_value' => $this->display->get_option($key),
-        ];
+        // Keep default values if set.
+        $form[$key]['#default_value'] = $this->display->get_option($key) ? $this->display->get_option($key) : '';
       }
     }
   }
@@ -71,23 +67,6 @@ class views_plugin_dt_shared_functions_views_config extends views_plugin_display
         $this->display->set_option($key, $form_state['values'][$key]);
       }
     }
-  }
-
-  /**
-   * Returns a list of current config.
-   *
-   * @return string
-   *   Comma separated list of config.
-   */
-  private function get_current_config_summary() {
-    $summary = [];
-    foreach (_dt_shared_functions_additional_views_config() as $key => $config) {
-      $setting = $this->display->get_option($key);
-      if (!empty($setting)) {
-        $summary[] = $config['title'] . ':' . $setting;
-      }
-    }
-    return implode(', ', $summary);
   }
 
 }

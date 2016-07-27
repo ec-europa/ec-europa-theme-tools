@@ -466,8 +466,10 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
       case 'telephone':
         foreach ($items as $delta => $item) {
+          // Label to display.
+          $label = isset($instance['label']) ? $instance['label'] : '';
           // Make the phone value a link, if possible.
-          $telf = dt_shared_function_phonetohtml($item['safe_value']);
+          $telf = dt_shared_function_phonetohtml($label, $item['safe_value']);
           $element[$delta] = array(
             '#markup' => $telf,
           );

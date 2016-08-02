@@ -811,7 +811,10 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
       '#description' => t('Class names separated by spaces.'),
     );
   }
-  elseif ($context['instance']['display'][$context['view_mode']]['type'] == 'link_listing_title') {
+  elseif (
+    isset($context['instance']['display'][$context['view_mode']]['type']) &&
+    $context['instance']['display'][$context['view_mode']]['type'] == 'link_listing_title'
+  ) {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
 

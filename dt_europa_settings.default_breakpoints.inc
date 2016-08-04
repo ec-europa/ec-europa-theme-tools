@@ -16,7 +16,7 @@ function dt_europa_settings_default_breakpoints() {
   $breakpoint->api_version = 1;
   $breakpoint->machine_name = 'breakpoints.theme.europa.medium';
   $breakpoint->name = 'medium';
-  $breakpoint->breakpoint = '(min-width: 480px)';
+  $breakpoint->breakpoint = '(min-width: 480px) and (max-width: 767px)';
   $breakpoint->source = 'europa';
   $breakpoint->source_type = 'theme';
   $breakpoint->status = 1;
@@ -32,7 +32,7 @@ function dt_europa_settings_default_breakpoints() {
   $breakpoint->api_version = 1;
   $breakpoint->machine_name = 'breakpoints.theme.europa.mobile';
   $breakpoint->name = 'mobile';
-  $breakpoint->breakpoint = '(min-width: 0px)';
+  $breakpoint->breakpoint = '(min-width: 0px) and (max-width: 319px)';
   $breakpoint->source = 'europa';
   $breakpoint->source_type = 'theme';
   $breakpoint->status = 1;
@@ -48,7 +48,7 @@ function dt_europa_settings_default_breakpoints() {
   $breakpoint->api_version = 1;
   $breakpoint->machine_name = 'breakpoints.theme.europa.narrow';
   $breakpoint->name = 'narrow';
-  $breakpoint->breakpoint = '(min-width: 320px)';
+  $breakpoint->breakpoint = '(min-width: 320px) and (max-width: 479px)';
   $breakpoint->source = 'europa';
   $breakpoint->source_type = 'theme';
   $breakpoint->status = 1;
@@ -64,7 +64,7 @@ function dt_europa_settings_default_breakpoints() {
   $breakpoint->api_version = 1;
   $breakpoint->machine_name = 'breakpoints.theme.europa.normal';
   $breakpoint->name = 'normal';
-  $breakpoint->breakpoint = '(min-width: 768px)';
+  $breakpoint->breakpoint = '(min-width: 768px) and (max-width: 991px)';
   $breakpoint->source = 'europa';
   $breakpoint->source_type = 'theme';
   $breakpoint->status = 1;

@@ -31,6 +31,17 @@ class DtSharedFunctionsParentCircular extends Exception {
 include_once 'dt_shared_functions.accessibility.inc';
 
 /**
+ * Implements hook_init().
+ */
+function dt_shared_functions_init() {
+  if ($node = menu_get_object()) {
+    $available_languages = language_list('prefix');
+    $content_language_code = _dt_shared_functions_content_language($node);
+    $GLOBALS['language_content'] = isset($available_languages[$content_language_code]) ? $available_languages[$content_language_code] : $GLOBALS['language_content'];
+  }
+}
+
+/**
  * Implements hook_views_api().
  */
 function dt_shared_functions_views_api() {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This file contains the shared functions between dt_core and cwt_core.
@@ -471,8 +472,8 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
  * @return object
  *   The language object.
  */
-function _dt_shared_functions_get_language_obj($langcode) {
-  $languages = locale_language_list();
+function _dt_shared_functions_get_language_obj($langcode, $type = 'name') {
+  $languages = locale_language_list($type);
 
   return isset($languages[$langcode]) ? $languages[$langcode] : NULL;
 }
@@ -610,7 +611,7 @@ function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
     $form['dt']['dt_latest_visibility'] = array(
       '#type' => 'checkbox',
       '#title' => t('Would you like to show the latest block when it is available?'),
-      '#default_value' => variable_get('dt_latest_visibility', TRUE),
+      '#default_value' => variable_get('dt_shared_functions_dt_latest_visibility', TRUE),
     );
 
     $form['#submit'][] = "_dt_shared_functions_theme_settings_submit";
@@ -622,5 +623,5 @@ function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
  */
 function _dt_shared_functions_theme_settings_submit(&$form, &$form_state) {
   $override = $form_state['values']['dt_latest_visibility'] == 1 ? TRUE : FALSE;
-  variable_set('dt_latest_visibility', $override);
+  variable_set('dt_shared_functions_dt_latest_visibility', $override);
 }

@@ -410,8 +410,8 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
   $classes = ['section__group', 'section--row-three', 'section--navigation'];
 
   // Check if we have extra classes.
-  if ($variables['ds-config']['meta_modifier']) {
-    $classes = array_merge($classes, explode(' ', $variables['ds-config']['meta_modifier']));
+  if (isset($variables['ds-config']['meta_modifier']) && $variables['ds-config']['meta_modifier']) {
+    $classes = array_merge($classes, explode(' ', ['ds-config']['meta_modifier']));
   }
 
   // Our default render array.

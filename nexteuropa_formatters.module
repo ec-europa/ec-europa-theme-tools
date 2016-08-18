@@ -19,23 +19,23 @@ function nexteuropa_formatters_theme_registry_alter(&$registry) {
  * Implements hook_theme().
  */
 function nexteuropa_formatters_theme($existing, $type, $theme, $path) {
-  return array(
-    'nexteuropa_bem_item_list' => array(
+  return [
+    'nexteuropa_bem_item_list' => [
       'file' => 'nexteuropa_formatters.theme.inc',
-      'variables' => array(
-        'items' => array(),
-        'modifiers' => array(),
+      'variables' => [
+        'items' => [],
+        'modifiers' => [],
         'type' => 'div',
-        'attributes' => array(),
-      ),
-    ),
-    'nexteuropa_file_translations' => array(
+        'attributes' => [],
+      ],
+    ],
+    'nexteuropa_file_translations' => [
       'file' => 'nexteuropa_formatters.theme.inc',
-      'variables' => array(
-        'files' => array(),
-      ),
-    ),
-  );
+      'variables' => [
+        'files' => [],
+      ],
+    ],
+  ];
 }
 
 /**
@@ -62,10 +62,10 @@ function _nexteuropa_formatters_get_context_nav_wrapper($label, $add_expander = 
     $data_attribute = 'data-trimat="' . $trim_at . '"';
     $data_attribute .= ' data-trimto="' . $trim_to . '"';
   }
-  return array(
+  return [
     '#prefix' => '<span class="context-nav__label">' . $label . '</span><div ' . $data_attribute . ' class="context-nav__items' . $extra_classes . '">',
     '#suffix' => '</div>',
-  );
+  ];
 }
 
 /**
@@ -89,7 +89,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
         $layout_name = isset($variables['nexteuropa_listing_columns']) ? $variables['nexteuropa_listing_columns'] : FALSE;
         $layout_name_clean = str_replace('_', '-', $layout_name);
 
-        $settings = array();
+        $settings = [];
         $settings['view_mode'] = $first_node['#view_mode'];
         $settings['layout'] = $layout_name_clean;
         $settings['modifier'] = isset($variables['nexteuropa_listing_modifier']) ? $variables['nexteuropa_listing_modifier'] : '';
@@ -97,8 +97,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
         $settings['item_modifier'] = isset($variables['nexteuropa_listing_item_modifier']) ? $variables['nexteuropa_listing_item_modifier'] : '';
 
         // Custom listing settings based on view mode.
-        $listing_view_modes = array('title', 'meta', 'teaser', 'image_label');
-        if (isset($first_node['#view_mode']) && in_array($first_node['#view_mode'], $listing_view_modes)) {
+        if (isset($first_node['#view_mode']) && in_array($first_node['#view_mode'], _nexteuropa_formatters_get_listing_view_modes())) {
           switch ($first_node['#view_mode']) {
             case 'title':
               $settings['modifier'] .= ' listing--title';
@@ -112,7 +111,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
               $settings['wrapper_modifier'] .= ' listing--meta__wrapper';
               break;
 
-            case 'teaser':
+            default:
               $settings['modifier'] .= ' listing--teaser';
               $settings['wrapper_modifier'] .= ' listing--teaser__wrapper';
               break;
@@ -159,7 +158,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
   // Handling default output following BEM syntax.
   $output = '';
-  $classes = array();
+  $classes = [];
 
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {
@@ -195,13 +194,13 @@ function nexteuropa_formatters_theme_field_override($variables) {
  * Helper function for display listings.
  */
 function _nexteuropa_formatters_field_component_listing($variables, $config) {
-  $config += array(
+  $config += [
     'modifier' => 'default',
     'wrapper_modifier' => '',
     'layout' => 'default',
     'listing_wrapper_element' => 'ul',
     'item_wrapper_element' => 'li',
-  );
+  ];
 
   $modifier_class = ' ' . trim($config['modifier']);
   $wrapper_class = $config['modifier'] == 'default' ? '' : ' listing__wrapper--' . $config['layout'];
@@ -230,8 +229,8 @@ function _nexteuropa_formatters_field_component_listing($variables, $config) {
 
   // Distribute them into columns.
   $total = count($variables['items']);
-  $columns = array();
-  $max_items_in_column = array();
+  $columns = [];
+  $max_items_in_column = [];
 
   for ($i = 0; $i < $columns_num; $i++) {
     $max_items_in_column[] = floor(($total + $columns_num - ($i + 1)) / $columns_num);

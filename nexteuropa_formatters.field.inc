@@ -5,13 +5,24 @@
  * Adding BEM related custom field formatters.
  */
 
-global $_nexteuropa_formatters_listing_view_modes;
-$_nexteuropa_formatters_listing_view_modes = array(
-  'title',
-  'meta',
-  'teaser',
-  'image_label',
-);
+/**
+ * Helper function to get the available view modes.
+ *
+ * @return array
+ *   Array of items that can use the formatter.
+ */
+function _nexteuropa_formatters_get_listing_view_modes() {
+  $items = [
+    'title',
+    'meta',
+    'teaser',
+    'image_label',
+  ];
+
+  drupal_alter('nexteuropa_formatters_view_modes', $items);
+
+  return $items;
+}
 
 /**
  * Implements hook_field_formatter_info().
@@ -752,8 +763,6 @@ function nexteuropa_formatters_field_formatter_info_alter(&$info) {
  * Implements hook_field_formatter_settings_form_alter().
  */
 function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_form, $context) {
-  global $_nexteuropa_formatters_listing_view_modes;
-
   if (
     isset($context['instance']['display'][$context['view_mode']]['type']) &&
     $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
@@ -773,7 +782,7 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
   if (
     isset($context['instance']['display'][$context['view_mode']]['type']) &&
     $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
-    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], $_nexteuropa_formatters_listing_view_modes)
+    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], _nexteuropa_formatters_get_listing_view_modes())
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
@@ -845,8 +854,6 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
  * Implements hook_field_formatter_settings_summary_alter().
  */
 function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary, $context) {
-  global $_nexteuropa_formatters_listing_view_modes;
-
   if (
     $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
     $context['instance']['display'][$context['view_mode']]['settings']['view_mode'] == 'file'
@@ -873,7 +880,7 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
 
   if (
     $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
-    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], $_nexteuropa_formatters_listing_view_modes)
+    in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], _nexteuropa_formatters_get_listing_view_modes())
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];

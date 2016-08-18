@@ -237,7 +237,7 @@ function nexteuropa_formatters_field_group_pre_render(&$element, $group, &$form)
         $langcode = isset($group->label_language) ?  $group->label_language : language_default('language');
         $translatable_label = check_plain(t($group->label, array(), array('langcode' => $langcode)));
         // @codingStandardsIgnoreEnd
-        $label = '<' . $label_element . '><span>' . $translatable_label . '</span></' . $label_element . '>';
+        $label = '<' . $label_element . '>' . $translatable_label . '</' . $label_element . '>';
       }
 
       $add = array(

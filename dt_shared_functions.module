@@ -625,3 +625,15 @@ function _dt_shared_functions_theme_settings_submit(&$form, &$form_state) {
   $override = $form_state['values']['dt_latest_visibility'] == 1 ? TRUE : FALSE;
   variable_set('dt_shared_functions_dt_latest_visibility', $override);
 }
+
+/**
+ * Implements hook_html_head_alter().
+ */
+function dt_shared_functions_html_head_alter(&$head_elements) {
+  if ($node = menu_get_object()) {
+    global $language;
+    if (!array_key_exists($language->language, $node->translations->data)) {
+      $head_elements['metatag_robots_0']['#value'] = 'follow, noindex';
+    }
+  }
+}

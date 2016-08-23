@@ -37,3 +37,12 @@ function dt_shared_functions_update_7104() {
     variable_del('dt_latest_visibility');
   }
 }
+
+/**
+ * Changing jQuery version 1.8 for admin pages.
+ *
+ * Minimal fix for: https://www.drupal.org/node/2534724.
+ */
+function dt_shared_functions_update_7105() {
+  variable_set('jquery_update_jquery_admin_version', '1.8');
+}

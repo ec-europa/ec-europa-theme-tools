@@ -7,7 +7,7 @@
   Drupal.behaviors.inpage_navigation = {
     currentTitle: function ($navBar, $navBarCurrent) {
       // Clear title for In page nav navbar title if nothing selected.
-      var currentItem = $("li.active > a", $navBar);
+      var currentItem = $('li.active > a', $navBar);
       if (currentItem.length == 0) {
         $navBarCurrent.text(Drupal.settings.inpage_navigation.node_title);
       }
@@ -26,7 +26,7 @@
           $navBarList = $('.inpage-nav__list', $navBar),
           $selector = '.inpage-nav',
           $selectorMobile = '.inpage-nav__navbar-wrapper',
-          $topOffset = GetOffsetTop($('.inpage-nav__wrapper')),
+          $topOffset = GetInpageOffsetTop(),
           $screenWidth = $(window).width(),
           $screenWidthOriginal = $(window).width(),
           $body = $('body'),
@@ -56,9 +56,7 @@
           // New width.
           $screenWidth = $(window).width();
           // Only when the screen width has changed, we should recalculate the top offset.
-          if ($screenWidthOriginal !== $screenWidth) {
-            $topOffset = GetOffsetTop($('.inpage-nav__wrapper').closest('.col-md-3'));
-          }
+          $topOffset = GetInpageOffsetTop();
           // Reinitialize the scroll function.
           TriggerScroll($screenWidth, $topOffset, $selectorMobile, $selector, $navBar, $navBarCurrent);
           // Reset scrollspy.
@@ -67,9 +65,8 @@
 
         $(window).on('scroll', function () {
           if ($bodyHeight != $body.height()) {
-            var $newHeight = $body.height();
-            $topOffset -= $bodyHeight - $newHeight;
-            $bodyHeight = $newHeight;
+            $topOffset = GetInpageOffsetTop();
+            $bodyHeight = $body.height();
           }
           TriggerScroll($screenWidth, $topOffset, $selectorMobile, $selector, $navBar, $navBarCurrent);
         });
@@ -118,7 +115,7 @@
   }
 
   function InpageUnfix(selector) {
-    $(selector).closest('.inpage-nav__wrapper').removeAttr("style");
+    $(selector).closest('.inpage-nav__wrapper').removeAttr('style');
   }
 
   function InpageFix(selector) {
@@ -143,15 +140,14 @@
         'width': $parentWidth + 'px'
       });
     }
-
   }
 
-  function GetOffsetTop($element) {
-    return $element.offset().top;
+  function GetInpageOffsetTop() {
+    return $('.inpage-nav__wrapper').closest('.col-md-3').offset().top;
   }
 
   function GetOffsetBottom(selector) {
-    return parseFloat($(document).height() - $(window).scrollTop() - ($(selector).outerHeight() + 75))
+    return parseFloat($(document).height() - $(window).scrollTop() - ($(selector).outerHeight() + 75));
   }
 
 })(jQuery);

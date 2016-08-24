@@ -70,7 +70,6 @@ function nexteuropa_formatters_field_group_formatter_info() {
  * the system, we should add it here.
  */
 function nexteuropa_formatters_field_group_format_settings($group) {
-
   // Add a wrapper for extra settings to use by others.
   $form = array(
     'instance_settings' => array(

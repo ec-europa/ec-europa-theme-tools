@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This file contains the shared functions between dt_core and cwt_core.
@@ -26,6 +27,19 @@ class DtSharedFunctionsFieldTypeAreNotSame extends Exception {
  * Circular reference Exception.
  */
 class DtSharedFunctionsParentCircular extends Exception {
+}
+
+include_once 'dt_shared_functions.accessibility.inc';
+
+/**
+ * Implements hook_init().
+ */
+function dt_shared_functions_init() {
+  if ($node = menu_get_object()) {
+    $available_languages = language_list('prefix');
+    $content_language_code = _dt_shared_functions_content_language($node);
+    $GLOBALS['language_content'] = isset($available_languages[$content_language_code]) ? $available_languages[$content_language_code] : $GLOBALS['language_content'];
+  }
 }
 
 /**
@@ -59,10 +73,10 @@ function dt_shared_functions_views_plugins() {
 function _dt_shared_functions_additional_views_config() {
   $settings = [
     'dt_shared_functions_views_config_title' => [
-      'title' => t('Title'),
-      'type' => 'textfield',
-      'description' => t('The title to display in the counter result.'),
-      'required' => FALSE,
+      '#title' => t('Title'),
+      '#type' => 'textfield',
+      '#description' => t('The title to display in the counter result.'),
+      '#required' => FALSE,
     ],
   ];
 
@@ -339,45 +353,6 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
 }
 
 /**
- * Helper: fixes the language of a field.
- *
- * @param string $field_name
- *   Machine name of field.
- *
- * @todo: remove or refactor.
- */
-function _dt_shared_fix_field_language($field_name) {
-  // Default language.
-  $language_default = language_default()->language;
-  // Table names for update.
-  $table_names = array(
-    "field_data_$field_name",
-    "field_revision_$field_name",
-  );
-  foreach ($table_names as $table_name) {
-    $query = "
-      UPDATE
-        $table_name AS field_data
-        INNER JOIN (
-          SELECT
-            entity_id
-          FROM
-            $table_name
-          GROUP BY
-            entity_id
-          HAVING
-            count(*) = 1
-        ) AS filter ON filter.entity_id = field_data.entity_id
-      SET
-        language = '$language_default'
-      WHERE
-        language = 'und';
-    ";
-    db_query($query);
-  }
-}
-
-/**
  * Get the final content language after applying translations and fallbacks.
  *
  * @param object $node
@@ -497,8 +472,8 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
  * @return object
  *   The language object.
  */
-function _dt_shared_functions_get_language_obj($langcode) {
-  $languages = locale_language_list();
+function _dt_shared_functions_get_language_obj($langcode, $type = 'name') {
+  $languages = locale_language_list($type);
 
   return isset($languages[$langcode]) ? $languages[$langcode] : NULL;
 }
@@ -546,10 +521,13 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
  * in validation/visualization of parts of
  * phone number number fields.
  *
+ * @param string $label
+ *   Field label, shoud display at errors.
+ *
  * @return array
  *   Available patterns.
  */
-function _dt_shared_functions_contactphone_patterns() {
+function _dt_shared_functions_contactphone_patterns($label) {
   $patterns = array(
     'phone_label' => array(
       'pattern' => '/\s?\(([^)]+)\)$/',
@@ -559,13 +537,13 @@ function _dt_shared_functions_contactphone_patterns() {
       'pattern' => '/^(\+[0-9]{2,3}\s?)/',
       'return_key' => 0,
       'required' => TRUE,
-      'explain' => 'Country code missing or in wrong format, ex:+32',
+      'explain' => t('Country code missing or in wrong format, ex:+32'),
     ),
     'telephone' => array(
       'pattern' => '/^(\+[0-9]{2,3}\s+)((([0-9]{1,4})\s?)+)(\s?\(([^)]+)\))?$/',
       'return_key' => 2,
       'required' => 1,
-      'explain' => 'Phone number is missing or with wrong format (+cc r xxx xx xx (description))',
+      'explain' => t('@label is missing or with wrong format (+cc r xxx xx xx (description))', ['@label' => $label]),
     ),
   );
   return $patterns;
@@ -576,17 +554,19 @@ function _dt_shared_functions_contactphone_patterns() {
  *
  * If in the generation it fails it will return false.
  *
+ * @param string $label
+ *   Field label, shoud display at errors.
  * @param string $tel
  *   String containing phone number.
  *
  * @return string
  *   Returns formatted value or the source one.
  */
-function dt_shared_function_phonetohtml($tel) {
+function dt_shared_function_phonetohtml($label, $tel) {
   $data = trim($tel);
   // Load the array containing our regular expressions and loop to convert them
   // into a link.
-  foreach (_dt_shared_functions_contactphone_patterns() as $regexp_index => $regexp_values) {
+  foreach (_dt_shared_functions_contactphone_patterns($label) as $regexp_index => $regexp_values) {
     preg_match($regexp_values['pattern'], $data, $matches);
     // Something is wrong with the phone value and can't be displayed correctly.
     if (!isset($matches[$regexp_values['return_key']]) && isset($regexp_values['required'])) {
@@ -617,95 +597,6 @@ function dt_shared_function_phonetohtml($tel) {
 }
 
 /**
- * Helper function to create translations from source.
- *
- * @todo: remove or refactor.
- */
-function _dt_shared_function_copy_translation() {
-  $fields_to_fix = array(
-    'departments' => array(
-      'source' => 'Departments',
-      'target' => 'Related departments',
-      'source_context' => '',
-      'target_context' => '',
-    ),
-    'topics' => array(
-      'source' => 'Topics',
-      'target' => 'Related topics',
-      'source_context' => '',
-      'target_context' => '',
-    ),
-    'timeline' => array(
-      'source' => 'Show timeline',
-      'target' => 'Show all timeline',
-      'source_context' => '',
-      'target_context' => '',
-    ),
-    'responsibilities' => array(
-      'source' => 'Responsibilities',
-      'target' => 'Responsibilities',
-      'source_context' => '',
-      'target_context' => 'body:biography:label',
-    ),
-    'team' => array(
-      'source' => 'Team',
-      'target' => 'Team',
-      'source_context' => '',
-      'target_context' => '',
-    ),
-    'team-page' => array(
-      'source' => 'team page',
-      'target' => 'Team page',
-      'source_context' => '',
-      'target_context' => '',
-    ),
-  );
-
-  foreach ($fields_to_fix as $key => $field) {
-
-    // Get the target_id.
-    $query_1 = "SELECT lid FROM locales_source WHERE source='" . $field['target'] . "' AND context='" . $field['target_context'] . "'";
-    $result_1 = db_query($query_1);
-    if (count($result_1) == 1) {
-      foreach ($result_1 as $record) {
-        $target_id = $record->lid;
-      }
-
-      // Get the source_id.
-      $query_2 = "SELECT lid FROM locales_source WHERE source='" . $field['source'] . "' AND context='" . $field['source_context'] . "'";
-      $result_2 = db_query($query_2);
-      if (count($result_2) == 1) {
-        foreach ($result_2 as $record) {
-          $source_id = $record->lid;
-        }
-
-        $query_3 = "SELECT * FROM locales_target WHERE lid = $target_id";
-        $result_3 = db_query($query_3);
-        $counter = 0;
-        foreach ($result_3 as $key) {
-          $counter++;
-        }
-
-        if ($counter == 0) {
-          $query_4 = "SELECT * FROM locales_target WHERE lid = $source_id";
-          $result_4 = db_query($query_4);
-          foreach ($result_4 as $record) {
-            $translation = addslashes($record->translation);
-            $insert_query = "INSERT INTO
-          locales_target
-          (lid, translation, language)
-          VALUES
-          ($target_id, '$translation', '$record->language')";
-            db_query($insert_query);
-            $insert_query = NULL;
-          }
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_form_alter().
  */
 function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
@@ -720,7 +611,7 @@ function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
     $form['dt']['dt_latest_visibility'] = array(
       '#type' => 'checkbox',
       '#title' => t('Would you like to show the latest block when it is available?'),
-      '#default_value' => variable_get('dt_latest_visibility', TRUE),
+      '#default_value' => variable_get('dt_shared_functions_dt_latest_visibility', TRUE),
     );
 
     $form['#submit'][] = "_dt_shared_functions_theme_settings_submit";
@@ -732,5 +623,17 @@ function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
  */
 function _dt_shared_functions_theme_settings_submit(&$form, &$form_state) {
   $override = $form_state['values']['dt_latest_visibility'] == 1 ? TRUE : FALSE;
-  variable_set('dt_latest_visibility', $override);
+  variable_set('dt_shared_functions_dt_latest_visibility', $override);
+}
+
+/**
+ * Implements hook_html_head_alter().
+ */
+function dt_shared_functions_html_head_alter(&$head_elements) {
+  if ($node = menu_get_object()) {
+    global $language;
+    if (!array_key_exists($language->language, $node->translations->data)) {
+      $head_elements['metatag_robots_0']['#value'] = 'follow, noindex';
+    }
+  }
 }

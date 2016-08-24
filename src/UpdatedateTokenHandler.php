@@ -26,9 +26,10 @@ class UpdatedateTokenHandler extends TokenAbstractHandler {
       foreach ($tokens as $name => $original) {
         if ($name == self::TOKEN_NAME) {
 
-          if (isset($data['node'])) {
+          if (isset($data['node']) || isset($data['entity']) && $data['entity_type'] == 'node') {
+            $entity = isset($data['node']) ? $data['node'] : $data['entity'];
             // Get the node object.
-            $node_object = entity_metadata_wrapper('node', $data['node']);
+            $node_object = entity_metadata_wrapper('node', $entity);
 
             // Init our date.
             $date_updated = NULL;

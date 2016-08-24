@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Dt_shared_functions.install file.
@@ -25,4 +26,23 @@ function dt_shared_functions_update_7102() {
  */
 function dt_shared_functions_update_7103() {
   variable_set('jquery_update_jquery_admin_version', '1.7');
+}
+
+/**
+ * DTTSB-884: refactor variable.
+ */
+function dt_shared_functions_update_7104() {
+  if (variable_get('dt_latest_visibility')) {
+    variable_set('dt_shared_functions_dt_latest_visibility', variable_get('dt_latest_visibility'));
+    variable_del('dt_latest_visibility');
+  }
+}
+
+/**
+ * Changing jQuery version 1.8 for admin pages.
+ *
+ * Minimal fix for: https://www.drupal.org/node/2534724.
+ */
+function dt_shared_functions_update_7105() {
+  variable_set('jquery_update_jquery_admin_version', '1.8');
 }

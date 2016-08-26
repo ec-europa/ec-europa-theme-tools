@@ -92,10 +92,10 @@ function _dt_shared_functions_additional_views_config() {
  * the handlers.
  */
 function dt_shared_functions_token_info() {
-  $info['types'][_dt_shared_function_get_token_type()] = array(
+  $info['types'][_dt_shared_function_get_token_type()] = [
     'name' => t('Dt tokens'),
     'description' => t('Dt custom tokens'),
-  );
+  ];
   return $info;
 }
 
@@ -116,11 +116,11 @@ function _dt_shared_function_get_token_type() {
  * Implements hook_nexteuropa_token_token_handlers().
  */
 function dt_shared_functions_nexteuropa_token_token_handlers() {
-  return array(
+  return [
     'language_handler' => '\Drupal\dt_shared_functions\LanguageTokenHandler',
     'publish_date_handler' => '\Drupal\dt_shared_functions\PublishdateTokenHandler',
     'update_date_handler' => '\Drupal\dt_shared_functions\UpdatedateTokenHandler',
-  );
+  ];
 }
 
 /**
@@ -163,7 +163,7 @@ function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
         menu_delete_links($name);
       }
       else {
-        menu_delete(array('menu_name' => $name));
+        menu_delete(['menu_name' => $name]);
       }
       break;
 
@@ -186,7 +186,7 @@ function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
       break;
 
     case 'node':
-      $node_type = array($name);
+      $node_type = [$name];
       $query = new EntityFieldQuery();
       $query->entityCondition('entity_type', 'node')
         ->propertyCondition('type', $node_type, 'IN');
@@ -265,24 +265,24 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
   // Error handling.
   if (!$source_field_info) {
     throw new DtSharedFunctionsSourceFieldError(
-      t('There is not any %source (source field) with this name.', array(
+      t('There is not any %source (source field) with this name.', [
         '%source' => $source_field_name,
-      ))
+      ])
     );
   }
   if (!$destination_field_info) {
     throw new DtSharedFunctionsDestinationFieldError(
-      t('There is not any %source (source field) with this name.', array(
+      t('There is not any %source (source field) with this name.', [
         '%source' => $destination_field_name,
-      ))
+      ])
     );
   }
   if ($source_field_info['type'] != $destination_field_info['type']) {
     throw new DtSharedFunctionsFieldTypeAreNotSame(
-      t('%source (source) and %destination (destination) are not the same field type.', array(
+      t('%source (source) and %destination (destination) are not the same field type.', [
         '%source' => $source_field_name,
         '%destination' => $destination_field_name,
-      ))
+      ])
     );
   }
   // Source field  is a multiple one.
@@ -301,7 +301,7 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
     // Get the entity ids from result.
     $ids = array_keys($result[$entity_type]);
     // Load entities using ids.
-    $entities = entity_load($entity_type, $ids, array(), TRUE);
+    $entities = entity_load($entity_type, $ids, [], TRUE);
     foreach ($entities as $entity) {
       $entity_wrapper = entity_metadata_wrapper($entity_type, $entity);
 
@@ -339,7 +339,7 @@ function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, 
         // than use an array wrapper.
         else {
           // Take the first item of array.
-          $entity_wrapper->$destination_field_name = array($entity_wrapper->$source_field_name->value());
+          $entity_wrapper->$destination_field_name = [$entity_wrapper->$source_field_name->value()];
         }
         // If our clear parameter is true, we have to delete the old data.
         if ($clear) {
@@ -435,10 +435,10 @@ function _dt_shared_functions_disable_anchors() {
     $theme_settings = variable_get($target_settings, FALSE);
     // If settings are not there, configure it, otherwise adapt them.
     if (!$theme_settings) {
-      $theme_settings = array(
+      $theme_settings = [
         'bootstrap_anchors_fix' => 0,
         'bootstrap_anchors_smooth_scrolling' => 0,
-      );
+      ];
     }
     else {
       $theme_settings['bootstrap_anchors_fix'] = 0;
@@ -528,24 +528,24 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
  *   Available patterns.
  */
 function _dt_shared_functions_contactphone_patterns($label) {
-  $patterns = array(
-    'phone_label' => array(
+  $patterns = [
+    'phone_label' => [
       'pattern' => '/\s?\(([^)]+)\)$/',
       'return_key' => 0,
-    ),
-    'country_prefix' => array(
+    ],
+    'country_prefix' => [
       'pattern' => '/^(\+[0-9]{2,3}\s?)/',
       'return_key' => 0,
       'required' => TRUE,
       'explain' => t('Country code missing or in wrong format, ex:+32'),
-    ),
-    'telephone' => array(
+    ],
+    'telephone' => [
       'pattern' => '/^(\+[0-9]{2,3}\s+)((([0-9]{1,4})\s?)+)(\s?\(([^)]+)\))?$/',
       'return_key' => 2,
       'required' => 1,
       'explain' => t('@label is missing or with wrong format (+cc r xxx xx xx (description))', ['@label' => $label]),
-    ),
-  );
+    ],
+  ];
   return $patterns;
 }
 
@@ -585,11 +585,11 @@ function dt_shared_function_phonetohtml($label, $tel) {
   // Create the href tel: value.
   $tel = 'tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']);
   // This defines the element telephone in the component field.
-  $classes = array('class' => 'field__telephone');
+  $classes = ['class' => 'field__telephone'];
   // This will be the link title.
   $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
   // Build the link.
-  $htmlphone = l($title, $tel, array('attributes' => $classes));
+  $htmlphone = l($title, $tel, ['attributes' => $classes]);
   // The full element.
   $markup = $htmlphone . ' ' . $phone['phone_label'];
 
@@ -602,17 +602,17 @@ function dt_shared_function_phonetohtml($label, $tel) {
 function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'system_theme_settings') {
     // Build the form.
-    $form['dt'] = array(
+    $form['dt'] = [
       '#type' => 'fieldset',
       '#title' => t('DTT settings'),
       '#weight' => -100,
-    );
+    ];
 
-    $form['dt']['dt_latest_visibility'] = array(
+    $form['dt']['dt_latest_visibility'] = [
       '#type' => 'checkbox',
       '#title' => t('Would you like to show the latest block when it is available?'),
       '#default_value' => variable_get('dt_shared_functions_dt_latest_visibility', TRUE),
-    );
+    ];
 
     $form['#submit'][] = "_dt_shared_functions_theme_settings_submit";
   }

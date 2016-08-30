@@ -109,7 +109,7 @@ function nexteuropa_formatters_field_formatter_info() {
     ),
     'listing_title' => array(
       'label' => t('Listing title'),
-      'field types' => array('text'),
+      'field types' => array('text', 'text_long'),
     ),
     'entity_reference_section' => array(
       'label' => t('Entity reference section group'),
@@ -125,6 +125,32 @@ function nexteuropa_formatters_field_formatter_info() {
     'telephone' => array(
       'label' => t('Telephone link'),
       'field types' => array('text'),
+    ),
+    'label' => array(
+      'label' => t('Label'),
+      'field types' => array(
+        'text',
+        'list_float',
+        'list_integer',
+        'list_text',
+      ),
+      'settings' => array(
+        'label_modifiers' => '',
+      ),
+    ),
+    'feedback_counter' => array(
+      'label' => t('Feedback counter'),
+      'field types' => array(
+        'number_integer',
+        'number_decimal',
+        'number_float',
+      ),
+    ),
+    'collapsed_term' => array(
+      'label' => t('Collapsed term (displays taxonomy term description in a collapsible way)'),
+      'field types' => array(
+        'taxonomy_term_reference',
+      ),
     ),
     'bold_last' => array(
       'label' => t('Bold last word'),
@@ -201,6 +227,15 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
     );
   }
 
+  if ($display['type'] == 'label') {
+    $element['label_modifiers'] = array(
+      '#title' => t('Modifiers'),
+      '#type' => 'textfield',
+      '#description' => t('Separate multiple modifiers with commas'),
+      '#default_value' => $settings['label_modifiers'],
+    );
+  }
+
   return $element;
 }
 
@@ -232,6 +267,12 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
 
     case 'link_button_two_column':
       return 'btn btn-default';
+
+    case 'label':
+      return 'label';
+
+    case 'feedback_counter':
+      return 'icon--feedback icon--text-small';
 
     case 'link_listing_title':
     case 'listing_title':
@@ -303,7 +344,6 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
   if (!empty($items)) {
     $formatter = $display['type'];
-
     switch ($formatter) {
       // Formatter for the structured content view mode.
       case 'structured_content_links':
@@ -487,12 +527,56 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         }
         break;
 
+      case 'label':
+        foreach ($items as $delta => $item) {
+          $settings = !empty($display['settings']['label_modifiers']);
+          $classes = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+
+          if ($settings) {
+            if (strpos($display['settings']['label_modifiers'], ',')) {
+              $modifiers = explode(',', $display['settings']['label_modifiers']);
+
+              foreach ($modifiers as $modifier) {
+                $classes .= ' label--' . check_plain(trim($modifier));
+              }
+            }
+            else {
+              $classes .= $settings['label_modifiers'] != '' ? ' label--' . check_plain($display['settings']['label_modifiers']) : '';
+            }
+          }
+
+          $element[$delta] = array(
+            '#markup' => '<span class="' . $classes . '">' . $item['value'] . '</span>',
+          );
+        }
+        break;
+
+      case 'collapsed_term':
+        $term = i18n_taxonomy_localize_terms(taxonomy_term_load($items[0]['tid']));
+        $format = $term->format ? $term->format : 'full_html';
+        $element[0] = array(
+          '#markup' => '<a data-toggle="collapse" data-target="#' . drupal_clean_css_identifier($term->name) . '">' . $term->name . ' <span class="icon icon--down"></span></a>
+            <div id="' . drupal_clean_css_identifier($term->name) . '" class="collapse">' . check_markup($term->description, $format) . '</div>',
+        );
+        break;
+
       case 'listing_title':
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           $element[$delta] = array(
             '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
           );
+        }
+        break;
+
+      case 'feedback_counter':
+        $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+        foreach ($items as $delta => $item) {
+          if ($item['value'] > 0) {
+            $element[$delta] = array(
+              '#markup' => '<span class="icon ' . $class . '">' . t('Feedback') . ' (' . $item['value'] . ')</span>',
+            );
+          }
         }
         break;
 

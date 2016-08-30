@@ -407,6 +407,56 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
 }
 
 /**
+ * This is a basic theme_ds_field implementation.
+ *
+ * It's name is required to start with theme_ds_field and is defined in
+ * nexteuropa_formatters_ds_field_theme_functions_info. It will modify the
+ * output of the field before it is passed to the render function.
+ *
+ * This will only be called for our h4label setting.
+ *
+ * @param array $variables
+ *   The array containing information for the field.
+ *
+ * @return string
+ *   The rendered output.
+ */
+function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
+  // Handling default output following BEM syntax.
+  $output = '';
+  $classes = array();
+
+  // Render the label, if it's not hidden.
+  if (!$variables['label_hidden']) {
+    $output .= '<div class="field__label"' . $variables['title_attributes'] . '><h4>' . $variables['label'] . '</h4></div>';
+    $classes[] = 'field--labeled';
+  }
+
+  // Render the items.
+  if ($variables['element']['#view_mode'] == 'title') {
+    foreach ($variables['items'] as $item) {
+      $output .= drupal_render($item);
+    }
+  }
+  else {
+    $output .= '<div class="field__items"' . $variables['content_attributes'] . '>';
+    foreach ($variables['items'] as $item) {
+      // We should pass along the parent object if we have access to it.
+      if (isset($item['#file']) && isset($variables['element']['#object'])) {
+        $item['#file']->entity = $variables['element']['#object'];
+      }
+      $output .= drupal_render($item);
+    }
+    $output .= '</div>';
+
+    // Render the top-level DIV.
+    $output = '<div ' . $variables['attributes'] . ' class="field field--' . strtr($variables['element']['#field_name'], '_', '-') . ' ' . implode(' ', $classes) . '">' . $output . '</div>';
+  }
+
+  return $output;
+}
+
+/**
  * Implements hook_ds_field_theme_functions_info().
  *
  * Adds a new select option.
@@ -415,5 +465,6 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
   return [
     'theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'),
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
+    'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
   ];
 }

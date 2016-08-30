@@ -126,7 +126,10 @@ function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
     // @codingStandardsIgnoreLine
     $label = isset($field_group->format_settings['label']) ? t($field_group->format_settings['label']) : $field_group->label;
     return [
-      'id' => str_replace(['id=', '"'], '', $field_group->format_settings['instance_settings']['attributes']),
+      'id' => str_replace([
+        'id=',
+        '"',
+      ], '', $field_group->format_settings['instance_settings']['attributes']),
       'label' => $label,
     ];
   }
@@ -172,7 +175,10 @@ function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
       }
       // We can already set the full anchor now..
       $anchors[] = [
-        'id' => str_replace(['id=', '"'], '', $ds_field['formatter_settings']['ft']['lb-at']),
+        'id' => str_replace([
+          'id=',
+          '"',
+        ], '', $ds_field['formatter_settings']['ft']['lb-at']),
         'label' => $label,
       ];
     }
@@ -264,7 +270,7 @@ function _nexteuropa_inpage_nav_get_anchors($element) {
     // If one passes, we know we are having an anchor.
     if ($has_child && ($label || !empty($childs))) {
       // Make sure that we already sort the childs.
-      if (count($childs > 1)) {
+      if (count($childs) > 1) {
         usort($childs, '_nexteuropa_inpage_nav_sort_by_weight');
       }
       // Add the group to our array, including label and child.
@@ -276,20 +282,64 @@ function _nexteuropa_inpage_nav_get_anchors($element) {
       ];
     }
   }
-
+  // Allow other modules to alter the data.
   foreach (module_implements('nexteuropa_inpage_nav_add') as $module) {
     $ordered_array += module_invoke($module, 'nexteuropa_inpage_nav_add', $element, $ds_field_settings);
   }
+  // Initialize.
+  $field_inpage_nav = FALSE;
+  // Loop over the rest of the fields, to make sure nothing is left out.
+  // @todo: We have to check if we can merge this and the code above.
+  foreach ($element as $field => $field_info) {
+    if (is_array($field_info) && isset($field_info['#field_name'])) {
+      $has_child = FALSE;
+      // Get our specific ds field settings and pass them.
+      $ds_field = isset($ds_field_settings[$field]) ? $ds_field_settings[$field] : NULL;
+      // If we were able to get a label from the helper we append them to the
+      // childs array.
+      if ($field_anchor = _nexteuropa_inpage_nav_get_field_anchors($element[$field], $ds_field)) {
+        // Search if the field is already in the field list.
+        foreach ($ordered_array as $item) {
+          if (isset($item['children']) && is_array($item['children'])) {
+            foreach ($item['children'] as $in_fields => $in_fields_value) {
+              if ($field == $in_fields) {
+                $field_inpage_nav = TRUE;
+              }
+            }
+          }
+        }
+        // Only add the field if its not there before.
+        if (!$field_inpage_nav) {
+          $has_child = TRUE;
+          $childs[$field] = $field_anchor;
+        }
+      }
 
+      // Remove it from our array so that we do not test for it again later.
+      unset($element[$field]);
+
+      if ($has_child) {
+        // Make sure that we already sort the childs.
+        if (isset($childs) && count($childs) > 0) {
+          usort($childs, '_nexteuropa_inpage_nav_sort_by_weight');
+          // Add the group to our array, including label and child.
+          $ordered_array[$field] = [
+            'weight' => intval($field_info['#weight']),
+            'children' => $childs,
+            'heading' => '',
+          ];
+        }
+      }
+    }
+  }
   // Sort the array by weight.
   usort($ordered_array, '_nexteuropa_inpage_nav_sort_by_weight');
 
   // Initialize our anchors.
   $anchors = [];
-
   // Parse the fresh array to a simple version.
   foreach ($ordered_array as $item) {
-    if (is_array($item['heading'])) {
+    if (is_array($item['heading']) && isset($item['heading']['label'])) {
       $anchor = [
         'id' => $item['heading']['id'],
         'label' => $item['heading']['label'],
@@ -304,7 +354,6 @@ function _nexteuropa_inpage_nav_get_anchors($element) {
       }
     }
   }
-
   return $anchors;
 }
 

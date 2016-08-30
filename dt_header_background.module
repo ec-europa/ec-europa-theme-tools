@@ -67,7 +67,7 @@ function dt_header_background_preprocess_node(&$variables) {
       $variables['header_back'] = TRUE;
       // Add the css to the page.
       $uri = DT_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
-      drupal_add_css($uri, array('group' => CSS_THEME, 'every_page' => FALSE));
+      drupal_add_css($uri, ['group' => CSS_THEME, 'every_page' => FALSE]);
     }
   }
 }
@@ -87,7 +87,7 @@ function dt_header_background_preprocess_page(&$variables) {
       $variables['header_back'] = TRUE;
       // Add the css to the page.
       $uri = DT_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
-      drupal_add_css($uri, array('group' => CSS_THEME, 'every_page' => FALSE));
+      drupal_add_css($uri, ['group' => CSS_THEME, 'every_page' => FALSE]);
     }
   }
 }
@@ -115,12 +115,12 @@ function _dt_header_background_set_default_header_background($ct = FALSE, $fid =
     $filepath = drupal_realpath(drupal_get_path('module', 'dt_header_background') . '/images/header_background_default.png');
 
     if (file_exists($filepath)) {
-      $file = (object) array(
+      $file = (object) [
         'uid' => 1,
         'uri' => $filepath,
         'filemime' => file_get_mimetype($filepath),
         'status' => FILE_STATUS_PERMANENT,
-      );
+      ];
 
       // Copy the default image in the public folder.
       $file = file_copy($file, 'public://');
@@ -168,7 +168,7 @@ function _dt_header_background_handle_header_background($entity_wrapper = NULL, 
     // Filter the ones regarding the header image.
     $header_styles = preg_grep('#^header_image*#', $style_names);
     // Prepare containers.
-    $mapping = array();
+    $mapping = [];
     $css = '';
 
     foreach ($breakpoints as $breakpoint) {

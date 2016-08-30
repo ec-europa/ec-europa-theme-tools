@@ -424,7 +424,7 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
 function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
   // Handling default output following BEM syntax.
   $output = '';
-  $classes = array();
+  $classes = [];
 
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {

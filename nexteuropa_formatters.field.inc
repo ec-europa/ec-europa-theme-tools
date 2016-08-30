@@ -28,145 +28,145 @@ function _nexteuropa_formatters_get_listing_view_modes() {
  * Implements hook_field_formatter_info().
  */
 function nexteuropa_formatters_field_formatter_info() {
-  return array(
-    'context_nav_item' => array(
+  return [
+    'context_nav_item' => [
       'label' => t('Context nav item'),
-      'field types' => array(
+      'field types' => [
         'text',
         'entityreference',
         'link_field',
         'datetime',
         'date',
         'datestamp',
-      ),
-      'settings' => array(
+      ],
+      'settings' => [
         'expander_has_expander' => FALSE,
         'expander_trim_at' => 0,
         'expander_trim_to' => 0,
         'contextual_date' => '',
-      ),
-    ),
-    'nexteuropa_tags' => array(
+      ],
+    ],
+    'nexteuropa_tags' => [
       'label' => t('Tags (NextEuropa)'),
-      'field types' => array(
+      'field types' => [
         'taxonomy_term_reference',
         'entityreference',
         'link_field',
-      ),
-    ),
-    'link_button_default' => array(
+      ],
+    ],
+    'link_button_default' => [
       'label' => t('Link button default'),
-      'field types' => array(
+      'field types' => [
         'link_field',
         'taxonomy_term_reference',
         'entityreference',
-      ),
-      'settings' => array(
+      ],
+      'settings' => [
         'link_title' => '',
         'force_language_default' => 0,
-      ),
-    ),
-    'link_button_primary' => array(
+      ],
+    ],
+    'link_button_primary' => [
       'label' => t('Link button primary'),
-      'field types' => array(
+      'field types' => [
         'link_field',
         'taxonomy_term_reference',
-      ),
-    ),
-    'link_button_secondary' => array(
+      ],
+    ],
+    'link_button_secondary' => [
       'label' => t('Link button secondary'),
-      'field types' => array(
+      'field types' => [
         'link_field',
         'taxonomy_term_reference',
-      ),
-    ),
-    'link_button_call_for_action' => array(
+      ],
+    ],
+    'link_button_call_for_action' => [
       'label' => t('Link button call for action'),
-      'field types' => array(
+      'field types' => [
         'link_field',
         'taxonomy_term_reference',
-      ),
-    ),
-    'link_button_block' => array(
+      ],
+    ],
+    'link_button_block' => [
       'label' => t('Link button block'),
-      'field types' => array(
+      'field types' => [
         'link_field',
         'taxonomy_term_reference',
-      ),
-    ),
-    'link_button_two_column' => array(
+      ],
+    ],
+    'link_button_two_column' => [
       'label' => t('Link button two column'),
-      'field types' => array(
+      'field types' => [
         'link_field',
-      ),
-    ),
-    'link_listing_title' => array(
+      ],
+    ],
+    'link_listing_title' => [
       'label' => t('Listing title'),
-      'field types' => array(
+      'field types' => [
         'link_field',
         'taxonomy_term_reference',
-      ),
-    ),
-    'listing_title' => array(
+      ],
+    ],
+    'listing_title' => [
       'label' => t('Listing title'),
-      'field types' => array('text', 'text_long'),
-    ),
-    'entity_reference_section' => array(
+      'field types' => ['text', 'text_long'],
+    ],
+    'entity_reference_section' => [
       'label' => t('Entity reference section group'),
-      'field types' => array(
+      'field types' => [
         'entityreference',
-      ),
-      'settings' => array(
+      ],
+      'settings' => [
         'use_content_language' => TRUE,
         'view_mode' => 'default',
         'links' => TRUE,
-      ),
-    ),
-    'telephone' => array(
+      ],
+    ],
+    'telephone' => [
       'label' => t('Telephone link'),
-      'field types' => array('text'),
-    ),
-    'label' => array(
+      'field types' => ['text'],
+    ],
+    'label' => [
       'label' => t('Label'),
-      'field types' => array(
+      'field types' => [
         'text',
         'list_float',
         'list_integer',
         'list_text',
-      ),
-      'settings' => array(
+      ],
+      'settings' => [
         'label_modifiers' => '',
-      ),
-    ),
-    'feedback_counter' => array(
+      ],
+    ],
+    'feedback_counter' => [
       'label' => t('Feedback counter'),
-      'field types' => array(
+      'field types' => [
         'number_integer',
         'number_decimal',
         'number_float',
-      ),
-    ),
-    'collapsed_term' => array(
+      ],
+    ],
+    'collapsed_term' => [
       'label' => t('Collapsed term (displays taxonomy term description in a collapsible way)'),
-      'field types' => array(
+      'field types' => [
         'taxonomy_term_reference',
-      ),
-    ),
-    'bold_last' => array(
+      ],
+    ],
+    'bold_last' => [
       'label' => t('Bold last word'),
-      'field types' => array(
+      'field types' => [
         'taxonomy_term_reference',
         'text',
-      ),
-    ),
-    'structured_content_links' => array(
+      ],
+    ],
+    'structured_content_links' => [
       'label' => t('Structured content links'),
-      'field types' => array(
+      'field types' => [
         'entityreference',
         'link_field',
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 }
 
 /**
@@ -176,29 +176,29 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
   $display = $instance['display'][$view_mode];
   $settings = $display['settings'];
 
-  $element = array();
+  $element = [];
 
   if ($display['type'] == 'context_nav_item') {
-    $element['expander_has_expander'] = array(
+    $element['expander_has_expander'] = [
       '#title' => t('Has expander'),
       '#type' => 'checkbox',
       '#size' => 1,
       '#default_value' => $settings['expander_has_expander'],
-    );
-    $element['expander_trim_at'] = array(
+    ];
+    $element['expander_trim_at'] = [
       '#title' => t('Trim at'),
       '#type' => 'textfield',
       '#size' => 2,
       '#default_value' => $settings['expander_trim_at'],
-      '#element_validate' => array('element_validate_integer'),
-    );
-    $element['expander_trim_to'] = array(
+      '#element_validate' => ['element_validate_integer'],
+    ];
+    $element['expander_trim_to'] = [
       '#title' => t('Trim to'),
       '#type' => 'textfield',
       '#size' => 2,
       '#default_value' => $settings['expander_trim_to'],
-      '#element_validate' => array('element_validate_integer'),
-    );
+      '#element_validate' => ['element_validate_integer'],
+    ];
 
     if ($display['type'] == 'context_nav_item' && $field['type'] == 'datetime') {
       module_load_include('inc', 'date', 'date_admin');
@@ -207,33 +207,33 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
   }
 
   if ($display['type'] == 'entity_reference_section') {
-    $element['use_content_language'] = array(
+    $element['use_content_language'] = [
       '#title' => t('Use the content language for referenced items.'),
       '#type' => 'checkbox',
       '#default_value' => $settings['use_content_language'],
-    );
+    ];
   }
 
   if ($display['type'] == 'link_button_default' && $field['type'] == 'entityreference') {
-    $element['link_title'] = array(
+    $element['link_title'] = [
       '#title' => t('Title'),
       '#type' => 'textfield',
       '#default_value' => $settings['link_title'],
-    );
-    $element['force_language_default'] = array(
+    ];
+    $element['force_language_default'] = [
       '#title' => t('Force the link to point to the default language.'),
       '#type' => 'checkbox',
       '#default_value' => $settings['force_language_default'],
-    );
+    ];
   }
 
   if ($display['type'] == 'label') {
-    $element['label_modifiers'] = array(
+    $element['label_modifiers'] = [
       '#title' => t('Modifiers'),
       '#type' => 'textfield',
       '#description' => t('Separate multiple modifiers with commas'),
       '#default_value' => $settings['label_modifiers'],
-    );
+    ];
   }
 
   return $element;
@@ -289,7 +289,7 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
  */
 function nexteuropa_formatters_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
   if ($field['type'] == 'entityreference') {
-    $target_ids = array();
+    $target_ids = [];
 
     // Collect every possible entity attached to any of the entities.
     foreach ($entities as $id => $entity) {
@@ -304,7 +304,7 @@ function nexteuropa_formatters_field_formatter_prepare_view($entity_type, $entit
       $target_entities = entity_load($field['settings']['target_type'], $target_ids);
     }
     else {
-      $target_entities = array();
+      $target_entities = [];
     }
 
     // Iterate through the fieldable entities again to attach the loaded data.
@@ -340,7 +340,7 @@ function nexteuropa_formatters_field_formatter_prepare_view($entity_type, $entit
  * Implements hook_field_formatter_view().
  */
 function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
-  $element = array();
+  $element = [];
 
   if (!empty($items)) {
     $formatter = $display['type'];
@@ -423,14 +423,14 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
                   $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
                   $link = l($label, $link_url, $uri['options']);
-                  $element[$delta] = array(
+                  $element[$delta] = [
                     '#prefix' => '<span class="context-nav__item">',
                     '#markup' => $link,
                     '#suffix' => '</span>',
-                  );
+                  ];
                 }
                 else {
-                  $element[$delta] = array('#markup' => check_plain($label));
+                  $element[$delta] = ['#markup' => check_plain($label)];
                 }
               }
             }
@@ -438,19 +438,19 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
           case 'link_field':
             foreach ($items as $delta => $item) {
-              $link = l($item['title'], $item['url'], array('attributes' => $item['attributes']));
-              $element[$delta] = array(
+              $link = l($item['title'], $item['url'], ['attributes' => $item['attributes']]);
+              $element[$delta] = [
                 '#markup' => '<span class="context-nav__item">' . $link . '</span>',
-              );
+              ];
             }
             // End of context_nav_item.
             break;
 
           case 'text':
             foreach ($items as $delta => $item) {
-              $element[$delta] = array(
+              $element[$delta] = [
                 '#markup' => '<span class="context-nav__item">' . $item['safe_value'] . '</span>',
-              );
+              ];
             }
             break;
 
@@ -461,20 +461,20 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             foreach ($items as $delta => $item) {
               $node_wrapper = entity_metadata_wrapper('node', $entity);
               if ($date_updated = $node_wrapper->field_core_date_updated->value()) {
-                $element[$delta] = array(
+                $element[$delta] = [
                   '#markup' => '<span class="context-nav__item">' .
                   format_date($item['value'], 'ec_date_j_f_y') . ' ' .
                   t('(last update on: @date)',
-                      array('@date' => format_date($date_updated, 'ec_date_j_f_y'))) .
+                      ['@date' => format_date($date_updated, 'ec_date_j_f_y')]) .
                   '</span>',
-                );
+                ];
               }
               else {
-                $element[$delta] = array(
+                $element[$delta] = [
                   '#markup' => '<span class="context-nav__item">' .
                   format_date($item['value'], 'ec_date_j_f_y') .
                   '</span>',
-                );
+                ];
               }
             }
             break;
@@ -501,7 +501,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                   $element[$delta] = _nexteuropa_formatters_tags_item_link($label, $link_url);
                 }
                 else {
-                  $element[$delta] = array('#markup' => check_plain($label));
+                  $element[$delta] = ['#markup' => check_plain($label)];
                 }
               }
             }
@@ -521,9 +521,9 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           $label = isset($instance['label']) ? $instance['label'] : '';
           // Make the phone value a link, if possible.
           $telf = dt_shared_function_phonetohtml($label, $item['safe_value']);
-          $element[$delta] = array(
+          $element[$delta] = [
             '#markup' => $telf,
-          );
+          ];
         }
         break;
 
@@ -545,27 +545,27 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             }
           }
 
-          $element[$delta] = array(
+          $element[$delta] = [
             '#markup' => '<span class="' . $classes . '">' . $item['value'] . '</span>',
-          );
+          ];
         }
         break;
 
       case 'collapsed_term':
         $term = i18n_taxonomy_localize_terms(taxonomy_term_load($items[0]['tid']));
         $format = $term->format ? $term->format : 'full_html';
-        $element[0] = array(
+        $element[0] = [
           '#markup' => '<a data-toggle="collapse" data-target="#' . drupal_clean_css_identifier($term->name) . '">' . $term->name . ' <span class="icon icon--down"></span></a>
             <div id="' . drupal_clean_css_identifier($term->name) . '" class="collapse">' . check_markup($term->description, $format) . '</div>',
-        );
+        ];
         break;
 
       case 'listing_title':
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
-          $element[$delta] = array(
+          $element[$delta] = [
             '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
-          );
+          ];
         }
         break;
 
@@ -573,9 +573,9 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           if ($item['value'] > 0) {
-            $element[$delta] = array(
+            $element[$delta] = [
               '#markup' => '<span class="icon ' . $class . '">' . t('Feedback') . ' (' . $item['value'] . ')</span>',
-            );
+            ];
           }
         }
         break;
@@ -594,12 +594,12 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
               // Call theme function of link module (theme_link_formatter_link_
               // default).
-              $element[$delta] = array(
+              $element[$delta] = [
                 '#theme' => 'link_formatter_link_default',
                 '#element' => $item,
                 '#field' => $instance,
                 '#display' => $display,
-              );
+              ];
             }
             break;
 
@@ -608,16 +608,16 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               $term = taxonomy_term_load($item['tid']);
               $link = isset($term->legacy) ? $term->legacy : url('taxonomy/term/' . $item['tid']);
 
-              $element[$delta] = array(
+              $element[$delta] = [
                 '#type' => 'link',
                 '#title' => $term->name,
                 '#href' => $link,
-                '#options' => array(
-                  'attributes' => array(
+                '#options' => [
+                  'attributes' => [
                     'class' => _nexteuropa_formatters_field_formatter_view_classes($formatter),
-                  ),
-                ),
-              );
+                  ],
+                ],
+              ];
             }
             break;
 
@@ -633,24 +633,24 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               $force = isset($settings['force_language_default']) && $settings['force_language_default'];
 
               if (!$force) {
-                $element[$delta] = array(
+                $element[$delta] = [
                   '#type' => 'link',
                   '#title' => $label,
                   '#href' => 'node/' . $items[$delta]['target_id'],
-                  '#options' => array(
-                    'attributes' => array(
+                  '#options' => [
+                    'attributes' => [
                       'class' => $classes,
-                    ),
-                  ),
-                );
+                    ],
+                  ],
+                ];
               }
               else {
-                $element[$delta] = array(
-                  '#markup' => l($label, 'node/' . $items[$delta]['target_id'], array(
+                $element[$delta] = [
+                  '#markup' => l($label, 'node/' . $items[$delta]['target_id'], [
                     'language' => $lang,
-                    'attributes' => array('class' => $classes),
-                  )),
-                );
+                    'attributes' => ['class' => $classes],
+                  ]),
+                ];
               }
             }
             break;
@@ -698,13 +698,13 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               $name_split = explode(' ', $term->name);
               $last_index = count($name_split) - 1;
               $name_split[$last_index] = '<strong>' . ($name_split[$last_index]) . '</strong>';
-              $element[$delta] = array('#markup' => implode(' ', $name_split));
+              $element[$delta] = ['#markup' => implode(' ', $name_split)];
             }
             break;
 
           case 'text':
             foreach ($items as $delta => $item) {
-              $element[$delta] = array('#markup' => $item['safe_value']);
+              $element[$delta] = ['#markup' => $item['safe_value']];
             }
             break;
         }
@@ -729,16 +729,16 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
  *    Render array constructing a link.
  */
 function _nexteuropa_formatters_tags_item_link($item_title, $item_link) {
-  return array(
+  return [
     '#type' => 'link',
     '#title' => $item_title,
     '#href' => $item_link,
-    '#options' => array(
-      'attributes' => array(
-        'class' => array('tags__item'),
-      ),
-    ),
-  );
+    '#options' => [
+      'attributes' => [
+        'class' => ['tags__item'],
+      ],
+    ],
+  ];
 }
 
 /**
@@ -761,12 +761,12 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
           $item['attributes']['class'] = $formatter_class_default;
         }
 
-        $element[$delta] = array(
+        $element[$delta] = [
           '#theme' => 'link_formatter_link_default',
           '#element' => $item,
           '#field' => $instance,
           '#display' => $display,
-        );
+        ];
 
         if (isset($title_item_modifier) && $title_item_modifier !== '') {
           $element[$delta]['#prefix'] = '<li class="listing__item ' . $title_item_modifier . '">';
@@ -783,18 +783,18 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
         $title_item_link_modifier = $display['settings']['nexteuropa_title_item_link_modifier'];
         $term = entity_metadata_wrapper('taxonomy_term', taxonomy_term_load($item['tid']));
 
-        $element[$delta] = array(
+        $element[$delta] = [
           '#theme' => 'link',
           '#text' => $term->name->value(),
           '#path' => $term->field_core_top_task_link->url->value(),
-          '#options' => array(
-            'attributes' => array(
+          '#options' => [
+            'attributes' => [
               'title' => $term->name->value(),
-            ),
-          ),
+            ],
+          ],
           '#field' => $instance,
           '#display' => $display,
-        );
+        ];
 
         if (isset($title_item_link_modifier) && !empty($title_item_link_modifier)) {
           $element[$delta]['#options']['attributes']['class'] = 'listing__item-link' . ' ' . $title_item_link_modifier;
@@ -860,13 +860,13 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
-    $settings_form['show_translations'] = array(
+    $settings_form['show_translations'] = [
       '#title' => t('Show file translations'),
       '#description' => t('In additional to the normal default display of the file, the user also see the translations of the file.'),
       '#type' => 'checkbox',
       '#size' => 1,
       '#default_value' => $settings['show_translations'],
-    );
+    ];
   }
 
   if (
@@ -876,39 +876,39 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
-    $settings_form['nexteuropa_listing_columns'] = array(
+    $settings_form['nexteuropa_listing_columns'] = [
       '#type' => 'select',
       '#title' => t('BEM: Listing layout'),
-      '#options' => array(
+      '#options' => [
         'default' => t('Default'),
         'two_columns' => t('Two Columns'),
         'three_columns' => t('Three Columns'),
         'row_two' => t('Row with two items'),
         'row_three' => t('Row with three items'),
-      ),
+      ],
       '#default_value' => $settings['nexteuropa_listing_columns'],
-    );
+    ];
 
-    $settings_form['nexteuropa_listing_modifier'] = array(
+    $settings_form['nexteuropa_listing_modifier'] = [
       '#type' => 'textfield',
       '#title' => t('BEM: Listing Modifier'),
       '#default_value' => $settings['nexteuropa_listing_modifier'],
       '#description' => t('Class names separated by spaces.'),
-    );
+    ];
 
-    $settings_form['nexteuropa_listing_wrapper_modifier'] = array(
+    $settings_form['nexteuropa_listing_wrapper_modifier'] = [
       '#type' => 'textfield',
       '#title' => t('BEM: Listing Wrapper Modifier'),
       '#default_value' => $settings['nexteuropa_listing_wrapper_modifier'],
       '#description' => t('Class names separated by spaces.'),
-    );
+    ];
 
-    $settings_form['nexteuropa_listing_item_modifier'] = array(
+    $settings_form['nexteuropa_listing_item_modifier'] = [
       '#type' => 'textfield',
       '#title' => t('BEM: Listing item Modifier'),
       '#default_value' => $settings['nexteuropa_listing_item_modifier'],
       '#description' => t('Class names separated by spaces.'),
-    );
+    ];
   }
   elseif (
     isset($context['instance']['display'][$context['view_mode']]['type']) &&
@@ -917,26 +917,26 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
 
-    $settings_form['nexteuropa_title_listing_modifier'] = array(
+    $settings_form['nexteuropa_title_listing_modifier'] = [
       '#type' => 'textfield',
       '#title' => t('List modifier'),
       '#default_value' => $settings['nexteuropa_title_listing_modifier'],
       '#description' => t('Class names separated by spaces.'),
-    );
+    ];
 
-    $settings_form['nexteuropa_title_item_modifier'] = array(
+    $settings_form['nexteuropa_title_item_modifier'] = [
       '#type' => 'textfield',
       '#title' => t('Item modifier'),
       '#default_value' => $settings['nexteuropa_title_item_modifier'],
       '#description' => t('Class names separated by spaces.'),
-    );
+    ];
 
-    $settings_form['nexteuropa_title_item_link_modifier'] = array(
+    $settings_form['nexteuropa_title_item_link_modifier'] = [
       '#type' => 'textfield',
       '#title' => t('Item link modifier'),
       '#default_value' => $settings['nexteuropa_title_item_link_modifier'],
       '#description' => t('Class names separated by spaces.'),
-    );
+    ];
   }
 }
 
@@ -951,9 +951,9 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
 
-    $file_settings = array(
+    $file_settings = [
       'Show file translations' => 'show_translations',
-    );
+    ];
 
     foreach ($file_settings as $label => $option) {
       if (isset($settings[$option])) {
@@ -978,39 +978,39 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
       if (!empty($summary)) {
         $summary .= '<br />';
       }
-      $summary .= t('BEM: List layout: %columns', array('%columns' => $settings['nexteuropa_listing_columns']));
+      $summary .= t('BEM: List layout: %columns', ['%columns' => $settings['nexteuropa_listing_columns']]);
     }
 
     if (isset($settings['nexteuropa_listing_modifier']) && !empty($settings['nexteuropa_listing_modifier'])) {
       if (!empty($summary)) {
         $summary .= '<br />';
       }
-      $summary .= t('BEM: Listing Modifier: %modifier', array('%modifier' => $settings['nexteuropa_listing_modifier']));
+      $summary .= t('BEM: Listing Modifier: %modifier', ['%modifier' => $settings['nexteuropa_listing_modifier']]);
     }
 
     if (isset($settings['nexteuropa_listing_wrapper_modifier']) && !empty($settings['nexteuropa_listing_wrapper_modifier'])) {
       if (!empty($summary)) {
         $summary .= '<br />';
       }
-      $summary .= t('BEM: Listing Wrapper Modifier: %wrapper_modifier', array('%wrapper_modifier' => $settings['nexteuropa_listing_wrapper_modifier']));
+      $summary .= t('BEM: Listing Wrapper Modifier: %wrapper_modifier', ['%wrapper_modifier' => $settings['nexteuropa_listing_wrapper_modifier']]);
     }
 
     if (isset($settings['nexteuropa_listing_item_modifier']) && !empty($settings['nexteuropa_listing_item_modifier'])) {
       if (!empty($summary)) {
         $summary .= '<br />';
       }
-      $summary .= t('BEM: Listing Item Modifier: %item_modifier', array('%item_modifier' => $settings['nexteuropa_listing_item_modifier']));
+      $summary .= t('BEM: Listing Item Modifier: %item_modifier', ['%item_modifier' => $settings['nexteuropa_listing_item_modifier']]);
     }
   }
   elseif ($context['instance']['display'][$context['view_mode']]['type'] == 'link_listing_title') {
     $display = $context['instance']['display'][$context['view_mode']];
     $settings = $display['settings'];
 
-    $modifiers = array(
+    $modifiers = [
       'List modifier' => 'nexteuropa_title_listing_modifier',
       'Item modifier' => 'nexteuropa_title_item_modifier',
       'Item link modifier' => 'nexteuropa_title_item_link_modifier',
-    );
+    ];
 
     foreach ($modifiers as $label => $modifier) {
       if (isset($settings[$modifier])) {
@@ -1079,66 +1079,66 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
  */
 function _nexteuropa_formatters_attach_translations($item) {
   $node = node_load(key($item['node']));
-  return theme('nexteuropa_file_translations', array('node' => $node));
+  return theme('nexteuropa_file_translations', ['node' => $node]);
 }
 
 /**
  * Implements hook_ds_fields_info().
  */
 function nexteuropa_formatters_ds_fields_info($entity_type) {
-  $fields = array();
+  $fields = [];
 
   // President.
-  $fields['cwt_team_president'] = array(
+  $fields['cwt_team_president'] = [
     'title' => t('Team: President (View: team members, president)'),
     'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => array('team|*'),
+    'ui_limit' => ['team|*'],
     'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => array(
+    'properties' => [
       'view_machine_name' => 'team_members',
       'view_display' => 'block_1',
-    ),
-  );
+    ],
+  ];
 
   // Team role.
-  $fields['cwt_team_role'] = array(
+  $fields['cwt_team_role'] = [
     'title' => t('Team: Role (View: team members, commissioners hierarchy, role arg)'),
     'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => array('team|*'),
+    'ui_limit' => ['team|*'],
     'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => array(
+    'properties' => [
       'view_machine_name' => 'team_members',
       'view_display' => 'block_2',
-      'views_arguments' => array('role'),
-    ),
-  );
+      'views_arguments' => ['role'],
+    ],
+  ];
 
   // Team project team.
-  $fields['cwt_team_project_team'] = array(
+  $fields['cwt_team_project_team'] = [
     'title' => t('Team: Project team (View: team members by domain)'),
     'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => array('team|*'),
+    'ui_limit' => ['team|*'],
     'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => array(
+    'properties' => [
       'view_machine_name' => 'team_members_by_domain',
       'view_display' => 'block',
-    ),
-  );
+    ],
+  ];
 
   // Team name.
-  $fields['cwt_team_name'] = array(
+  $fields['cwt_team_name'] = [
     'title' => t('Team: Name (View: team members, commissioners hierarchy, name arg)'),
     'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => array('team|*'),
+    'ui_limit' => ['team|*'],
     'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => array(
+    'properties' => [
       'view_machine_name' => 'team_members',
       'view_display' => 'block_3',
-      'view_arguments' => array('name'),
-    ),
-  );
+      'view_arguments' => ['name'],
+    ],
+  ];
 
-  return array('node' => $fields);
+  return ['node' => $fields];
 }
 
 /**

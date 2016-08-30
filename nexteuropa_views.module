@@ -9,9 +9,7 @@
  * Implements hook_views_api().
  */
 function nexteuropa_views_views_api() {
-  return array(
-    'api' => 3,
-  );
+  return ['api' => 3.0];
 }
 
 /**

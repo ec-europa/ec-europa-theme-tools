@@ -40,3 +40,20 @@ function nexteuropa_views_views_plugins() {
 
   return $plugins;
 }
+
+/**
+ * Implements hook_views_data().
+ */
+function nexteuropa_views_views_data() {
+  $data = array();
+
+  $data['views']['result_nexteuropa'] = array(
+    'title' => t('Nexteuropa result summary'),
+    'help' => t('Shows result summary, for example the items per page.'),
+    'area' => array(
+      'handler' => 'views_handler_nexteuropa_views_area_result',
+    ),
+  );
+
+  return $data;
+}

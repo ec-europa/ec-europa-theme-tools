@@ -9,28 +9,28 @@
  * Implements hook_ds_fields_info().
  */
 function nexteuropa_ds_fields_ds_fields_info($entity_type) {
-  $fields = array();
+  $fields = [];
 
-  $fields['comment_count'] = array(
+  $fields['comment_count'] = [
     'title' => t('Comments count'),
     'field_type' => DS_FIELD_TYPE_FUNCTION,
     'function' => '_nexteuropa_ds_fields_token_replace',
-    'properties' => array(
+    'properties' => [
       'value' => '[node:comment-count] comments',
-    ),
-  );
+    ],
+  ];
 
   // A simple field containing a floating hr.
   $amount_of_lines = 2;
   for ($i = 1; $i <= $amount_of_lines; $i++) {
-    $fields['hr_' . $i] = array(
+    $fields['hr_' . $i] = [
       'title' => t('Horizontal line (@line)', ['@line' => $i]),
       'field_type' => DS_FIELD_TYPE_FUNCTION,
       'function' => '_nexteuropa_ds_fields_hr',
-    );
+    ];
   }
 
-  return array('node' => $fields);
+  return ['node' => $fields];
 
 }
 
@@ -47,7 +47,7 @@ function _nexteuropa_ds_fields_hr($field) {
 function _nexteuropa_ds_fields_token_replace($field) {
   if (isset($field['properties']['value'])) {
     $value = $field['properties']['value'];
-    $value = token_replace($value, array($field['entity_type'] => $field['entity']), array('clear' => TRUE));
+    $value = token_replace($value, [$field['entity_type'] => $field['entity']], ['clear' => TRUE]);
     return $value;
   }
 }

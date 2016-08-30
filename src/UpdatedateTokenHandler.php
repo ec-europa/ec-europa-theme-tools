@@ -19,8 +19,8 @@ class UpdatedateTokenHandler extends TokenAbstractHandler {
    * This will return the update date if it might have been set in our custom
    * field. The fallback is the node update date.
    */
-  public function hookTokens($type, $tokens, array $data = array(), array $options = array()) {
-    $replacements = array();
+  public function hookTokens($type, $tokens, array $data = [], array $options = []) {
+    $replacements = [];
 
     if ($type == _dt_shared_function_get_token_type()) {
       foreach ($tokens as $name => $original) {
@@ -52,10 +52,10 @@ class UpdatedateTokenHandler extends TokenAbstractHandler {
    */
   public function hookTokenInfoAlter(&$data) {
     // Define the token.
-    $data['tokens'][_dt_shared_function_get_token_type()][self::TOKEN_NAME] = array(
+    $data['tokens'][_dt_shared_function_get_token_type()][self::TOKEN_NAME] = [
       'name' => t("DT Update date"),
       'description' => t("The update date of the node. Date updated with fallback to update date."),
-    );
+    ];
   }
 
 }

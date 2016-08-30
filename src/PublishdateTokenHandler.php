@@ -19,8 +19,8 @@ class PublishdateTokenHandler extends TokenAbstractHandler {
    * This will return the publish date if it might have been set in our custom
    * field. The fallback is the node creation date.
    */
-  public function hookTokens($type, $tokens, array $data = array(), array $options = array()) {
-    $replacements = array();
+  public function hookTokens($type, $tokens, array $data = [], array $options = []) {
+    $replacements = [];
 
     if ($type == _dt_shared_function_get_token_type()) {
       foreach ($tokens as $name => $original) {
@@ -51,10 +51,10 @@ class PublishdateTokenHandler extends TokenAbstractHandler {
    */
   public function hookTokenInfoAlter(&$data) {
     // Define the token.
-    $data['tokens'][_dt_shared_function_get_token_type()][self::TOKEN_NAME] = array(
+    $data['tokens'][_dt_shared_function_get_token_type()][self::TOKEN_NAME] = [
       'name' => t("DT Publish date"),
       'description' => t("The publish date of the node. First published with fallback to creation date."),
-    );
+    ];
   }
 
 }

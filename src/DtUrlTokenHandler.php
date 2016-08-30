@@ -16,7 +16,7 @@ class DtUrlTokenHandler extends UrlTokenHandler {
    */
   public function getEntityUrl($entity_type, $entity) {
     $uri = entity_uri($entity_type, $entity);
-    return url($uri['path'], array('absolute' => FALSE));
+    return url($uri['path'], ['absolute' => FALSE]);
   }
 
 }

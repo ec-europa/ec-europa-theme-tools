@@ -17,9 +17,9 @@ class LanguageTokenHandler extends TokenAbstractHandler {
   /**
    * {@inheritdoc}
    */
-  public function hookTokens($type, $tokens, array $data = array(), array $options = array()) {
+  public function hookTokens($type, $tokens, array $data = [], array $options = []) {
     global $language;
-    $replacements = array();
+    $replacements = [];
 
     // Our tokens.
     if ($type == _dt_shared_function_get_token_type()) {
@@ -57,14 +57,14 @@ class LanguageTokenHandler extends TokenAbstractHandler {
   public function hookTokenInfoAlter(&$data) {
     $token = _dt_shared_function_get_token_type();
     // And the token.
-    $data['tokens'][$token][self::CONTENT_LANGUAGE] = array(
+    $data['tokens'][$token][self::CONTENT_LANGUAGE] = [
       'name' => t("DT Content language"),
       'description' => t("The real language of the content - not the interface."),
-    );
-    $data['tokens'][$token][self::INTERFACE_LANGUAGE] = array(
+    ];
+    $data['tokens'][$token][self::INTERFACE_LANGUAGE] = [
       'name' => t("DT Interface language"),
       'description' => t("The langauge of the interface."),
-    );
+    ];
   }
 
 }

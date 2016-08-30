@@ -61,8 +61,8 @@ function template_preprocess_views_view_nexteuropa_listing(&$variables) {
 
   // Distribute items into columns.
   $total = count($rows);
-  $variables['columns'] = array();
-  $max_items_in_column = array();
+  $variables['columns'] = [];
+  $max_items_in_column = [];
 
   for ($i = 0; $i < $columns_num; $i++) {
     $max_items_in_column[] = floor(($total + $columns_num - ($i + 1)) / $columns_num);

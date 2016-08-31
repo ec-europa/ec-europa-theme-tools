@@ -656,6 +656,25 @@ function _nexteuropa_formatters_tags_item_link($item_title, $item_link) {
 
 /**
  * Helper function to link listing title field view.
+ *
+ * @param array $field
+ *   The field structure.
+ * @param array $instance
+ *   The field instance.
+ * @param array $items
+ *   Array of values for this field.
+ * @param array $display
+ *   The display settings to use, as found in the 'display' entry of instance
+ *   definitions. The array notably contains the following keys and values;
+ *   - type: The name of the formatter to use.
+ *   - settings: The array of formatter settings.
+ * @param array $formatter
+ *   The formatter settings.
+ * @param array $element
+ *   The full element we are working with.
+ *
+ * @return array
+ *   A renderable array for the element.
  */
 function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, $instance, $items, $display, $formatter, $element) {
   foreach ($items as $delta => $item) {
@@ -986,6 +1005,12 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
 
 /**
  * Helper to theme the markup of file translations.
+ *
+ * @param array $item
+ *   The item to work with.
+ *
+ * @return string
+ *   The markup as a string.
  */
 function _nexteuropa_formatters_attach_translations($item) {
   $node = node_load(key($item['node']));
@@ -1053,6 +1078,12 @@ function nexteuropa_formatters_ds_fields_info($entity_type) {
 
 /**
  * Helper function to display test title.
+ *
+ * @param array $field
+ *   The field array to work with.
+ *
+ * @return mixed
+ *   The rendered view or false.
  */
 function _nexteuropa_formatters_theme_ds_team_field($field) {
   $view_machine_name = isset($field['properties']['view_machine_name']) ? $field['properties']['view_machine_name'] : NULL;

@@ -36,13 +36,22 @@ function nexteuropa_ds_fields_ds_fields_info($entity_type) {
 
 /**
  * Custom function to return a simple hr element in a field.
+ *
+ * @return string
+ *    Horizontal rule markup, in-line with our style-guide.
  */
-function _nexteuropa_ds_fields_hr($field) {
+function _nexteuropa_ds_fields_hr() {
   return '<hr class="hr--fullwidth">';
 }
 
 /**
  * Custom function for single token replacement in a field.
+ *
+ * @param array $field
+ *   The configuration of a DS field.
+ *
+ * @return string
+ *    Value with replaced tokens.
  */
 function _nexteuropa_ds_fields_token_replace($field) {
   if (isset($field['properties']['value'])) {

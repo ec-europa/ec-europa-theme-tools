@@ -192,6 +192,14 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
 /**
  * Helper function for display listings.
+ *
+ * @param array $variables
+ *   The element variable coming from the parent function.
+ * @param array $config
+ *   The configuration parameters.
+ *
+ * @return string
+ *   The markup as a string.
  */
 function _nexteuropa_formatters_field_component_listing($variables, $config) {
   $config += [

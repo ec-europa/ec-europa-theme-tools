@@ -232,7 +232,7 @@ function _nexteuropa_inpage_nav_recursive_anchors(&$childs, &$has_child, $childr
 
     unset($element[$field]);
 
-    if (substr($field, 0, 6) == 'group_') {
+    if (drupal_substr($field, 0, 6) == 'group_') {
       _nexteuropa_inpage_nav_recursive_anchors($childs, $has_child, $element['#groups'][$field]->children, $element, $field);
     }
   }

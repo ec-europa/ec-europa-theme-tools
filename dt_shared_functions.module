@@ -751,3 +751,69 @@ function dt_shared_functions_html_head_alter(&$head_elements) {
     }
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function dt_shared_functions_theme() {
+  return [
+    'site_user_menu' => [
+      'file' => 'dt_shared_functions.theme.inc',
+      'variables' => [
+        'modifier' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function dt_shared_functions_block_info() {
+  // Block to display user name and the option to login/logout.
+  $blocks['dt_shared_functions_user_menu'] = [
+    'info' => t('User menu block'),
+  ];
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function dt_shared_functions_block_view($delta = '') {
+  $block = [];
+
+  switch ($delta) {
+    case 'dt_shared_functions_user_menu':
+      if (user_is_logged_in()) {
+        $block['content'] = _dt_shared_functions_get_blocks_content($delta);
+      }
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Function to generate the site user menu.
+ *
+ * @param string $delta
+ *   The delta.
+ *
+ * @return array
+ *   Result to be rendered.
+ */
+function _dt_shared_functions_get_blocks_content($delta) {
+  $result = [];
+
+  switch ($delta) {
+    case 'dt_shared_functions_user_menu':
+      $result = [
+        '#markup' => theme('site_user_menu'),
+      ];
+      break;
+  }
+
+  return $result;
+}

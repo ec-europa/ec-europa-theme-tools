@@ -43,6 +43,15 @@ function dt_shared_functions_init() {
 }
 
 /**
+ * Implements hook_ctools_plugin_directory().
+ */
+function dt_shared_functions_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'entityreference') {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+/**
  * Implements hook_views_api().
  */
 function dt_shared_functions_views_api() {

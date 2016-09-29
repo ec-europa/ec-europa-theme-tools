@@ -425,7 +425,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                   '#markup' => '<span class="context-nav__item">' .
                   format_date($item['value'], 'ec_date_j_f_y') . ' ' .
                   t('(last update on: @date)',
-                    array('@date' => format_date($date_updated, 'ec_date_j_f_y'))) .
+                      array('@date' => format_date($date_updated, 'ec_date_j_f_y'))) .
                   '</span>',
                 );
               }
@@ -562,7 +562,10 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               }
               else {
                 $element[$delta] = array(
-                  '#markup' => l($label, 'node/' . $items[$delta]['target_id'], array('language' => $lang, 'attributes' => array('class' => $classes))),
+                  '#markup' => l($label, 'node/' . $items[$delta]['target_id'], array(
+                    'language' => $lang,
+                    'attributes' => array('class' => $classes),
+                  )),
                 );
               }
             }
@@ -764,18 +767,21 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
  * Implements hook_field_formatter_info_alter().
  */
 function nexteuropa_formatters_field_formatter_info_alter(&$info) {
-  $info['entityreference_entity_view']['settings'] += array(
-    'show_translations' => '',
-    'nexteuropa_listing_columns' => 'default',
-    'nexteuropa_listing_modifier' => '',
-    'nexteuropa_listing_wrapper_modifier' => '',
-    'nexteuropa_listing_item_modifier' => '',
-  );
-  $info['link_listing_title']['settings'] += array(
-    'nexteuropa_title_listing_modifier' => '',
-    'nexteuropa_title_item_modifier' => '',
-    'nexteuropa_title_item_link_modifier' => '',
-  );
+  // The check avoids breaking ctools in Dynamic Display Suite fields.
+  if (isset($info['entityreference_entity_view']['settings'])) {
+    $info['entityreference_entity_view']['settings'] += [
+      'show_translations' => '',
+      'nexteuropa_listing_columns' => 'default',
+      'nexteuropa_listing_modifier' => '',
+      'nexteuropa_listing_wrapper_modifier' => '',
+      'nexteuropa_listing_item_modifier' => '',
+    ];
+    $info['link_listing_title']['settings'] += [
+      'nexteuropa_title_listing_modifier' => '',
+      'nexteuropa_title_item_modifier' => '',
+      'nexteuropa_title_item_link_modifier' => '',
+    ];
+  }
 }
 
 /**
@@ -960,9 +966,9 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
 
     // Convenient access to the important elements of the $variables.
     $entity_type = $variables['element']['#entity_type'];
-    $field_name  = $variables['element']['#field_name'];
-    $bundle      = $variables['element']['#bundle'];
-    $view_mode   = $variables['element']['#view_mode'];
+    $field_name = $variables['element']['#field_name'];
+    $bundle = $variables['element']['#bundle'];
+    $view_mode = $variables['element']['#view_mode'];
 
     switch ($variables['element']['#formatter']) {
 

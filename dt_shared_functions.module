@@ -826,3 +826,64 @@ function _dt_shared_functions_get_blocks_content($delta) {
 
   return $result;
 }
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function dt_shared_functions_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (isset($context['field']['type']) && $context['field']['type'] == 'entityreference') {
+    if ($context['field']['settings']['handler'] == 'extended_base') {
+
+      $field = $context['field'];
+      $instance = $context['instance'];
+      $delta = $context['delta'];
+      $items = $context['items'];
+
+      if ($instance['widget']['type'] == 'entityreference_autocomplete') {
+
+        // Ensure that the entity target type exists before displaying the
+        // widget.
+        $entity_info = entity_get_info($field['settings']['target_type']);
+        if (empty($entity_info)) {
+          return;
+        }
+        $entity_type = $instance['entity_type'];
+        $entity = isset($element['#entity']) ? $element['#entity'] : NULL;
+        $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
+
+        // Initialize arrays.
+        $entity_ids = [];
+        $entity_labels = [];
+
+        // We let the Field API handles multiple values for us, only take
+        // care of the one matching our delta.
+        if (isset($items[$delta])) {
+          $items = [$items[$delta]];
+        }
+        else {
+          $items = [];
+        }
+
+        // Build an array of entities ID.
+        foreach ($items as $item) {
+          $entity_ids[] = $item['target_id'];
+        }
+
+        // Load those entities and loop through them to extract their labels.
+        $entities = entity_load($field['settings']['target_type'], $entity_ids);
+
+        foreach ($entities as $entity_id => $entity_item) {
+          $label = $handler->getFormLabel($entity_item, FALSE);
+          $key = "$label ($entity_id)";
+          // Labels containing commas or quotes must be wrapped in quotes.
+          if (strpos($key, ',') !== FALSE || strpos($key, '"') !== FALSE) {
+            $key = '"' . str_replace('"', '""', $key) . '"';
+          }
+          $entity_labels[] = $key;
+        }
+
+        $element['target_id']['#default_value'] = implode(', ', $entity_labels);
+      }
+    }
+  }
+}

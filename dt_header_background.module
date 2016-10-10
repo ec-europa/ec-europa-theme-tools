@@ -174,7 +174,7 @@ function _dt_header_background_handle_header_background($entity_wrapper = NULL, 
     foreach ($breakpoints as $breakpoint) {
       $name = $breakpoint->machine_name;
       // Get the key to find correspondencies in the image presets.
-      $breakpoint_key = substr($name, strrpos($name, '.') + 1);
+      $breakpoint_key = drupal_substr($name, strrpos($name, '.') + 1);
       // Get the styles related to this breakpoint.
       $style_names_breakpoint = preg_grep('#' . $breakpoint_key . '#', $header_styles);
 

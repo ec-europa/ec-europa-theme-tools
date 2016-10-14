@@ -40,7 +40,14 @@ class DtSharedFunctionsEntityReferenceSelectionHandler extends EntityReference_S
     if ($limit > 0) {
       $query->range(0, $limit);
     }
-
+    // If limit target bundle is set, restrict the query to the host entity's
+    // bundle.
+    if (isset($this->field['settings']['handler_settings']['limit_bundles_to_host']) && $this->field['settings']['handler_settings']['limit_bundles_to_host']) {
+      // Restrict only if the bundle was originally in the target_bundles.
+      if (isset($query->entityConditions['bundle']['value'][$this->instance['bundle']])) {
+        $query->entityConditions['bundle']['value'] = [$this->instance['bundle'] => $this->instance['bundle']];
+      }
+    }
     $results = $query->execute();
 
     if (!empty($results[$entity_type])) {
@@ -81,6 +88,21 @@ class DtSharedFunctionsEntityReferenceSelectionHandler extends EntityReference_S
     $label .= ')';
 
     return $label;
+  }
+
+  /**
+   * Implements EntityReferenceHandler::settingsForm().
+   */
+  public static function settingsForm($field, $instance) {
+    $form = parent::settingsForm($field, $instance);
+    $form['limit_bundles_to_host'] = [
+      '#title' => t('Limit target bundles'),
+      '#type' => 'checkbox',
+      '#default_value' => isset($field['settings']['handler_settings']['limit_bundles_to_host']) ? $field['settings']['handler_settings']['limit_bundles_to_host'] : FALSE,
+      '#description' => t('This will limit the target bundles to the same bundle the entity containing the field instance belongs to.'),
+    ];
+
+    return $form;
   }
 
 }

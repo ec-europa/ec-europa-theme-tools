@@ -66,6 +66,12 @@ function nexteuropa_formatters_field_formatter_info() {
         'force_language_default' => 0,
       ],
     ],
+    'link_button_download' => [
+      'label' => t('Download button'),
+      'field types' => [
+        'link_field',
+      ],
+    ],
     'link_button_primary' => [
       'label' => t('Link button primary'),
       'field types' => [
@@ -577,6 +583,26 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               '#markup' => '<span class="icon ' . $class . '">' . t('Feedback') . ' (' . $item['value'] . ')</span>',
             ];
           }
+        }
+        break;
+
+      case 'link_button_download':
+        foreach ($items as $delta => $item) {
+
+          // Emulate the file array.
+          $file = new stdClass();
+          $file->type = 'document';
+          $file->uri = $item['url'];
+          $file->filename = $item['title'];
+          $file->entity = $entity;
+
+          $url = [];
+          $url['path'] = $item['url'];
+          $url['options'] = [];
+
+          $element[$delta] = [
+            '#markup' => _europa_file_markup($file, $url, NULL, FALSE, TRUE),
+          ];
         }
         break;
 

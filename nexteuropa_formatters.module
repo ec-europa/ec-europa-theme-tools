@@ -159,11 +159,18 @@ function nexteuropa_formatters_theme_field_override($variables) {
   // Handling default output following BEM syntax.
   $output = '';
   $classes = [];
+  $items_number = count($variables['items']);
 
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {
     $output .= '<div class="field__label"' . $variables['title_attributes'] . '>' . $variables['label'] . '</div>';
     $classes[] = 'field--labeled';
+
+    if (isset($element['#formatter']) && $element['#formatter'] == "date_default" && $items_number > 1) {
+      for ($i = 1; $i < $items_number; $i++) {
+        $output .= '<div class="field__label"' . $variables['title_attributes'] . '>' . $variables['label'] . ' ' . $i . '</div>';
+      }
+    }
   }
 
   // Render the items.
@@ -174,12 +181,25 @@ function nexteuropa_formatters_theme_field_override($variables) {
   }
   else {
     $output .= '<div class="field__items"' . $variables['content_attributes'] . '>';
+    $i = 1;
     foreach ($variables['items'] as $item) {
+      // This is to clean the output of this ds field.
+      // It shouldn't be needed, though.
+      if ($element['#field_name'] == 'publicate_date_journal') {
+        $item['#markup'] = strip_tags($item['#markup']);
+      }
       // We should pass along the parent object if we have access to it.
       if (isset($item['#file']) && isset($variables['element']['#object'])) {
         $item['#file']->entity = $variables['element']['#object'];
       }
-      $output .= drupal_render($item);
+      if (isset($element['#formatter']) && $element['#formatter'] == "entityreference_label" && $i < $items_number) {
+        $output .= drupal_render($item) . ', ';
+      }
+      else {
+        $output .= drupal_render($item);
+      }
+
+      $i++;
     }
     $output .= '</div>';
 

@@ -176,5 +176,18 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     'is_nexteuropa' => TRUE,
   ];
 
+  $layouts['ne_featured_item'] = [
+    'label' => t('Component: Featured item'),
+    'path' => $path . '/layouts/ne_featured_item',
+    'regions' => [
+      'featured_image' => t('Featured image'),
+      'meta' => t('Meta'),
+      'main' => t('Main content'),
+    ],
+    'form' => TRUE,
+    'image' => TRUE,
+    'is_nexteuropa' => TRUE,
+  ];
+
   return $layouts;
 }

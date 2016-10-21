@@ -877,15 +877,22 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
  * Implements hook_field_formatter_info_alter().
  */
 function nexteuropa_formatters_field_formatter_info_alter(&$info) {
+  $additonal_options = [
+    'show_translations' => '',
+    'nexteuropa_listing_columns' => 'default',
+    'nexteuropa_listing_modifier' => '',
+    'nexteuropa_listing_wrapper_modifier' => '',
+    'nexteuropa_listing_item_modifier' => '',
+  ];
+
+  if (isset($info['entityreference_entity_view_ifl']['settings'])) {
+    $info['entityreference_entity_view_ifl']['settings'] += $additonal_options;
+  }
+
   // The check avoids breaking ctools in Dynamic Display Suite fields.
   if (isset($info['entityreference_entity_view']['settings'])) {
-    $info['entityreference_entity_view']['settings'] += [
-      'show_translations' => '',
-      'nexteuropa_listing_columns' => 'default',
-      'nexteuropa_listing_modifier' => '',
-      'nexteuropa_listing_wrapper_modifier' => '',
-      'nexteuropa_listing_item_modifier' => '',
-    ];
+    $info['entityreference_entity_view']['settings'] += $additonal_options;
+
     $info['link_listing_title']['settings'] += [
       'nexteuropa_title_listing_modifier' => '',
       'nexteuropa_title_item_modifier' => '',
@@ -900,7 +907,7 @@ function nexteuropa_formatters_field_formatter_info_alter(&$info) {
 function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_form, $context) {
   if (
     isset($context['instance']['display'][$context['view_mode']]['type']) &&
-    $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
+    _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
     $context['instance']['display'][$context['view_mode']]['settings']['view_mode'] == 'file'
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
@@ -916,7 +923,7 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
 
   if (
     isset($context['instance']['display'][$context['view_mode']]['type']) &&
-    $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
+    _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
     in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], _nexteuropa_formatters_get_listing_view_modes())
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
@@ -990,7 +997,7 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
  */
 function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary, $context) {
   if (
-    $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
+    _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
     $context['instance']['display'][$context['view_mode']]['settings']['view_mode'] == 'file'
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
@@ -1014,7 +1021,7 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
   }
 
   if (
-    $context['instance']['display'][$context['view_mode']]['type'] == 'entityreference_entity_view' &&
+    _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
     in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], _nexteuropa_formatters_get_listing_view_modes())
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
@@ -1073,48 +1080,42 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
  */
 function nexteuropa_formatters_preprocess_field(&$variables) {
   if (isset($variables['element']['#formatter'])) {
+    if (_nexteuropa_formatters_is_entityreference($variables['element']['#formatter'])) {
+      // Convenient access to the important elements of the $variables.
+      $entity_type = $variables['element']['#entity_type'];
+      $field_name = $variables['element']['#field_name'];
+      $bundle = $variables['element']['#bundle'];
+      $view_mode = $variables['element']['#view_mode'];
 
-    // Convenient access to the important elements of the $variables.
-    $entity_type = $variables['element']['#entity_type'];
-    $field_name = $variables['element']['#field_name'];
-    $bundle = $variables['element']['#bundle'];
-    $view_mode = $variables['element']['#view_mode'];
+      // Fetch the instance settings and default display settings.
+      $info = field_info_instance($entity_type, $field_name, $bundle);
+      $formatter_settings = $info['display']['default']['settings'];
+      if (isset($info['display'][$view_mode]['settings'])) {
+        $formatter_settings = $info['display'][$view_mode]['settings'] + $formatter_settings;
+      }
 
-    switch ($variables['element']['#formatter']) {
+      // Make the setting available in the field template.
+      $settings = [
+        'nexteuropa_listing_columns',
+        'nexteuropa_listing_modifier',
+        'nexteuropa_listing_wrapper_modifier',
+        'nexteuropa_listing_item_modifier',
+      ];
+      foreach ($settings as $setting) {
+        $variables[$setting] = isset($formatter_settings[$setting]) ? $formatter_settings[$setting] : '';
+      }
 
-      case 'entityreference_entity_view':
+      // Default the settings.
+      if (!isset($formatter_settings['show_translations'])) {
+        $formatter_settings['show_translations'] = 0;
+      }
 
-        // Fetch the instance settings and default display settings.
-        $info = field_info_instance($entity_type, $field_name, $bundle);
-        $formatter_settings = $info['display']['default']['settings'];
-        if (isset($info['display'][$view_mode]['settings'])) {
-          $formatter_settings = $info['display'][$view_mode]['settings'] + $formatter_settings;
+      // Attach file translations when required.
+      if ($formatter_settings['show_translations'] == 1) {
+        foreach ($variables['items'] as $item_key => $item) {
+          $variables['items'][$item_key]['#suffix'] = _nexteuropa_formatters_attach_translations($item);
         }
-
-        // Make the setting available in the field template.
-        $settings = [
-          'nexteuropa_listing_columns',
-          'nexteuropa_listing_modifier',
-          'nexteuropa_listing_wrapper_modifier',
-          'nexteuropa_listing_item_modifier',
-        ];
-        foreach ($settings as $setting) {
-          $variables[$setting] = isset($formatter_settings[$setting]) ? $formatter_settings[$setting] : '';
-        }
-
-        // Default the settings.
-        if (!isset($formatter_settings['show_translations'])) {
-          $formatter_settings['show_translations'] = 0;
-        }
-
-        // Attach file translations when required.
-        if ($formatter_settings['show_translations'] == 1) {
-          foreach ($variables['items'] as $item_key => $item) {
-            $variables['items'][$item_key]['#suffix'] = _nexteuropa_formatters_attach_translations($item);
-          }
-        }
-        break;
-
+      }
     }
   }
 }
@@ -1217,4 +1218,20 @@ function _nexteuropa_formatters_theme_ds_team_field($field) {
   }
 
   return FALSE;
+}
+
+/**
+ * Helper function to check if a entity reference formatter is supported.
+ *
+ * @param string $type
+ *   The entity reference view type.
+ *
+ * @return bool
+ *   If it is supported or not.
+ */
+function _nexteuropa_formatters_is_entityreference($type) {
+  return in_array($type, [
+    'entityreference_entity_view',
+    'entityreference_entity_view_ifl',
+  ]);
 }

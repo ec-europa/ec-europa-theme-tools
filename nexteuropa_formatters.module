@@ -79,7 +79,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
   switch ($field_type) {
     case 'entityreference':
-      if ($element['#formatter'] == 'entityreference_entity_view') {
+      if (_nexteuropa_formatters_is_entityreference($element['#formatter'])) {
         // First node from entity reference.
         $reference = '';
         if (isset($element[0])) {

@@ -535,19 +535,19 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
       case 'label':
         foreach ($items as $delta => $item) {
-          $settings = !empty($display['settings']['label_modifiers']);
+          $user_modifiers = $display['settings']['label_modifiers'];
           $classes = _nexteuropa_formatters_field_formatter_view_classes($formatter);
 
-          if ($settings) {
-            if (strpos($display['settings']['label_modifiers'], ',')) {
-              $modifiers = explode(',', $display['settings']['label_modifiers']);
+          if (!empty($user_modifiers)) {
+            if (strpos($user_modifiers, ',')) {
+              $modifiers = explode(',', $user_modifiers);
 
               foreach ($modifiers as $modifier) {
                 $classes .= ' label--' . check_plain(trim($modifier));
               }
             }
             else {
-              $classes .= $settings['label_modifiers'] != '' ? ' label--' . check_plain($display['settings']['label_modifiers']) : '';
+              $classes .= $user_modifiers != '' ? ' label--' . check_plain($user_modifiers) : '';
             }
           }
 

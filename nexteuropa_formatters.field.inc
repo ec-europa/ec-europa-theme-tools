@@ -38,6 +38,7 @@ function nexteuropa_formatters_field_formatter_info() {
         'datetime',
         'date',
         'datestamp',
+        'taxonomy_term_reference',
       ],
       'settings' => [
         'expander_has_expander' => FALSE,
@@ -439,6 +440,15 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                   $element[$delta] = ['#markup' => check_plain($label)];
                 }
               }
+            }
+            break;
+
+          case 'taxonomy_term_reference':
+            $terms = taxonomy_term_load_multiple($items);
+            foreach ($terms as $delta => $item) {
+              $element[$delta] = [
+                '#markup' => '<span class="context-nav__item">' . $item->name . '</span>',
+              ];
             }
             break;
 

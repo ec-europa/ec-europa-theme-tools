@@ -278,7 +278,7 @@ function dt_header_background_file_delete($file) {
   $fid = $file->fid;
   $file = drupal_realpath(DT_HEADER_BACKGROUND_DIR) . '/header_background_' . $fid . '.css';
   if (file_exists($file)) {
-    unlink($file);
+    drupal_unlink($file);
   }
 }
 
@@ -293,7 +293,7 @@ function _dt_header_background_clear_css() {
   $not_deleted = 0;
   foreach (glob($dir) as $file) {
     if (is_writable($file)) {
-      unlink($file);
+      drupal_unlink($file);
       $deleted_files++;
     }
     else {

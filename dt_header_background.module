@@ -190,7 +190,7 @@ function _dt_header_background_handle_header_background($entity_wrapper = NULL, 
           // Create the image since we're going to call it from a relative path.
           image_style_create_derivative(image_style_load($style_name), $file->uri, $style_path);
           // And that's just the way to retrieve an absolute, but relative path.
-          $url = parse_url($style_url);
+          $url = drupal_parse_url($style_url);
           $url_path = $url['path'] . '?' . $url['query'];
           // Build an array mapping the breakpoints media queries and the image.
           $mapping[$breakpoints[$name]->breakpoint][] = $url_path;

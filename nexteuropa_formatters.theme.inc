@@ -109,10 +109,10 @@ function theme_nexteuropa_file_translations($variables) {
     $files = $variables['node']->field_core_file;
     $nid = $variables['node']->nid;
 
-    $output = '<div class="file__translations">';
+    $output = '<div class="file__translations" id="file__translations-' . $nid . '">';
     // Building the link.
     $link = [
-      '#href' => '',
+      '#href' => ['file__translations-' . $nid],
       '#type' => 'link',
       '#attached' => [
         'js' => [
@@ -132,10 +132,11 @@ function theme_nexteuropa_file_translations($variables) {
       ],
       '#attributes' => [
         'class' => ['file__translations-control'],
+        'title' => t('Click to see translations'),
         'data-toggle' => ['collapse'],
+        'data-parent' => ['#file-translations-' . $nid],
         'aria-expanded' => ['false'],
         'aria-controls' => ['file__translations-' . $nid],
-        'title' => t('Click to see translations'),
       ],
       '#title' => t("Available languages (@count)", ['@count' => $files_count]),
     ];

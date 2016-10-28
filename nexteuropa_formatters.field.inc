@@ -288,6 +288,7 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
     case 'entity_reference_section':
       return 'section__item';
   }
+
   return '';
 }
 
@@ -374,17 +375,15 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           case 'entityreference':
             $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
             foreach ($items as $delta => $item) {
-              if ($label = $handler->getLabel($item['entity'])) {
-                if ($uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
-                  // Check if it is a legacy link.
-                  $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
-                  // Add the default options.
-                  $uri['options'] += $options;
-                  // Format the link.
-                  $render_array['#markup'] = l($label, $link_url, $uri['options']);
-                  // Add the render array to the element.
-                  $element[$delta] = $render_array;
-                }
+              if ($item['access'] && $label = $handler->getLabel($item['entity']) && $uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
+                // Check if it is a legacy link.
+                $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
+                // Add the default options.
+                $uri['options'] += $options;
+                // Format the link.
+                $render_array['#markup'] = l($label, $link_url, $uri['options']);
+                // Add the render array to the element.
+                $element[$delta] = $render_array;
               }
             }
             break;
@@ -476,20 +475,16 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             // @TODO: Make date format flexible based on formatter options.
             foreach ($items as $delta => $item) {
               $node_wrapper = entity_metadata_wrapper('node', $entity);
+              $date = format_date($item['value'], 'ec_date_j_f_y');
               if ($date_updated = $node_wrapper->field_core_date_updated->value()) {
+                $last_update_text = t('(last update on: @date)', ['@date' => format_date($date_updated, 'ec_date_j_f_y')]);
                 $element[$delta] = [
-                  '#markup' => '<span class="context-nav__item">' .
-                  format_date($item['value'], 'ec_date_j_f_y') . ' ' .
-                  t('(last update on: @date)',
-                      ['@date' => format_date($date_updated, 'ec_date_j_f_y')]) .
-                  '</span>',
+                  '#markup' => '<span class="context-nav__item">' . $date . ' ' . $last_update_text . '</span>',
                 ];
               }
               else {
                 $element[$delta] = [
-                  '#markup' => '<span class="context-nav__item">' .
-                  format_date($item['value'], 'ec_date_j_f_y') .
-                  '</span>',
+                  '#markup' => '<span class="context-nav__item">' . $date . '</span>',
                 ];
               }
             }
@@ -878,8 +873,10 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
       $element['#prefix'] = '<div class="listing listing--title">';
     }
     $element['#suffix'] = '</div>';
+
     return $element;
   }
+
   return $element;
 }
 
@@ -1141,6 +1138,7 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
  */
 function _nexteuropa_formatters_attach_translations($item) {
   $node = node_load(key($item['node']));
+
   return theme('nexteuropa_file_translations', ['node' => $node]);
 }
 
@@ -1224,6 +1222,7 @@ function _nexteuropa_formatters_theme_ds_team_field($field) {
     $view->set_arguments($view_arguments);
     $view->pre_execute();
     $view->execute();
+
     return $view->render();
   }
 

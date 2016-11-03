@@ -375,13 +375,14 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           case 'entityreference':
             $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
             foreach ($items as $delta => $item) {
-              if ($item['access'] && $label = $handler->getLabel($item['entity']) && $uri = entity_uri($field['settings']['target_type'], $item['entity'])) {
+              if ($item['access']) {
                 // Check if it is a legacy link.
+                $uri = entity_uri($field['settings']['target_type'], $item['entity']);
                 $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
                 // Add the default options.
                 $uri['options'] += $options;
                 // Format the link.
-                $render_array['#markup'] = l($label, $link_url, $uri['options']);
+                $render_array['#markup'] = l($handler->getLabel($item['entity']), $link_url, $uri['options']);
                 // Add the render array to the element.
                 $element[$delta] = $render_array;
               }

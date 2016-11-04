@@ -185,62 +185,68 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
 
   $element = [];
 
-  if ($display['type'] == 'context_nav_item') {
-    $element['expander_has_expander'] = [
-      '#title' => t('Has expander'),
-      '#type' => 'checkbox',
-      '#size' => 1,
-      '#default_value' => $settings['expander_has_expander'],
-    ];
-    $element['expander_trim_at'] = [
-      '#title' => t('Trim at'),
-      '#type' => 'textfield',
-      '#size' => 2,
-      '#default_value' => $settings['expander_trim_at'],
-      '#element_validate' => ['element_validate_integer'],
-    ];
-    $element['expander_trim_to'] = [
-      '#title' => t('Trim to'),
-      '#type' => 'textfield',
-      '#size' => 2,
-      '#default_value' => $settings['expander_trim_to'],
-      '#element_validate' => ['element_validate_integer'],
-    ];
+  switch ($display['type']) {
+    case 'context_nav_item':
+      $element['expander_has_expander'] = [
+        '#title' => t('Has expander'),
+        '#type' => 'checkbox',
+        '#size' => 1,
+        '#default_value' => $settings['expander_has_expander'],
+      ];
+      $element['expander_trim_at'] = [
+        '#title' => t('Trim at'),
+        '#type' => 'textfield',
+        '#size' => 2,
+        '#default_value' => $settings['expander_trim_at'],
+        '#element_validate' => ['element_validate_integer'],
+      ];
+      $element['expander_trim_to'] = [
+        '#title' => t('Trim to'),
+        '#type' => 'textfield',
+        '#size' => 2,
+        '#default_value' => $settings['expander_trim_to'],
+        '#element_validate' => ['element_validate_integer'],
+      ];
+      break;
 
-    if ($display['type'] == 'context_nav_item' && $field['type'] == 'datetime') {
-      module_load_include('inc', 'date', 'date_admin');
-      $element[] = date_default_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
-    }
-  }
+    case 'context_nav_item':
+      if ($field['type'] == 'datetime') {
+        module_load_include('inc', 'date', 'date_admin');
+        $element[] = date_default_formatter_settings_form($field, $instance, $view_mode, $form, $form_state);
+      }
+      break;
 
-  if ($display['type'] == 'entity_reference_section') {
-    $element['use_content_language'] = [
-      '#title' => t('Use the content language for referenced items.'),
-      '#type' => 'checkbox',
-      '#default_value' => $settings['use_content_language'],
-    ];
-  }
+    case 'entity_reference_section':
+      $element['use_content_language'] = [
+        '#title' => t('Use the content language for referenced items.'),
+        '#type' => 'checkbox',
+        '#default_value' => $settings['use_content_language'],
+      ];
+      break;
 
-  if ($display['type'] == 'link_button_default' && $field['type'] == 'entityreference') {
-    $element['link_title'] = [
-      '#title' => t('Title'),
-      '#type' => 'textfield',
-      '#default_value' => $settings['link_title'],
-    ];
-    $element['force_language_default'] = [
-      '#title' => t('Force the link to point to the default language.'),
-      '#type' => 'checkbox',
-      '#default_value' => $settings['force_language_default'],
-    ];
-  }
+    case 'link_button_default':
+      if ($field['type'] == 'entityreference') {
+        $element['link_title'] = [
+          '#title' => t('Title'),
+          '#type' => 'textfield',
+          '#default_value' => $settings['link_title'],
+        ];
+        $element['force_language_default'] = [
+          '#title' => t('Force the link to point to the default language.'),
+          '#type' => 'checkbox',
+          '#default_value' => $settings['force_language_default'],
+        ];
+      }
+      break;
 
-  if ($display['type'] == 'label') {
-    $element['label_modifiers'] = [
-      '#title' => t('Modifiers'),
-      '#type' => 'textfield',
-      '#description' => t('Separate multiple modifiers with commas'),
-      '#default_value' => $settings['label_modifiers'],
-    ];
+    case 'label':
+      $element['label_modifiers'] = [
+        '#title' => t('Modifiers'),
+        '#type' => 'textfield',
+        '#description' => t('Separate multiple modifiers with commas'),
+        '#default_value' => $settings['label_modifiers'],
+      ];
+      break;
   }
 
   return $element;

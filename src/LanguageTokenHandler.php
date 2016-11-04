@@ -30,14 +30,14 @@ class LanguageTokenHandler extends TokenAbstractHandler {
               $languages = language_list();
               // If we can load our node, we will use that for our language.
               $content_language = _dt_shared_functions_content_language($node);
-              $language_token_value = $languages[$content_language];
+              $language_token_value = isset($languages[$content_language]) ? $languages[$content_language]->prefix : LANGUAGE_NONE;
             }
             else {
-              // On other cases we fall back to interface..
-              $language_token_value = $language;
+              // On other cases we fall back to interface.
+              $language_token_value = $language->prefix;
             }
             // Set the replacement.
-            $replacements[$original] = $language_token_value->prefix;
+            $replacements[$original] = $language_token_value;
             break;
 
           case self::INTERFACE_LANGUAGE:

@@ -4,6 +4,11 @@ package = "Nexteuropa Digital Transformation"
 core = 7.x
 
 dependencies[] = field_group
+dependencies[] = ds
 dependencies[] = ds_extras
+dependencies[] = link
+dependencies[] = entity
+dependencies[] = entityreference
+dependencies[] = date
 php = 5.5
 multisite_version = 2.2

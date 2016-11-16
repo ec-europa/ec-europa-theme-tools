@@ -64,15 +64,15 @@ function nexteuropa_formatters_field_formatter_info() {
       'settings' => array(
         'link_title' => '',
         'force_language_default' => 0,
-      ],
-    ],
-    'link_button_download' => [
+      ),
+    ),
+    'link_button_download' => array(
       'label' => t('Download button'),
-      'field types' => [
+      'field types' => array(
         'link_field',
-      ],
-    ],
-    'link_button_primary' => [
+      ),
+    ),
+    'link_button_primary' => array(
       'label' => t('Link button primary'),
       'field types' => array(
         'link_field',
@@ -503,7 +503,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         foreach ($items as $delta => $item) {
           if ($item['value'] > 0) {
             $element[$delta] = [
-              '#markup' => '<span class="icon ' . $class . '">' . t('Feedback') . ' (' . $item['value'] . ')</span>',
+              '#markup' => '<span class="icon ' . $class . '">' . t('Feedback (%value)', ['%value' => $item['value']]) . '</span>',
             ];
           }
         }
@@ -523,6 +523,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           $url['path'] = $item['url'];
           $url['options'] = [];
 
+          // @todo: refactor this https://webgate.ec.europa.eu/CITnet/jira/browse/DTTSB-1284.
           $element[$delta] = [
             '#markup' => _europa_file_markup($file, $url, NULL, FALSE, TRUE),
           ];

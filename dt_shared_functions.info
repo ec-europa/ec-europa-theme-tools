@@ -9,4 +9,5 @@ files[] = views/views_plugin_dt_shared_functions_views_config.inc
 registry_autoload[] = PSR-4
 
 dependencies[] = views
+dependencies[] = entityreference
 multisite_version = 2.2

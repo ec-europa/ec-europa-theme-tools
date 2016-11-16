@@ -15,7 +15,8 @@ function dt_shared_functions_init() {
   if ($node = menu_get_object()) {
     $available_languages = language_list('prefix');
     $content_language_code = _dt_shared_functions_content_language($node);
-    $GLOBALS['language_content'] = isset($available_languages[$content_language_code]) ? $available_languages[$content_language_code] : $GLOBALS['language_content'];
+    $GLOBALS['language_content'] = isset($available_languages[$content_language_code])
+        ? $available_languages[$content_language_code] : $GLOBALS['language_content'];
   }
 }
 
@@ -61,6 +62,7 @@ function dt_shared_functions_token_info() {
     'name' => t('Dt tokens'),
     'description' => t('Dt custom tokens'),
   ];
+
   return $info;
 }
 
@@ -155,7 +157,9 @@ function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
  * except for the entity reference fields (or other non language aware fields).
  */
 function dt_shared_functions_field_language_alter(&$display_language, $context) {
-  if (variable_get('locale_field_language_fallback', TRUE) && $context['entity_type'] == 'node' && entity_translation_enabled($context['entity_type'])) {
+  if (variable_get('locale_field_language_fallback', TRUE)
+      && $context['entity_type'] == 'node'
+      && entity_translation_enabled($context['entity_type'])) {
     // Define our content language.
     $content_language = $context['language'];
     // Overwrite it if we manage to get a different content language.
@@ -207,12 +211,8 @@ function dt_shared_function_phonetohtml($label, $tel) {
       return $tel;
     }
     else {
-      if (isset($matches[$regexp_values['return_key']])) {
-        $phone[$regexp_index] = trim($matches[$regexp_values['return_key']]);
-      }
-      else {
-        $phone[$regexp_index] = '';
-      }
+      $phone[$regexp_index] = isset($matches[$regexp_values['return_key']])
+          ? trim($matches[$regexp_values['return_key']]) : '';
     }
   }
 
@@ -223,9 +223,9 @@ function dt_shared_function_phonetohtml($label, $tel) {
   // This will be the link title.
   $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
   // Build the link.
-  $htmlphone = l($title, $tel, ['attributes' => $classes]);
+  $phone_link  = l($title, $tel, ['attributes' => $classes]);
   // The full element.
-  $markup = $htmlphone . ' ' . $phone['phone_label'];
+  $markup = $phone_link . ' ' . $phone['phone_label'];
 
   return $markup;
 }

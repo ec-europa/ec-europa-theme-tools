@@ -79,7 +79,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
   switch ($field_type) {
     case 'entityreference':
-      if ($element['#formatter'] == 'entityreference_entity_view') {
+      if (_nexteuropa_formatters_is_entityreference($element['#formatter'])) {
         // First node from entity reference.
         $reference = '';
         if (isset($element[0])) {
@@ -159,6 +159,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
   // Handling default output following BEM syntax.
   $output = '';
   $classes = [];
+  $items_number = count($variables['items']);
 
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {
@@ -167,24 +168,33 @@ function nexteuropa_formatters_theme_field_override($variables) {
   }
 
   // Render the items.
-  if ($variables['element']['#view_mode'] == 'title') {
+  if ($element['#view_mode'] == 'title') {
     foreach ($variables['items'] as $item) {
       $output .= drupal_render($item);
     }
   }
   else {
     $output .= '<div class="field__items"' . $variables['content_attributes'] . '>';
+    $i = 1;
+
     foreach ($variables['items'] as $item) {
       // We should pass along the parent object if we have access to it.
-      if (isset($item['#file']) && isset($variables['element']['#object'])) {
-        $item['#file']->entity = $variables['element']['#object'];
+      if (isset($item['#file']) && isset($element['#object'])) {
+        $item['#file']->entity = $element['#object'];
       }
+      // Comma separated list, applied to the "Label" formatter of er.
+      if (isset($element['#formatter']) && $element['#formatter'] == "entityreference_label" && $i < $items_number) {
+        $item['#suffix'] = ', ';
+      }
+
+      $i++;
       $output .= drupal_render($item);
     }
+
     $output .= '</div>';
 
     // Render the top-level DIV.
-    $output = '<div ' . $variables['attributes'] . ' class="field field--' . strtr($variables['element']['#field_name'], '_', '-') . ' ' . implode(' ', $classes) . '">' . $output . '</div>';
+    $output = '<div ' . $variables['attributes'] . ' class="field field--' . strtr($element['#field_name'], '_', '-') . ' ' . implode(' ', $classes) . '">' . $output . '</div>';
   }
 
   return $output;
@@ -224,17 +234,6 @@ function _nexteuropa_formatters_field_component_listing($variables, $config) {
     $columns_num = 3;
   }
 
-  $items_per_row = 1;
-  if ($config['layout'] == 'row-two') {
-    $items_per_row = 2;
-  }
-  elseif ($config['layout'] == 'row-three') {
-    $items_per_row = 3;
-  }
-
-  // Add a new variable that indicates the row structure.
-  $is_row = $items_per_row > 1;
-
   // Distribute them into columns.
   $total = count($variables['items']);
   $columns = [];
@@ -268,28 +267,10 @@ function _nexteuropa_formatters_field_component_listing($variables, $config) {
   foreach ($columns as $column) {
     $output .= '<' . $config['listing_wrapper_element'] . ' class="listing' . $modifier_class . '">';
 
-    // Start Itemcounter.
-    $item_in_row = 0;
-
     // Loop over all our items.
-    foreach ($column as $key => $item) {
-
-      // In row logic we need to add extra markup.
-      if ($is_row) {
-        if ($item_in_row == $items_per_row || $item_in_row == 0) {
-          $output .= '<div class="clearfix">';
-          $item_in_row = 0;
-        }
-        $item_in_row++;
-      }
-
+    foreach ($column as $item) {
       // Add the actual item.
       $output .= $item;
-
-      // In row logic we need to add extra markup.
-      if ($is_row && ($item_in_row == $items_per_row || count($column) == $key + 1)) {
-        $output .= '</div>';
-      }
     }
 
     $output .= '</' . $config['listing_wrapper_element'] . '>';
@@ -444,6 +425,56 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
 }
 
 /**
+ * This is a basic theme_ds_field implementation.
+ *
+ * It's name is required to start with theme_ds_field and is defined in
+ * nexteuropa_formatters_ds_field_theme_functions_info. It will modify the
+ * output of the field before it is passed to the render function.
+ *
+ * This will only be called for our h4label setting.
+ *
+ * @param array $variables
+ *   The array containing information for the field.
+ *
+ * @return string
+ *   The rendered output.
+ */
+function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
+  // Handling default output following BEM syntax.
+  $output = '';
+  $classes = [];
+
+  // Render the label, if it's not hidden.
+  if (!$variables['label_hidden']) {
+    $output .= '<div class="field__label"' . $variables['title_attributes'] . '><h4>' . $variables['label'] . '</h4></div>';
+    $classes[] = 'field--labeled';
+  }
+
+  // Render the items.
+  if ($variables['element']['#view_mode'] == 'title') {
+    foreach ($variables['items'] as $item) {
+      $output .= drupal_render($item);
+    }
+  }
+  else {
+    $output .= '<div class="field__items"' . $variables['content_attributes'] . '>';
+    foreach ($variables['items'] as $item) {
+      // We should pass along the parent object if we have access to it.
+      if (isset($item['#file']) && isset($variables['element']['#object'])) {
+        $item['#file']->entity = $variables['element']['#object'];
+      }
+      $output .= drupal_render($item);
+    }
+    $output .= '</div>';
+
+    // Render the top-level DIV.
+    $output = '<div ' . $variables['attributes'] . ' class="field field--' . strtr($variables['element']['#field_name'], '_', '-') . ' ' . implode(' ', $classes) . '">' . $output . '</div>';
+  }
+
+  return $output;
+}
+
+/**
  * Implements hook_ds_field_theme_functions_info().
  *
  * Adds a new select option.
@@ -452,5 +483,6 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
   return [
     'theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'),
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
+    'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
   ];
 }

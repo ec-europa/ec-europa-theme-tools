@@ -20,6 +20,15 @@ function dt_shared_functions_init() {
 }
 
 /**
+ * Implements hook_ctools_plugin_directory().
+ */
+function dt_shared_functions_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'entityreference') {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+/**
  * Implements hook_views_api().
  */
 function dt_shared_functions_views_api() {
@@ -48,10 +57,10 @@ function dt_shared_functions_views_plugins() {
  * the handlers.
  */
 function dt_shared_functions_token_info() {
-  $info['types'][_dt_shared_function_get_token_type()] = array(
+  $info['types'][_dt_shared_function_get_token_type()] = [
     'name' => t('Dt tokens'),
     'description' => t('Dt custom tokens'),
-  );
+  ];
   return $info;
 }
 
@@ -59,11 +68,11 @@ function dt_shared_functions_token_info() {
  * Implements hook_nexteuropa_token_token_handlers().
  */
 function dt_shared_functions_nexteuropa_token_token_handlers() {
-  return array(
+  return [
     'language_handler' => '\Drupal\dt_shared_functions\LanguageTokenHandler',
     'publish_date_handler' => '\Drupal\dt_shared_functions\PublishdateTokenHandler',
     'update_date_handler' => '\Drupal\dt_shared_functions\UpdatedateTokenHandler',
-  );
+  ];
 }
 
 /**
@@ -210,11 +219,11 @@ function dt_shared_function_phonetohtml($label, $tel) {
   // Create the href tel: value.
   $tel = 'tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']);
   // This defines the element telephone in the component field.
-  $classes = array('class' => 'field__telephone');
+  $classes = ['class' => 'field__telephone'];
   // This will be the link title.
   $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
   // Build the link.
-  $htmlphone = l($title, $tel, array('attributes' => $classes));
+  $htmlphone = l($title, $tel, ['attributes' => $classes]);
   // The full element.
   $markup = $htmlphone . ' ' . $phone['phone_label'];
 
@@ -225,21 +234,58 @@ function dt_shared_function_phonetohtml($label, $tel) {
  * Implements hook_form_alter().
  */
 function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'system_theme_settings') {
-    // Build the form.
-    $form['dt'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('DTT settings'),
-      '#weight' => -100,
-    );
+  switch ($form_id) {
+    case 'system_theme_settings':
+      // Build the form.
+      $form['dt'] = [
+        '#type' => 'fieldset',
+        '#title' => t('DTT settings'),
+        '#weight' => -100,
+      ];
 
-    $form['dt']['dt_latest_visibility'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Would you like to show the latest block when it is available?'),
-      '#default_value' => variable_get('dt_shared_functions_dt_latest_visibility', TRUE),
-    );
+      $form['dt']['dt_latest_visibility'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Would you like to show the latest block when it is available?'),
+        '#default_value' => variable_get('dt_shared_functions_dt_latest_visibility', TRUE),
+      ];
 
-    $form['#submit'][] = "_dt_shared_functions_theme_settings_submit";
+      $form['#submit'][] = "_dt_shared_functions_theme_settings_submit";
+      break;
+
+    // To solve accessibility issue with for attribute in label.
+    case 'views_exposed_form':
+
+      $date_fields = [];
+      // Get all exposed fields.
+      foreach ($form['#info'] as $exposed => $filter_values) {
+        // Only process the date_pop up fields for search api related.
+        if (isset($form[$filter_values['value']]['#type'])) {
+          if ($form[$filter_values['value']]['#type'] == 'date_popup') {
+            array_push($date_fields, $filter_values['value']);
+          }
+        }
+        // Non search Api have a different render array.
+        if (isset($form[$filter_values['value']]['value']['#type'])) {
+          // Only process the date_pop up fields for normal i related.
+          if ($form[$filter_values['value']]['value']['#type'] == 'date_popup') {
+            // Set the name title.
+            $form[$filter_values['value']]['#title'] = $filter_values['label'];
+            // Remove the current (date) label title.
+            unset($form['#info'][$exposed]['label']);
+            // Set the current (date) label to invisible.
+            $form[$filter_values['value']]['value']['#title_display'] = 'invisible';
+            // Process each element, we will have more information.
+            $form[$filter_values['value']]['#after_build'][]
+              = '_dt_shared_functions_datepopup_accessibilty_nosearchapi_build';
+          }
+        }
+      }
+
+      if (!empty($date_fields)) {
+        // Call our helper to manipulate labels.
+        $form = _dt_shared_functions_datepopup_accessibilty($form, $date_fields);
+      }
+      break;
   }
 }
 

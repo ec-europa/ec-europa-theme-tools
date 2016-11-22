@@ -111,6 +111,8 @@ function _dt_shared_functions_delete($name, $type = 'menu', $op = 'items') {
  *   Exception when no source field with the given name.
  *   Exception when no destination field with the given name.
  *   Exception when source and destination are not the same field type.
+ *
+ * @todo: Refactor this so it can work in a batch operation.
  */
 function _dt_shared_field_value_copy($entity_type, $bundle, $source_field_name, $destination_field_name, $append = FALSE, $clear = FALSE) {
   // Source and destination field info.

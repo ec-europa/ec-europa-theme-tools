@@ -600,21 +600,33 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
       case 'link_button_download':
         foreach ($items as $delta => $item) {
+          // Check if europa theme is used, otherwise use standard link field.
+          if (function_exists('_europa_file_markup')) {
+            // Emulate the file array.
+            $file = new stdClass();
+            $file->type = 'document';
+            $file->uri = $item['url'];
+            $file->filename = $item['title'];
+            $file->entity = $entity;
 
-          // Emulate the file array.
-          $file = new stdClass();
-          $file->type = 'document';
-          $file->uri = $item['url'];
-          $file->filename = $item['title'];
-          $file->entity = $entity;
+            $url = [];
+            $url['path'] = $item['url'];
+            $url['options'] = [];
 
-          $url = [];
-          $url['path'] = $item['url'];
-          $url['options'] = [];
-
-          $element[$delta] = [
-            '#markup' => _europa_file_markup($file, $url, NULL, FALSE, TRUE),
-          ];
+            $element[$delta] = [
+              '#markup' => _europa_file_markup($file, $url, NULL, FALSE, TRUE),
+            ];
+          }
+          else {
+            // Call theme function of link module (theme_link_formatter_link_
+            // default).
+            $element[$delta] = [
+              '#theme' => 'link_formatter_link_default',
+              '#element' => $item,
+              '#field' => $instance,
+              '#display' => $display,
+            ];
+          }
         }
         break;
 

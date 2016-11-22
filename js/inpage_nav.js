@@ -124,6 +124,11 @@
         $fullElement = $(selector).closest('.inpage-nav__wrapper'),
         $parentWidth = $(selector).closest('.inpage-nav__wrapper').parent().width();
 
+    // If we have publication listing on the page.
+    if ($('.field--publication-listing').outerHeight() !== null) {
+      $bottomLimit += $('.field--publication-listing').outerHeight() + 20;
+    }
+
     if (GetOffsetBottom('.inpage-nav__wrapper') <= $bottomLimit) {
       $fullElement.css({
         'position': 'fixed',

@@ -3,7 +3,9 @@ description  = Custom formatters and field groups for BEM components. Suplementa
 package = "Nexteuropa Digital Transformation"
 core = 7.x
 
-dependencies[] = field_group
 dependencies[] = ds_extras
+dependencies[] = field_group
+dependencies[] = i18n_taxonomy
+
 php = 5.5
 multisite_version = 2.2

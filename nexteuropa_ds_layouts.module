@@ -54,6 +54,8 @@ function nexteuropa_ds_layouts_ds_layout_info() {
       'top' => t('Top'),
       'left' => t('Left'),
       'central' => t('Middle'),
+      'bottom_left' => t('Bottom Left'),
+      'bottom_central' => t('Bottom Middle'),
     ],
     'form' => TRUE,
     'image' => TRUE,

@@ -163,8 +163,12 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {
-    $output .= '<div class="field__label"' . $variables['title_attributes'] . '>' . $variables['label'] . '</div>';
-    $classes[] = 'field--labeled';
+    $label_classes = 'field__label';
+    if ($variables['element']['#label_display'] == 'above') {
+      $label_classes .= ' field__label--above';
+    }
+
+    $output .= '<div class="' . $label_classes . '"' . $variables['title_attributes'] . '>' . $variables['label'] . '</div>';
   }
 
   // Render the items.
@@ -447,7 +451,6 @@ function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {
     $output .= '<div class="field__label"' . $variables['title_attributes'] . '><h4>' . $variables['label'] . '</h4></div>';
-    $classes[] = 'field--labeled';
   }
 
   // Render the items.

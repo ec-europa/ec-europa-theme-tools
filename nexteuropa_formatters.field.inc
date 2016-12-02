@@ -71,6 +71,10 @@ function nexteuropa_formatters_field_formatter_info() {
       'label' => t('Download button'),
       'field types' => [
         'link_field',
+        'file',
+      ],
+      'settings' => [
+        'show_translations' => TRUE,
       ],
     ],
     'link_button_primary' => [
@@ -206,6 +210,15 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
         '#size' => 2,
         '#default_value' => $settings['expander_trim_to'],
         '#element_validate' => ['element_validate_integer'],
+      ];
+      break;
+
+    case 'link_button_download':
+      $element['show_translations'] = [
+        '#title' => t('Show translations of the file'),
+        '#type' => 'checkbox',
+        '#size' => 1,
+        '#default_value' => $settings['show_translations'],
       ];
       break;
 
@@ -599,33 +612,47 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         break;
 
       case 'link_button_download':
-        foreach ($items as $delta => $item) {
-          // Check if europa theme is used, otherwise use standard link field.
-          if (function_exists('_europa_file_markup')) {
-            // Emulate the file array.
-            $file = new stdClass();
-            $file->type = 'document';
-            $file->uri = $item['url'];
-            $file->filename = $item['title'];
-            $file->entity = $entity;
-
-            $url = [];
-            $url['path'] = $item['url'];
-            $url['options'] = [];
-
-            $element[$delta] = [
-              '#markup' => _europa_file_markup($file, $url, NULL, FALSE, TRUE),
-            ];
+        if (isset($field['type']) && $field['type'] == 'file') {
+          if (function_exists('_nexteuropa_formatters_file_markup')) {
+            foreach ($items as $delta => $item) {
+              $file = (object) $item;
+              $file->entity = $entity;
+              $element[$delta] = [
+                '#markup' => _nexteuropa_formatters_file_markup($file),
+              ];
+            }
           }
-          else {
-            // Call theme function of link module (theme_link_formatter_link_
-            // default).
-            $element[$delta] = [
-              '#theme' => 'link_formatter_link_default',
-              '#element' => $item,
-              '#field' => $instance,
-              '#display' => $display,
-            ];
+        }
+        elseif (isset($field['type']) && $field['type'] == 'link_field') {
+          foreach ($items as $delta => $item) {
+            // Check if europa theme is used, otherwise use standard link field.
+            if (function_exists('_nexteuropa_formatters_file_markup')) {
+              // Emulate the file array.
+              $file = new stdClass();
+              $file->type = 'document';
+              $file->uri = $item['url'];
+              $file->filename = $item['title'];
+              $file->entity = $entity;
+
+              $url = [];
+              $url['path'] = $item['url'];
+              $url['options'] = [];
+
+              $element[$delta] = [
+                '#markup' => _nexteuropa_formatters_file_markup($file, NULL, FALSE, TRUE, $url),
+              ];
+            }
+            else {
+              // Call theme function of link module (theme_link_formatter_link_
+              // default).
+              $element[$delta] = [
+                '#theme' => 'link_formatter_link_default',
+                '#element' => $item,
+                '#field' => $instance,
+                '#display' => $display,
+              ];
+            }
+
           }
         }
         break;
@@ -934,22 +961,6 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
   if (
     isset($context['instance']['display'][$context['view_mode']]['type']) &&
     _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
-    $context['instance']['display'][$context['view_mode']]['settings']['view_mode'] == 'file'
-  ) {
-    $display = $context['instance']['display'][$context['view_mode']];
-    $settings = $display['settings'];
-    $settings_form['show_translations'] = [
-      '#title' => t('Show file translations'),
-      '#description' => t('In additional to the normal default display of the file, the user also see the translations of the file.'),
-      '#type' => 'checkbox',
-      '#size' => 1,
-      '#default_value' => $settings['show_translations'],
-    ];
-  }
-
-  if (
-    isset($context['instance']['display'][$context['view_mode']]['type']) &&
-    _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
     in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], _nexteuropa_formatters_get_listing_view_modes())
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
@@ -1024,30 +1035,6 @@ function nexteuropa_formatters_field_formatter_settings_form_alter(&$settings_fo
 function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary, $context) {
   if (
     _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
-    $context['instance']['display'][$context['view_mode']]['settings']['view_mode'] == 'file'
-  ) {
-    $display = $context['instance']['display'][$context['view_mode']];
-    $settings = $display['settings'];
-
-    $file_settings = [
-      'Show file translations' => 'show_translations',
-    ];
-
-    foreach ($file_settings as $label => $option) {
-      if (isset($settings[$option])) {
-        if (!empty($summary)) {
-          $summary .= '<br />';
-        }
-        if ($settings[$option] == 1) {
-          $settings[$option] = t('yes');
-        }
-        $summary .= $label . ': ' . $settings[$option];
-      }
-    }
-  }
-
-  if (
-    _nexteuropa_formatters_is_entityreference($context['instance']['display'][$context['view_mode']]['type']) &&
     in_array($context['instance']['display'][$context['view_mode']]['settings']['view_mode'], _nexteuropa_formatters_get_listing_view_modes())
   ) {
     $display = $context['instance']['display'][$context['view_mode']];
@@ -1105,60 +1092,24 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
  * Implements hook_preprocess_field().
  */
 function nexteuropa_formatters_preprocess_field(&$variables) {
-  if (isset($variables['element']['#formatter'])) {
-    if (_nexteuropa_formatters_is_entityreference($variables['element']['#formatter'])) {
-      // Convenient access to the important elements of the $variables.
-      $entity_type = $variables['element']['#entity_type'];
-      $field_name = $variables['element']['#field_name'];
-      $bundle = $variables['element']['#bundle'];
-      $view_mode = $variables['element']['#view_mode'];
+  if (isset($variables['element']['#field_type']) && $variables['element']['#field_type'] == 'file') {
+    // Convenient access to the important elements of the $variables.
+    $entity_type = $variables['element']['#entity_type'];
+    $field_name = $variables['element']['#field_name'];
+    $bundle = $variables['element']['#bundle'];
+    $view_mode = $variables['element']['#view_mode'];
 
-      // Fetch the instance settings and default display settings.
-      $info = field_info_instance($entity_type, $field_name, $bundle);
-      $formatter_settings = $info['display']['default']['settings'];
-      if (isset($info['display'][$view_mode]['settings'])) {
-        $formatter_settings = $info['display'][$view_mode]['settings'] + $formatter_settings;
-      }
+    // Fetch the instance settings.
+    $info = field_info_instance($entity_type, $field_name, $bundle);
+    // Get the settings, fall back to default TRUE.
+    $show_translation = isset($info['display'][$view_mode]['settings']['show_translations']) ? $info['display'][$view_mode]['settings']['show_translations'] : TRUE;
 
-      // Make the setting available in the field template.
-      $settings = [
-        'nexteuropa_listing_columns',
-        'nexteuropa_listing_modifier',
-        'nexteuropa_listing_wrapper_modifier',
-        'nexteuropa_listing_item_modifier',
-      ];
-      foreach ($settings as $setting) {
-        $variables[$setting] = isset($formatter_settings[$setting]) ? $formatter_settings[$setting] : '';
-      }
-
-      // Default the settings.
-      if (!isset($formatter_settings['show_translations'])) {
-        $formatter_settings['show_translations'] = 0;
-      }
-
-      // Attach file translations when required.
-      if ($formatter_settings['show_translations'] == 1) {
-        foreach ($variables['items'] as $item_key => $item) {
-          $variables['items'][$item_key]['#suffix'] = _nexteuropa_formatters_attach_translations($item);
-        }
+    if ($show_translation && $info['display'][$view_mode]['type'] == 'link_button_download') {
+      foreach ($variables['items'] as $item_key => $item) {
+        $variables['items'][$item_key]['#suffix'] = theme('nexteuropa_file_translations', ['node' => $variables['element']['#object']]);
       }
     }
   }
-}
-
-/**
- * Helper to theme the markup of file translations.
- *
- * @param array $item
- *   The item to work with.
- *
- * @return string
- *   The markup as a string.
- */
-function _nexteuropa_formatters_attach_translations($item) {
-  $node = node_load(key($item['node']));
-
-  return theme('nexteuropa_file_translations', ['node' => $node]);
 }
 
 /**

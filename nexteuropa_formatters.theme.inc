@@ -90,24 +90,25 @@ function theme_nexteuropa_bem_item_list($variables) {
  * Returns markup for a list of file translations.
  *
  * @param array $variables
- *   Accepts: $variables['node']->field_core_file.
+ *   The variables to render.
  *
  * @return string
  *   Markup of translations.
  */
 function theme_nexteuropa_file_translations($variables) {
-  $files_count = isset($variables['node']->field_core_file) ? count($variables['node']->field_core_file) : 0;
+  $node = $variables['node'];
+  $files_count = isset($node->field_core_file) ? count($node->field_core_file) : 0;
 
   if ($files_count > 1) {
-    $displayed_langcode = entity_translation_get_existing_language($variables['node']->type, $variables['node']);
+    $displayed_langcode = entity_translation_get_existing_language($node->type, $node);
 
     // Remove one from the count, if the current language is in the list.
-    if (isset($variables['node']->field_core_file[$displayed_langcode])) {
+    if (isset($node->field_core_file[$displayed_langcode])) {
       $files_count--;
     }
 
-    $files = $variables['node']->field_core_file;
-    $nid = $variables['node']->nid;
+    $files = $node->field_core_file;
+    $nid = $node->nid;
 
     $output = '<div class="file__translations">';
     // Building the link.
@@ -164,15 +165,7 @@ function theme_nexteuropa_file_translations($variables) {
       // Add our language.
       $file_object->language = $lang;
       $file_object->filename = t('@language version', ['@language' => $language]);
-      $file_url = [
-        'path' => file_create_url($file_info['uri']),
-        'options' => [
-          'attributes' => [
-            'class' => ['file__btn', 'btn', 'btn--condensed'],
-          ],
-        ],
-      ];
-      $file_markup = _europa_file_markup($file_object, $file_url, 'file--bare', TRUE);
+      $file_markup = _nexteuropa_formatters_file_markup($file_object, 'file--bare', TRUE);
       $list['items'][] = [
         'class' => ['file__translations-item'],
         'data' => $file_markup,

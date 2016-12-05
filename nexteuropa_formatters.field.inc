@@ -1110,6 +1110,45 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
       }
     }
   }
+  elseif (isset($variables['element']['#formatter'])) {
+    if (_nexteuropa_formatters_is_entityreference($variables['element']['#formatter'])) {
+      // Convenient access to the important elements of the $variables.
+      $entity_type = $variables['element']['#entity_type'];
+      $field_name = $variables['element']['#field_name'];
+      $bundle = $variables['element']['#bundle'];
+      $view_mode = $variables['element']['#view_mode'];
+
+      // Fetch the instance settings and default display settings.
+      $info = field_info_instance($entity_type, $field_name, $bundle);
+      $formatter_settings = $info['display']['default']['settings'];
+      if (isset($info['display'][$view_mode]['settings'])) {
+        $formatter_settings = $info['display'][$view_mode]['settings'] + $formatter_settings;
+      }
+
+      // Make the setting available in the field template.
+      $settings = [
+        'nexteuropa_listing_columns',
+        'nexteuropa_listing_modifier',
+        'nexteuropa_listing_wrapper_modifier',
+        'nexteuropa_listing_item_modifier',
+      ];
+      foreach ($settings as $setting) {
+        $variables[$setting] = isset($formatter_settings[$setting]) ? $formatter_settings[$setting] : '';
+      }
+
+      // Default the settings.
+      if (!isset($formatter_settings['show_translations'])) {
+        $formatter_settings['show_translations'] = 0;
+      }
+
+      // Attach file translations when required.
+      if ($formatter_settings['show_translations'] == 1) {
+        foreach ($variables['items'] as $item_key => $item) {
+          $variables['items'][$item_key]['#suffix'] = _nexteuropa_formatters_attach_translations($item);
+        }
+      }
+    }
+  }
 }
 
 /**

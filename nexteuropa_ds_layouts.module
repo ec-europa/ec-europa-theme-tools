@@ -191,5 +191,17 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     'is_nexteuropa' => TRUE,
   ];
 
+  $layouts['ne_2col_hitme'] = [
+    'label' => t('NE: 2col hitme'),
+    'path' => $path . '/layouts/ne_2col_hitme',
+    'regions' => [
+      'main' => t('Main'),
+      'second' => t('Second'),
+    ],
+    'form' => TRUE,
+    'image' => TRUE,
+    'is_nexteuropa' => TRUE,
+  ];
+
   return $layouts;
 }

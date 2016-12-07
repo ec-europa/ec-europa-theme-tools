@@ -428,7 +428,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           // @codingStandardsIgnoreLine
           $label_altered = t($layout_field_settings[$field_name]['formatter_settings']['ft']['lb']);
         }
-        $wrapper_label = (isset($label_altered) ? $label_altered : $instance['label']);
+        //@codingStandardsIgnoreLine
+        $wrapper_label = isset($label_altered) ? $label_altered : t($instance['label']);
 
         // Apply custom label to the element.
         $element = array_merge(

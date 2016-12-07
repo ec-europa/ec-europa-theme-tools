@@ -19,6 +19,12 @@ function _dt_shared_functions_additional_views_config() {
       '#description' => t('The title to display in the counter result.'),
       '#required' => FALSE,
     ],
+    'dt_shared_functions_views_config_hidecount' => [
+      '#title' => t('Hide count'),
+      '#type' => 'checkbox',
+      '#description' => t('Hides the result count from the title.'),
+      '#required' => FALSE,
+    ],
   ];
 
   drupal_alter('dt_shared_functions_views_config', $settings);

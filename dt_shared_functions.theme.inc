@@ -27,7 +27,7 @@ function theme_site_user_menu($variables) {
 
   $items = [];
   $items[] = [
-    'data' => t('Logged in as') . ' ' . check_plain(format_username($user)),
+    'data' => t('Logged in as %username', ['%username' => format_username($user)]),
     'class' => ['site-user-menu__option'],
   ];
   $items[] = [

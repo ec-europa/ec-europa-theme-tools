@@ -547,10 +547,23 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     $file_info_parts[] = $file_extension;
   }
 
+  // Default download button settings.
+  $options = [
+    'attributes' => [
+      'class' => ['btn', 'file__btn'],
+      'title' => check_plain($file->filename),
+    ],
+    'html' => TRUE,
+  ];
+
   // File information and title setter.
   if ($subfile && isset($file_language_string)) {
     $file_info_string = implode(' - ', $file_info_parts);
     $title_string = $file_language_string . ' ' . t('version');
+
+    // Sub file download classes settings.
+    $options['attributes']['class'][] = 'btn--condensed';
+    $options['attributes']['class'][] = 'is-internal';
   }
   else {
     $file_info_string = isset($file_language_string) ? '<span class="file__content-language">' . $file_language_string . ' </span>' : '';
@@ -564,16 +577,10 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     else {
       $title_string = !empty($file->description) ? $file->description : $file->filename;
     }
-  }
 
-  // Button information.
-  $options = [
-    'attributes' => [
-      'class' => ['file__btn', 'btn', 'btn-default'],
-      'title' => check_plain($file->filename),
-    ],
-    'html' => TRUE,
-  ];
+    // Main download button classes settings.
+    $options['attributes']['class'][] = 'btn-default';
+  }
 
   if (isset($file->filemime, $file->filesize)) {
     $options['attributes']['type'] = $file->filemime . '; length=' . $file->filesize;

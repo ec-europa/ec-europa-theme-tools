@@ -703,8 +703,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               ];
             }
             else {
-              // Call theme function of link module (theme_link_formatter_link_
-              // default).
+              // Call theme function of link module
+              // (theme_link_formatter_link_default).
               $element[$delta] = [
                 '#theme' => 'link_formatter_link_default',
                 '#element' => $item,
@@ -729,8 +729,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
               // Set attribute from formatter settings.
               $item['attributes']['class'] = _nexteuropa_formatters_field_formatter_view_classes($formatter) . $pull_right;
 
-              // Call theme function of link module (theme_link_formatter_link_
-              // default).
+              // Call theme function of link module
+              // (theme_link_formatter_link_default).
               $element[$delta] = [
                 '#theme' => 'link_formatter_link_default',
                 '#element' => $item,

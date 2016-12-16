@@ -10,5 +10,6 @@ dependencies[] = entityreference
 dependencies[] = field_group
 dependencies[] = i18n_taxonomy
 dependencies[] = link
+dependencies[] = nexteuropa_file
 php = 5.5
 multisite_version = 2.2

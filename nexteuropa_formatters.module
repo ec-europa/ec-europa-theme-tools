@@ -515,7 +515,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   }
   // Define the file icon class.
   $icons_available = ['image', 'audio', 'video'];
-  $file_icon_class = in_array($file->type, $icons_available) ? ' icon--' . $file->type : ' icon--file';
+  $file_icon_class = in_array($file->type, $icons_available) ? ' icon--' . $file->type : ($modifier == 'file--link' ? ' icon--file-link' : ' icon--file');
 
   // If we have a modifier, just append it to the class.
   $file_class = (!empty($modifier) ? ' ' . $modifier : '');
@@ -626,6 +626,16 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     '#type' => 'markup',
     '#markup' => l($file_text, $url['path'], array_merge($options, $url['options'])),
   ];
+
+  if ($modifier == "file--link") {
+    // Reorganize elements to match styleguide.
+    $render_array['file_metadata']['#prefix'] = '<div class="file__metadata--link">';
+    $render_array['file_metadata']['title']['#prefix'] = '<a class="file__title" href="' . $url['path'] . '">';
+    $render_array['file_metadata']['title']['#suffix'] = '</a>';
+
+    unset($render_array['file_metadata']['info']);
+    unset($render_array['button']);
+  }
 
   return drupal_render($render_array);
 }

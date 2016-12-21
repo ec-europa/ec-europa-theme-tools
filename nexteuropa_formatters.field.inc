@@ -78,6 +78,15 @@ function nexteuropa_formatters_field_formatter_info() {
         'show_translations' => TRUE,
       ],
     ],
+    'link_download' => [
+      'label' => t('Download file-link'),
+      'field types' => [
+        'link_field',
+      ],
+      'settings' => [
+        'show_translations' => TRUE,
+      ],
+    ],
     'link_button_primary' => [
       'label' => t('Link button primary'),
       'field types' => [
@@ -251,6 +260,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
       break;
 
     case 'link_button_download':
+    case 'link_download':
       $element['show_translations'] = [
         '#title' => t('Show translations of the file'),
         '#type' => 'checkbox',
@@ -672,6 +682,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         break;
 
       case 'link_button_download':
+      case 'link_download':
         if (isset($field['type']) && $field['type'] == 'file') {
           foreach ($items as $delta => $item) {
             $file = (object) $item;
@@ -694,8 +705,12 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             $url['path'] = $item['url'];
             $url['options'] = [];
 
+            // Add modifier.
+            $modifier = ($formatter == "link_download" ? "file--link" : "");
+            drupal_alter('nexteuropa_formatters_modifier', $modifier, $entity_type, $entity);
+
             $element[$delta] = [
-              '#markup' => _nexteuropa_formatters_file_markup($file, NULL, FALSE, TRUE, $url),
+              '#markup' => _nexteuropa_formatters_file_markup($file, $modifier, FALSE, TRUE, $url),
             ];
           }
         }
@@ -1137,7 +1152,7 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
     // Get the settings, fall back to default TRUE.
     $show_translation = isset($info['display'][$view_mode]['settings']['show_translations']) ? $info['display'][$view_mode]['settings']['show_translations'] : TRUE;
 
-    if ($show_translation && $info['display'][$view_mode]['type'] == 'link_button_download') {
+    if ($show_translation && ($info['display'][$view_mode]['type'] == 'link_button_download' || $info['display'][$view_mode]['type'] == 'link_download')) {
       foreach ($variables['items'] as $item_key => $item) {
         $variables['items'][$item_key]['#suffix'] = theme('nexteuropa_file_translations', ['node' => $variables['element']['#object']]);
       }

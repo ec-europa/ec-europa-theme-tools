@@ -470,3 +470,23 @@ function _dt_shared_functions_get_blocks_content($delta) {
 
   return $result;
 }
+
+/**
+ * Helper function to sort an array list of values.
+ *
+ * @param string $a
+ *   String to be processed.
+ * @param string $b
+ *   String to be processed.
+ *
+ * @return int
+ *   Calculated value.
+ */
+function _dt_shared_functions_compare_ascii($a, $b) {
+  setlocale(LC_ALL, "en_US.utf8");
+
+  $at = iconv(mb_detect_encoding($a), 'ascii//TRANSLIT', $a);
+  $bt = iconv(mb_detect_encoding($b), 'ascii//TRANSLIT', $b);
+
+  return strcmp($at, $bt);
+}

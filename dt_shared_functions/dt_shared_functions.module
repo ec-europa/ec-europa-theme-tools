@@ -1,0 +1,513 @@
+<?php
+
+/**
+ * @file
+ * This file contains the shared functions between dt_core and cwt_core.
+ */
+
+include_once 'dt_shared_functions.accessibility.inc';
+include_once 'dt_shared_functions.helpers.inc';
+
+/**
+ * Implements hook_init().
+ */
+function dt_shared_functions_init() {
+  if ($node = menu_get_object()) {
+    $available_languages = language_list('prefix');
+    $content_language_code = _dt_shared_functions_content_language($node);
+    if (isset($available_languages[$content_language_code])) {
+      $GLOBALS['language_content'] = $available_languages[$content_language_code];
+    }
+  }
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function dt_shared_functions_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'entityreference') {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function dt_shared_functions_views_api() {
+  return ['api' => 3.0];
+}
+
+/**
+ * Implements hook_views_plugins().
+ */
+function dt_shared_functions_views_plugins() {
+  return [
+    'display_extender' => [
+      'dt_shared_views_config' => [
+        'title' => t('Digital Transformation config'),
+        'handler' => 'views_plugin_dt_shared_functions_views_config',
+        'enabled' => TRUE,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_token_info().
+ *
+ * Here we define our token "group" so we do not have to define it anymore in
+ * the handlers.
+ */
+function dt_shared_functions_token_info() {
+  $info['types'][_dt_shared_function_get_token_type()] = [
+    'name' => t('Dt tokens'),
+    'description' => t('Dt custom tokens'),
+  ];
+
+  return $info;
+}
+
+/**
+ * Implements hook_nexteuropa_token_token_handlers().
+ */
+function dt_shared_functions_nexteuropa_token_token_handlers() {
+  return [
+    'language_handler' => '\Drupal\dt_shared_functions\LanguageTokenHandler',
+    'publish_date_handler' => '\Drupal\dt_shared_functions\PublishdateTokenHandler',
+    'update_date_handler' => '\Drupal\dt_shared_functions\UpdatedateTokenHandler',
+  ];
+}
+
+/**
+ * Implements hook_nexteuropa_token_token_handlers_alter().
+ */
+function dt_shared_functions_nexteuropa_token_token_handlers_alter(array &$handlers) {
+  $handlers['url_entity_handler'] = '\Drupal\dt_shared_functions\DtUrlTokenHandler';
+}
+
+/**
+ * Implements hook_translated_menu_link_alter().
+ */
+function dt_shared_functions_translated_menu_link_alter(&$item, $map) {
+  $nid = isset($item['options']['menu_token_data']['node']['options']['id']);
+  if ($nid) {
+    $data['node'] = entity_load_single('node', $nid);
+    // This should be done by the token_menu module, actually.
+    $options['language'] = $GLOBALS['language']->language;
+    $item['link_title'] = token_replace($item['title'], $data, $options);
+  }
+}
+
+/**
+ * Implements hook_facetapi_facet_info_alter().
+ *
+ * This modification is required for using the database search. If we are not
+ * doing this, errors will appear.
+ */
+function dt_shared_functions_facetapi_facet_info_alter(array &$facet_info, array $searcher_info) {
+  if (!isset($facet_info['bundle']['name'])) {
+    unset($facet_info['bundle']);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alters the exposed form to include some additional logic.
+ */
+function dt_shared_functions_form_views_exposed_form_alter(&$form, &$form_state) {
+  if (!$form_state['submitted']) {
+    // Hide the button, but only when js is available.
+    if (isset($form['reset']) && !empty($form['reset'])) {
+      $form['reset']['#attributes']['class'][] = 'js-hide';
+      $form['reset']['#attributes']['class'][] = 'js-showonsubmit';
+    }
+  }
+}
+
+/**
+ * Implements hook_ajax_render_alter().
+ *
+ * Hide the showonsubmit button after the ajax request.
+ */
+function dt_shared_functions_ajax_render_alter(&$commands) {
+  $commands[] = ajax_command_invoke('.js-showonsubmit', 'show');
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ *
+ * This is used to make this module load later in the bootstrap process.
+ */
+function dt_shared_functions_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'field_language_alter'
+    && isset($implementations['dt_shared_functions'])
+  ) {
+    $group = $implementations['dt_shared_functions'];
+    unset($implementations['dt_shared_functions']);
+    $implementations['dt_shared_functions'] = $group;
+  }
+}
+
+/**
+ * Implements hook_field_language_alter().
+ *
+ * Alters the language of translatable fields to be forced to use the content
+ * language. This makes sure the content only shows the language requested,
+ * except for the entity reference fields (or other non language aware fields).
+ */
+function dt_shared_functions_field_language_alter(&$display_language, $context) {
+  if (variable_get('locale_field_language_fallback', TRUE)
+    && $context['entity_type'] == 'node'
+    && entity_translation_enabled($context['entity_type'])
+  ) {
+    // Define our content language.
+    $content_language = $context['language'];
+    // Overwrite it if we manage to get a different content language.
+    if ($lang = entity_translation_get_existing_language($context['entity_type'], $context['entity'])) {
+      $content_language = $lang;
+    }
+    // To reduce load, we only do it for the current node. We dont use the
+    // menu_get_object('node') here to save some resources, instead we use and
+    // check the arg().
+    $entity_nid = is_numeric(arg(1)) ? arg(1) : FALSE;
+    // Make the checks.
+    if ($entity_nid && $entity_nid == $context['entity']->nid) {
+      // Loop over the fields being displayed.
+      foreach ($display_language as $field_name => &$field_language) {
+        // If the field language is not the same as the content, but is set to
+        // be translatable, we set it to the content language.
+        if ($field_language <> $content_language && $field_info = field_info_field($field_name)) {
+          // We have field information, let's make our checks.
+          if ($field_info['translatable']) {
+            $field_language = $context['language'];
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Generates "<a href=tel:" tag for the contact phone field.
+ *
+ * If in the generation it fails it will return false.
+ *
+ * @param string $label
+ *   Field label, shoud display at errors.
+ * @param string $tel
+ *   String containing phone number.
+ *
+ * @return string
+ *   Returns formatted value or the source one.
+ */
+function dt_shared_function_phonetohtml($label, $tel) {
+  $data = trim($tel);
+  // Load the array containing our regular expressions and loop to convert them
+  // into a link.
+  foreach (_dt_shared_functions_contactphone_patterns($label) as $regexp_index => $regexp_values) {
+    preg_match($regexp_values['pattern'], $data, $matches);
+    // Something is wrong with the phone value and can't be displayed correctly.
+    if (!isset($matches[$regexp_values['return_key']]) && isset($regexp_values['required'])) {
+      return $tel;
+    }
+    else {
+      $phone[$regexp_index] = isset($matches[$regexp_values['return_key']])
+          ? trim($matches[$regexp_values['return_key']]) : '';
+    }
+  }
+
+  // Create the href tel: value.
+  $tel = 'tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']);
+  // This defines the element telephone in the component field.
+  $classes = ['class' => 'field__telephone'];
+  // This will be the link title.
+  $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
+  // Build the link.
+  $phone_link  = l($title, $tel, ['attributes' => $classes]);
+  // The full element.
+  $markup = $phone_link . ' ' . $phone['phone_label'];
+
+  return $markup;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    case 'system_theme_settings':
+      // Build the form.
+      $form['dt'] = [
+        '#type' => 'fieldset',
+        '#title' => t('DTT settings'),
+        '#weight' => -100,
+      ];
+
+      $form['dt']['dt_latest_visibility'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Would you like to show the latest block when it is available?'),
+        '#default_value' => variable_get('dt_shared_functions_dt_latest_visibility', TRUE),
+      ];
+
+      $form['#submit'][] = "_dt_shared_functions_theme_settings_submit";
+      break;
+
+    // To add options in the backend for the file upload component.
+    case 'field_ui_field_edit_form':
+      // Checks if the field is a file.
+      if ($form['#field']['type'] == 'file') {
+        $field_name = $form['#field']['field_name'];
+        $bundle = $form['#field']['bundles']['node'][0];
+        // Variable to hold the value if its to use the DT component in the
+        // front end.
+        $check_use = variable_get('dt_shared_functions_dt_file_use_component_' . $bundle . '_' . $field_name, TRUE);
+        // Variable to hold the value if upload button is displayed.
+        $check_upload = variable_get('dt_shared_functions_dt_file_show_upload_' . $bundle . '_' . $field_name, TRUE);
+
+        // Adding settings for the file upload component.
+        $form['field']['settings']['dt'] = [
+          '#type' => 'fieldset',
+          '#title' => t('DT options'),
+        ];
+
+        // Option if its to use the DT component in the front end.
+        $form['field']['settings']['dt']['use_component'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Use the DT component in the front end'),
+          '#default_value' => $check_use,
+          '#ajax' => [
+            'event' => 'change',
+            'callback' => '_dt_shared_functions_file_use_component_callback',
+            'wrapper' => 'dt_file_use_component_wrapper',
+            'method' => 'replace',
+            'effect' => 'fade',
+          ],
+        ];
+
+        $form['field']['settings']['dt']['use_component_wrapper'] = [
+          '#type' => 'container',
+          '#attributes' => [
+            'id' => [
+              'dt_file_use_component_wrapper',
+            ],
+          ],
+        ];
+
+        // Option if its to display the upload button.
+        $form['field']['settings']['dt']['show_upload'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Show the upload button'),
+          '#default_value' => $check_upload,
+          '#ajax' => [
+            'event' => 'change',
+            'callback' => '_dt_shared_functions_file_show_upload_callback',
+            'wrapper' => 'dt_file_show_upload_wrapper',
+            'method' => 'replace',
+            'effect' => 'fade',
+          ],
+        ];
+
+        $form['field']['settings']['dt']['show_upload_wrapper'] = [
+          '#type' => 'container',
+          '#attributes' => [
+            'id' => [
+              'dt_file_show_upload_wrapper',
+            ],
+          ],
+        ];
+      }
+      break;
+
+    // To solve accessibility issue with for attribute in label.
+    case 'views_exposed_form':
+      $date_fields = [];
+      // Get all exposed fields.
+      foreach ($form['#info'] as $exposed => $filter_values) {
+        // Only process the date_pop up fields for search API related.
+        if (isset($form[$filter_values['value']]['#type'])) {
+          if ($form[$filter_values['value']]['#type'] == 'date_popup') {
+            array_push($date_fields, $filter_values['value']);
+          }
+        }
+        // Non search API have a different render array.
+        if (isset($form[$filter_values['value']]['value']['#type'])) {
+          // Only process the date_pop up fields for normal i related.
+          if ($form[$filter_values['value']]['value']['#type'] == 'date_popup') {
+            // Set the name title.
+            $form[$filter_values['value']]['#title'] = $filter_values['label'];
+            // Remove the current (date) label title.
+            unset($form['#info'][$exposed]['label']);
+            // Set the current (date) label to invisible.
+            $form[$filter_values['value']]['value']['#title_display'] = 'invisible';
+            // Process each element, we will have more information.
+            $form[$filter_values['value']]['#after_build'][]
+              = '_dt_shared_functions_datepopup_accessibilty_nosearchapi_build';
+          }
+        }
+      }
+
+      if (!empty($date_fields)) {
+        // Call our helper to manipulate labels.
+        $form = _dt_shared_functions_datepopup_accessibilty($form, $date_fields);
+      }
+      break;
+  }
+}
+
+/**
+ * Implements hook_html_head_alter().
+ */
+function dt_shared_functions_html_head_alter(&$head_elements) {
+  if ($node = menu_get_object()) {
+    if (!array_key_exists($GLOBALS['language']->language, $node->translations->data)) {
+      $head_elements['metatag_robots_0']['#value'] = 'follow, noindex';
+    }
+  }
+}
+
+/**
+ * Implements hook_custom_theme().
+ *
+ * @see https://www.drupal.org/node/2156371
+ * @see https://www.drupal.org/node/2563761
+ */
+function dt_shared_functions_custom_theme() {
+  if (current_path() == 'system/ajax') {
+    return variable_get('admin_theme');
+  }
+}
+
+/**
+ * Submit handler.
+ *
+ * @see dt_shared_functions_form_alter()
+ */
+function _dt_shared_functions_file_use_component_callback(&$form, &$form_state) {
+  $options = [
+    'option' => 'use_component',
+    'field_name' => $form['#field']['field_name'],
+    'bundle' => $form['#field']['bundles']['node'][0],
+  ];
+
+  return _dt_shared_functions_file_callback_helper($options);
+}
+
+/**
+ * Submit handler.
+ *
+ * @see dt_shared_functions_form_alter()
+ */
+function _dt_shared_functions_file_show_upload_callback(&$form, &$form_state) {
+  $options = [
+    'option' => 'show_upload',
+    'field_name' => $form['#field']['field_name'],
+    'bundle' => $form['#field']['bundles']['node'][0],
+  ];
+
+  return _dt_shared_functions_file_callback_helper($options);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function dt_shared_functions_theme() {
+  return [
+    'site_user_menu' => [
+      'file' => 'dt_shared_functions.theme.inc',
+      'variables' => [
+        'modifier' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function dt_shared_functions_block_info() {
+  // Block to display user name and the option to login/logout.
+  $blocks['dt_shared_functions_user_menu'] = [
+    'info' => t('User menu block'),
+  ];
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function dt_shared_functions_block_view($delta = '') {
+  $block = [];
+
+  switch ($delta) {
+    case 'dt_shared_functions_user_menu':
+      if (user_is_logged_in()) {
+        $block['content'] = _dt_shared_functions_get_blocks_content($delta);
+      }
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function dt_shared_functions_field_widget_form_alter(&$element, &$form_state, $context) {
+  if (isset($context['field']['type'])
+    && $context['field']['type'] == 'entityreference'
+  ) {
+    if ($context['field']['settings']['handler'] == 'extended_base') {
+      $field = $context['field'];
+      $instance = $context['instance'];
+      $delta = $context['delta'];
+      $items = $context['items'];
+
+      if ($instance['widget']['type'] == 'entityreference_autocomplete') {
+        // Ensure that the entity target type exists before displaying the
+        // widget.
+        $entity_info = entity_get_info($field['settings']['target_type']);
+        if (empty($entity_info)) {
+          return;
+        }
+        $entity_type = $instance['entity_type'];
+        $entity = isset($element['#entity']) ? $element['#entity'] : NULL;
+        $handler = entityreference_get_selection_handler($field, $instance, $entity_type, $entity);
+
+        // Initialize arrays.
+        $entity_ids = [];
+        $entity_labels = [];
+
+        // We let the Field API handles multiple values for us, only take
+        // care of the one matching our delta.
+        if (isset($items[$delta])) {
+          $items = [$items[$delta]];
+        }
+        else {
+          $items = [];
+        }
+
+        // Build an array of entities ID.
+        foreach ($items as $item) {
+          $entity_ids[] = $item['target_id'];
+        }
+
+        // Load those entities and loop through them to extract their labels.
+        $entities = entity_load($field['settings']['target_type'], $entity_ids);
+
+        foreach ($entities as $entity_id => $entity_item) {
+          $label = $handler->getFormLabel($entity_item, FALSE);
+          $key = "$label ($entity_id)";
+          // Labels containing commas or quotes must be wrapped in quotes.
+          if (strpos($key, ',') !== FALSE || strpos($key, '"') !== FALSE) {
+            $key = '"' . str_replace('"', '""', $key) . '"';
+          }
+          $entity_labels[] = $key;
+        }
+
+        $element['target_id']['#default_value'] = implode(', ', $entity_labels);
+      }
+    }
+  }
+}

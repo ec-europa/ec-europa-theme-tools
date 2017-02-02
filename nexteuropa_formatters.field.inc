@@ -134,9 +134,10 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_listing_title' => [
-      'label' => t('Listing title'),
+      'label' => t('Listing title link'),
       'field types' => [
         'link_field',
+        'text',
         'taxonomy_term_reference',
       ],
       'settings' => [
@@ -144,8 +145,12 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'listing_title' => [
-      'label' => t('Listing title'),
+      'label' => t('Listing title (h3)'),
       'field types' => ['text', 'text_long'],
+    ],
+    'listing_title_element' => [
+      'label' => t('Listing title element'),
+      'field types' => ['text'],
     ],
     'entity_reference_section' => [
       'label' => t('Entity reference section group'),
@@ -368,6 +373,7 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
 
     case 'link_listing_title':
     case 'listing_title':
+    case 'listing_title_element':
       $class = 'listing__title';
       break;
 
@@ -440,6 +446,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
   if (!empty($items)) {
     $formatter = $display['type'];
     $pull_right = !empty($display['settings']['align_right']) ? ' pull-right' : '';
+
     switch ($formatter) {
       // Formatter for the structured content view mode.
       case 'structured_content_links':
@@ -666,6 +673,18 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         foreach ($items as $delta => $item) {
           $element[$delta] = [
             '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
+          ];
+        }
+        break;
+
+      case 'listing_title_element':
+        $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+
+        foreach ($items as $delta => $item) {
+          $link = l($item['safe_value'], 'node/' . $entity->nid, ['attributes' => ['class' => $class]]);
+
+          $element[$delta] = [
+            '#markup' => $link,
           ];
         }
         break;

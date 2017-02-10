@@ -10,13 +10,13 @@
  */
 function dt_europa_settings_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "breakpoints" && $api == "default_breakpoint_group") {
-    return array("version" => "1");
+    return ["version" => "1"];
   }
   if ($module == "breakpoints" && $api == "default_breakpoints") {
-    return array("version" => "1");
+    return ["version" => "1"];
   }
   if ($module == "picture" && $api == "default_picture_mapping") {
-    return array("version" => "2");
+    return ["version" => "2"];
   }
 }
 
@@ -24,546 +24,546 @@ function dt_europa_settings_ctools_plugin_api($module = NULL, $api = NULL) {
  * Implements hook_image_default_styles().
  */
 function dt_europa_settings_image_default_styles() {
-  $styles = array();
+  $styles = [];
 
   // Exported image style: header_image_breakpoints_theme_europa_medium_1x.
-  $styles['header_image_breakpoints_theme_europa_medium_1x'] = array(
+  $styles['header_image_breakpoints_theme_europa_medium_1x'] = [
     'label' => 'header_image_breakpoints_theme_europa_medium_1x',
-    'effects' => array(
-      11 => array(
+    'effects' => [
+      11 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 738,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_medium_2x.
-  $styles['header_image_breakpoints_theme_europa_medium_2x'] = array(
+  $styles['header_image_breakpoints_theme_europa_medium_2x'] = [
     'label' => 'header_image_breakpoints_theme_europa_medium_2x',
-    'effects' => array(
-      10 => array(
+    'effects' => [
+      10 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 738,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_mobile_1x.
-  $styles['header_image_breakpoints_theme_europa_mobile_1x'] = array(
+  $styles['header_image_breakpoints_theme_europa_mobile_1x'] = [
     'label' => 'header_image_breakpoints_theme_europa_mobile_1x',
-    'effects' => array(
-      7 => array(
+    'effects' => [
+      7 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 290,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_mobile_2x.
-  $styles['header_image_breakpoints_theme_europa_mobile_2x'] = array(
+  $styles['header_image_breakpoints_theme_europa_mobile_2x'] = [
     'label' => 'header_image_breakpoints_theme_europa_mobile_2x',
-    'effects' => array(
-      6 => array(
+    'effects' => [
+      6 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 290,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_narrow_1x.
-  $styles['header_image_breakpoints_theme_europa_narrow_1x'] = array(
+  $styles['header_image_breakpoints_theme_europa_narrow_1x'] = [
     'label' => 'header_image_breakpoints_theme_europa_narrow_1x',
-    'effects' => array(
-      9 => array(
+    'effects' => [
+      9 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 450,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_narrow_2x.
-  $styles['header_image_breakpoints_theme_europa_narrow_2x'] = array(
+  $styles['header_image_breakpoints_theme_europa_narrow_2x'] = [
     'label' => 'header_image_breakpoints_theme_europa_narrow_2x',
-    'effects' => array(
-      8 => array(
+    'effects' => [
+      8 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 450,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_normal_1x.
-  $styles['header_image_breakpoints_theme_europa_normal_1x'] = array(
+  $styles['header_image_breakpoints_theme_europa_normal_1x'] = [
     'label' => 'header_image_breakpoints_theme_europa_normal_1x',
-    'effects' => array(
-      13 => array(
+    'effects' => [
+      13 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 962,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_normal_2x.
-  $styles['header_image_breakpoints_theme_europa_normal_2x'] = array(
+  $styles['header_image_breakpoints_theme_europa_normal_2x'] = [
     'label' => 'header_image_breakpoints_theme_europa_normal_2x',
-    'effects' => array(
-      12 => array(
+    'effects' => [
+      12 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 962,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_wide_1x.
-  $styles['header_image_breakpoints_theme_europa_wide_1x'] = array(
+  $styles['header_image_breakpoints_theme_europa_wide_1x'] = [
     'label' => 'header_image_breakpoints_theme_europa_wide_1x',
-    'effects' => array(
-      15 => array(
+    'effects' => [
+      15 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 1140,
           'height' => '',
           'upscale' => 1,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_breakpoints_theme_europa_wide_2x.
-  $styles['header_image_breakpoints_theme_europa_wide_2x'] = array(
+  $styles['header_image_breakpoints_theme_europa_wide_2x'] = [
     'label' => 'header_image_breakpoints_theme_europa_wide_2x',
-    'effects' => array(
-      14 => array(
+    'effects' => [
+      14 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 1140,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: header_image_module_picture_empty_srcset_1x.
-  $styles['header_image_module_picture_empty_srcset_1x'] = array(
+  $styles['header_image_module_picture_empty_srcset_1x'] = [
     'label' => 'header_image_module_picture_empty_srcset_1x',
-    'effects' => array(
-      5 => array(
+    'effects' => [
+      5 => [
         'name' => 'image_scale',
-        'data' => array(
+        'data' => [
           'width' => 1140,
           'height' => '',
           'upscale' => 0,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 1,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_medium_1x.
-  $styles['highlight_image_breakpoints_theme_europa_medium_1x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_medium_1x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_medium_1x',
-    'effects' => array(
-      23 => array(
+    'effects' => [
+      23 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 546,
           'height' => 365,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_medium_2x.
-  $styles['highlight_image_breakpoints_theme_europa_medium_2x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_medium_2x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_medium_2x',
-    'effects' => array(
-      24 => array(
+    'effects' => [
+      24 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 546,
           'height' => 365,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_mobile_1x.
-  $styles['highlight_image_breakpoints_theme_europa_mobile_1x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_mobile_1x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_mobile_1x',
-    'effects' => array(
-      25 => array(
+    'effects' => [
+      25 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 290,
           'height' => 193,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_mobile_2x.
-  $styles['highlight_image_breakpoints_theme_europa_mobile_2x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_mobile_2x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_mobile_2x',
-    'effects' => array(
-      26 => array(
+    'effects' => [
+      26 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 290,
           'height' => 193,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_narrow_1x.
-  $styles['highlight_image_breakpoints_theme_europa_narrow_1x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_narrow_1x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_narrow_1x',
-    'effects' => array(
-      27 => array(
+    'effects' => [
+      27 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 546,
           'height' => 364,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_narrow_2x.
-  $styles['highlight_image_breakpoints_theme_europa_narrow_2x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_narrow_2x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_narrow_2x',
-    'effects' => array(
-      28 => array(
+    'effects' => [
+      28 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 546,
           'height' => 364,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_normal_1x.
-  $styles['highlight_image_breakpoints_theme_europa_normal_1x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_normal_1x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_normal_1x',
-    'effects' => array(
-      29 => array(
+    'effects' => [
+      29 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 546,
           'height' => 364,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_normal_2x.
-  $styles['highlight_image_breakpoints_theme_europa_normal_2x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_normal_2x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_normal_2x',
-    'effects' => array(
-      30 => array(
+    'effects' => [
+      30 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 546,
           'height' => 364,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_wide_1x.
-  $styles['highlight_image_breakpoints_theme_europa_wide_1x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_wide_1x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_wide_1x',
-    'effects' => array(
-      31 => array(
+    'effects' => [
+      31 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 360,
           'height' => 240,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_breakpoints_theme_europa_wide_2x.
-  $styles['highlight_image_breakpoints_theme_europa_wide_2x'] = array(
+  $styles['highlight_image_breakpoints_theme_europa_wide_2x'] = [
     'label' => 'highlight_image_breakpoints_theme_europa_wide_2x',
-    'effects' => array(
-      32 => array(
+    'effects' => [
+      32 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 360,
           'height' => 240,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: highlight_image_module_picture_empty_srcset_1x.
-  $styles['highlight_image_module_picture_empty_srcset_1x'] = array(
+  $styles['highlight_image_module_picture_empty_srcset_1x'] = [
     'label' => 'highlight_image_module_picture_empty_srcset_1x',
-    'effects' => array(
-      33 => array(
+    'effects' => [
+      33 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 360,
           'height' => 240,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_medium_1x.
-  $styles['teaser_image_breakpoints_theme_europa_medium_1x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_medium_1x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_medium_1x',
-    'effects' => array(
-      2 => array(
+    'effects' => [
+      2 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 250,
           'height' => 167,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_medium_2x.
-  $styles['teaser_image_breakpoints_theme_europa_medium_2x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_medium_2x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_medium_2x',
-    'effects' => array(
-      4 => array(
+    'effects' => [
+      4 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 250,
           'height' => 167,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_mobile_1x.
-  $styles['teaser_image_breakpoints_theme_europa_mobile_1x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_mobile_1x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_mobile_1x',
-    'effects' => array(
-      6 => array(
+    'effects' => [
+      6 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 290,
           'height' => 193,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_mobile_2x.
-  $styles['teaser_image_breakpoints_theme_europa_mobile_2x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_mobile_2x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_mobile_2x',
-    'effects' => array(
-      8 => array(
+    'effects' => [
+      8 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 290,
           'height' => 193,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_narrow_1x.
-  $styles['teaser_image_breakpoints_theme_europa_narrow_1x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_narrow_1x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_narrow_1x',
-    'effects' => array(
-      10 => array(
+    'effects' => [
+      10 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 450,
           'height' => 300,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_narrow_2x.
-  $styles['teaser_image_breakpoints_theme_europa_narrow_2x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_narrow_2x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_narrow_2x',
-    'effects' => array(
-      12 => array(
+    'effects' => [
+      12 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 450,
           'height' => 300,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_normal_1x.
-  $styles['teaser_image_breakpoints_theme_europa_normal_1x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_normal_1x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_normal_1x',
-    'effects' => array(
-      14 => array(
+    'effects' => [
+      14 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 250,
           'height' => 167,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_normal_2x.
-  $styles['teaser_image_breakpoints_theme_europa_normal_2x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_normal_2x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_normal_2x',
-    'effects' => array(
-      16 => array(
+    'effects' => [
+      16 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 250,
           'height' => 167,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_wide_1x.
-  $styles['teaser_image_breakpoints_theme_europa_wide_1x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_wide_1x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_wide_1x',
-    'effects' => array(
-      18 => array(
+    'effects' => [
+      18 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 250,
           'height' => 167,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_breakpoints_theme_europa_wide_2x.
-  $styles['teaser_image_breakpoints_theme_europa_wide_2x'] = array(
+  $styles['teaser_image_breakpoints_theme_europa_wide_2x'] = [
     'label' => 'teaser_image_breakpoints_theme_europa_wide_2x',
-    'effects' => array(
-      20 => array(
+    'effects' => [
+      20 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 250,
           'height' => 167,
           'retinafy' => 1,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   // Exported image style: teaser_image_module_picture_empty_srcset_1x.
-  $styles['teaser_image_module_picture_empty_srcset_1x'] = array(
+  $styles['teaser_image_module_picture_empty_srcset_1x'] = [
     'label' => 'teaser_image_module_picture_empty_srcset_1x',
-    'effects' => array(
-      22 => array(
+    'effects' => [
+      22 => [
         'name' => 'image_scale_and_crop',
-        'data' => array(
+        'data' => [
           'width' => 250,
           'height' => 167,
           'retinafy' => 0,
-        ),
+        ],
         'weight' => 2,
-      ),
-    ),
-  );
+      ],
+    ],
+  ];
 
   return $styles;
 }

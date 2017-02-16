@@ -89,11 +89,11 @@ function dt_shared_functions_nexteuropa_token_token_handlers_alter(array &$handl
  * Implements hook_translated_menu_link_alter().
  */
 function dt_shared_functions_translated_menu_link_alter(&$item, $map) {
-  $nid = isset($item['options']['menu_token_data']['node']['options']['id']);
-  if ($nid) {
-    $data['node'] = entity_load_single('node', $nid);
+  $nid = isset($item['options']['menu_token_data']['node']['options']['id']) ? $item['options']['menu_token_data']['node']['options']['id'] : FALSE;
+  if ($nid && $node = node_load($nid)) {
+    $data['node'] = $node;
     // This should be done by the token_menu module, actually.
-    $options['language'] = $GLOBALS['language']->language;
+    $options['language'] = $GLOBALS['language'];
     $item['link_title'] = token_replace($item['title'], $data, $options);
   }
 }
@@ -194,7 +194,7 @@ function dt_shared_functions_field_language_alter(&$display_language, $context) 
  * If in the generation it fails it will return false.
  *
  * @param string $label
- *   Field label, shoud display at errors.
+ *   Field label, should display at errors.
  * @param string $tel
  *   String containing phone number.
  *
@@ -258,8 +258,8 @@ function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
       // Checks if the field is a file.
       if ($form['#field']['type'] == 'file') {
         $field_name = $form['#field']['field_name'];
-        $bundle = $form['#field']['bundles']['node'][0];
-        // Variable to hold the value if its to use the DT component in the
+        $bundle = $form['#instance']['bundle'];
+        // Variable to hold the value if it's to use the DT component in the
         // front end.
         $check_use = variable_get('dt_shared_functions_dt_file_use_component_' . $bundle . '_' . $field_name, TRUE);
         // Variable to hold the value if upload button is displayed.
@@ -271,7 +271,7 @@ function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
           '#title' => t('DT options'),
         ];
 
-        // Option if its to use the DT component in the front end.
+        // Option if it's to use the DT component in the front end.
         $form['field']['settings']['dt']['use_component'] = [
           '#type' => 'checkbox',
           '#title' => t('Use the DT component in the front end'),
@@ -294,7 +294,7 @@ function dt_shared_functions_form_alter(&$form, &$form_state, $form_id) {
           ],
         ];
 
-        // Option if its to display the upload button.
+        // Option if it's to display the upload button.
         $form['field']['settings']['dt']['show_upload'] = [
           '#type' => 'checkbox',
           '#title' => t('Show the upload button'),
@@ -387,7 +387,7 @@ function _dt_shared_functions_file_use_component_callback(&$form, &$form_state) 
   $options = [
     'option' => 'use_component',
     'field_name' => $form['#field']['field_name'],
-    'bundle' => $form['#field']['bundles']['node'][0],
+    'bundle' => $form['#instance']['bundle'],
   ];
 
   return _dt_shared_functions_file_callback_helper($options);
@@ -402,7 +402,7 @@ function _dt_shared_functions_file_show_upload_callback(&$form, &$form_state) {
   $options = [
     'option' => 'show_upload',
     'field_name' => $form['#field']['field_name'],
-    'bundle' => $form['#field']['bundles']['node'][0],
+    'bundle' => $form['#instance']['bundle'],
   ];
 
   return _dt_shared_functions_file_callback_helper($options);
@@ -509,5 +509,49 @@ function dt_shared_functions_field_widget_form_alter(&$element, &$form_state, $c
         $element['target_id']['#default_value'] = implode(', ', $entity_labels);
       }
     }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Here we add extra modifiers to the file markup.
+ */
+function dt_shared_functions_preprocess_file_entity(&$variables) {
+  // Remove the field folder to avoid to be rendered in frontend.
+  unset($variables['content']['field_folder']);
+
+  switch ($variables['type']) {
+    case 'image':
+      _dt_shared_functions_file_caption($variables, 'field_caption');
+      break;
+
+    case 'video':
+      // Adds the modifier class file--video.
+      $variables['classes_array'][] = 'file--video';
+
+      _dt_shared_functions_file_caption($variables, 'field_video_description');
+      break;
+
+  }
+}
+
+/**
+ * Helper function for the markup of the file caption.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - editorial_section: The editorial section for which the highlights are
+ *     rendered.
+ * @param string $field_name
+ *   Field name with the caption or description.
+ */
+function _dt_shared_functions_file_caption(&$variables, $field_name) {
+  // Check if the field has a caption.
+  if (!empty($variables['content'][$field_name])) {
+    // Resets the HTML of the field and adds the wrapper for the caption.
+    $variables['content'][$field_name]['#theme'] = 'ds_field_reset';
+    $variables['content'][$field_name]['#prefix'] = '<span class="file__caption">';
+    $variables['content'][$field_name]['#suffix'] = '</span>';
   }
 }

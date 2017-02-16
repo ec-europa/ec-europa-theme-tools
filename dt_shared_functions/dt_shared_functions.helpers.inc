@@ -61,7 +61,7 @@ function _dt_shared_functions_file_callback_helper($options) {
   }
 
   $output = '<div id="dt_file_' . $options['option'] . '_wrapper">';
-  $output .= '<div class="alert messages ' . $class . '">' . $message . '</div>';
+  $output .= '<div class="alert messages ' . $class . '"><p>' . $message . '</p></div>';
   $output .= '</div>';
 
   return $output;

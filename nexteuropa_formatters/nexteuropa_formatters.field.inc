@@ -167,6 +167,13 @@ function nexteuropa_formatters_field_formatter_info() {
       'label' => t('Telephone link'),
       'field types' => ['text'],
     ],
+    'text_number' => [
+      'label' => t('Text as number'),
+      'field types' => ['text'],
+      'settings' => [
+        'suffix' => '',
+      ],
+    ],
     'label' => [
       'label' => t('Label'),
       'field types' => [
@@ -298,6 +305,15 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
         '#title' => t('Use the content language for referenced items.'),
         '#type' => 'checkbox',
         '#default_value' => $settings['use_content_language'],
+      ];
+      break;
+
+    case 'text_number':
+      $element['suffix'] = [
+        '#title' => t('Suffix'),
+        '#type' => 'textfield',
+        '#size' => 2,
+        '#default_value' => '',
       ];
       break;
 
@@ -635,6 +651,14 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         }
         break;
 
+      case 'text_number':
+        foreach ($items as $delta => $item) {
+          $element[$delta] = [
+            '#markup' => number_format($item['safe_value'], 0, ".", ",") . $display['settings']['suffix'],
+          ];
+        }
+        break;
+
       case 'label':
         foreach ($items as $delta => $item) {
           $user_modifiers = $display['settings']['label_modifiers'];
@@ -681,7 +705,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
 
         foreach ($items as $delta => $item) {
-          $link = l($item['safe_value'], 'node/' . $entity->nid, ['attributes' => ['class' => $class]]);
+          $link = l($item['value'], 'node/' . $entity->nid, ['attributes' => ['class' => $class]]);
 
           $element[$delta] = [
             '#markup' => $link,
@@ -1159,7 +1183,9 @@ function nexteuropa_formatters_field_formatter_settings_summary_alter(&$summary,
  * Implements hook_preprocess_field().
  */
 function nexteuropa_formatters_preprocess_field(&$variables) {
-  if (isset($variables['element']['#field_type']) && $variables['element']['#field_type'] == 'file') {
+  if (isset($variables['element']['#field_type'])
+    && $variables['element']['#field_type'] == 'file'
+  ) {
     // Convenient access to the important elements of the $variables.
     $entity_type = $variables['element']['#entity_type'];
     $field_name = $variables['element']['#field_name'];
@@ -1171,7 +1197,10 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
     // Get the settings, fall back to default TRUE.
     $show_translation = isset($info['display'][$view_mode]['settings']['show_translations']) ? $info['display'][$view_mode]['settings']['show_translations'] : TRUE;
 
-    if ($show_translation && ($info['display'][$view_mode]['type'] == 'link_button_download' || $info['display'][$view_mode]['type'] == 'link_download')) {
+    if ($show_translation
+      && ($info['display'][$view_mode]['type'] == 'link_button_download'
+      || $info['display'][$view_mode]['type'] == 'link_download')
+    ) {
       foreach ($variables['items'] as $item_key => $item) {
         $variables['items'][$item_key]['#suffix'] = theme('nexteuropa_file_translations', ['node' => $variables['element']['#object']]);
       }

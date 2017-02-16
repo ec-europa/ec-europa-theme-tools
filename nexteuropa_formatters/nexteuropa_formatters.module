@@ -120,12 +120,11 @@ function nexteuropa_formatters_theme_field_override($variables) {
           return _nexteuropa_formatters_field_component_listing($variables, $settings);
         }
       }
-
       break;
+
   }
 
   if (isset($element['#formatter'])) {
-
     // Handling nexteuropa_formatters custom cases.
     switch ($element['#formatter']) {
       case 'context_nav_item':
@@ -158,7 +157,6 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
   // Handling default output following BEM syntax.
   $output = '';
-  $classes = [];
   $items_number = count($variables['items']);
 
   // Render the label, if it's not hidden.
@@ -197,8 +195,18 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
     $output .= '</div>';
 
+    // Removing classes related to label and field type that we will never use.
+    if (!empty($variables['classes_array'])) {
+      $variables['classes_array'] = array_filter($variables['classes_array'], function($value) {
+        return ((strstr($value, 'field-type') == TRUE || strstr($value, 'field-label') == TRUE) ? FALSE : TRUE);
+      });
+    }
+
+    /*
+     * @todo DTTSB-1671 Remove invalid field modifier.
+     */
     // Render the top-level DIV.
-    $output = '<div ' . $variables['attributes'] . ' class="field field--' . strtr($element['#field_name'], '_', '-') . ' ' . implode(' ', $classes) . '">' . $output . '</div>';
+    $output = '<div ' . $variables['attributes'] . ' class="' . implode(' ', $variables['classes_array']) . ' field--' . strtr($element['#field_name'], '_', '-') . '">' . $output . '</div>';
   }
 
   return $output;
@@ -446,7 +454,6 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
 function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
   // Handling default output following BEM syntax.
   $output = '';
-  $classes = [];
 
   // Render the label, if it's not hidden.
   if (!$variables['label_hidden']) {
@@ -470,8 +477,11 @@ function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
     }
     $output .= '</div>';
 
+    /*
+     * @todo DTTSB-1671 Remove invalid field modifier.
+     */
     // Render the top-level DIV.
-    $output = '<div ' . $variables['attributes'] . ' class="field field--' . strtr($variables['element']['#field_name'], '_', '-') . ' ' . implode(' ', $classes) . '">' . $output . '</div>';
+    $output = '<div ' . $variables['attributes'] . ' class="' . implode(' ', $variables['classes_array']) . ' field--' . strtr($variables['element']['#field_name'], '_', '-') . '">' . $output . '</div>';
   }
 
   return $output;

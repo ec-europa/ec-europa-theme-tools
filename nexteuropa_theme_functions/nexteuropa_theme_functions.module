@@ -1,0 +1,255 @@
+<?php
+
+/**
+ * @file
+ * This file contains the shared functions for the Next Europa theme.
+ */
+
+/**
+ * Generates "<a href=tel:" tag for the contact phone field.
+ *
+ * If in the generation it fails it will return false.
+ *
+ * @param string $label
+ *   Field label, should display at errors.
+ * @param string $tel
+ *   String containing phone number.
+ *
+ * @return string
+ *   Returns formatted value or the source one.
+ */
+function _nexteuropa_theme_functions_phonetohtml($label, $tel) {
+  $data = trim($tel);
+  // Load the array containing our regular expressions and loop to convert them
+  // into a link.
+  foreach (_nexteuropa_theme_functions_contactphone_patterns($label) as $regexp_index => $regexp_values) {
+    preg_match($regexp_values['pattern'], $data, $matches);
+    // Something is wrong with the phone value and can't be displayed correctly.
+    if (!isset($matches[$regexp_values['return_key']]) && isset($regexp_values['required'])) {
+      return $tel;
+    }
+    else {
+      $phone[$regexp_index] = isset($matches[$regexp_values['return_key']])
+          ? trim($matches[$regexp_values['return_key']]) : '';
+    }
+  }
+
+  // Create the href tel: value.
+  $tel = 'tel:' . str_replace(' ', '', $phone['country_prefix'] . $phone['telephone']);
+  // This defines the element telephone in the component field.
+  $classes = ['class' => 'field__telephone'];
+  // This will be the link title.
+  $title = $phone['country_prefix'] . ' ' . $phone['telephone'];
+  // Build the link.
+  $phone_link  = l($title, $tel, ['attributes' => $classes]);
+  // The full element.
+  $markup = $phone_link . ' ' . $phone['phone_label'];
+
+  return $markup;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function nexteuropa_theme_functions_form_alter(&$form, &$form_state, $form_id) {
+  switch ($form_id) {
+    // To add options in the backend for the file upload component.
+    case 'field_ui_field_edit_form':
+      // Checks if the field is a file.
+      if ($form['#field']['type'] == 'file') {
+        $field_name = $form['#field']['field_name'];
+        $bundle = $form['#instance']['bundle'];
+        // Variable to hold the value if it's to use the DT component in the
+        // front end.
+        $check_use = variable_get('nexteuropa_theme_functions_dt_file_use_component_' . $bundle . '_' . $field_name, TRUE);
+        // Variable to hold the value if upload button is displayed.
+        $check_upload = variable_get('nexteuropa_theme_functions_dt_file_show_upload_' . $bundle . '_' . $field_name, TRUE);
+
+        // Adding settings for the file upload component.
+        $form['field']['settings']['dt'] = [
+          '#type' => 'fieldset',
+          '#title' => t('DT options'),
+        ];
+
+        // Option if it's to use the DT component in the front end.
+        $form['field']['settings']['dt']['use_component'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Use the DT component in the front end'),
+          '#default_value' => $check_use,
+          '#ajax' => [
+            'event' => 'change',
+            'callback' => '_nexteuropa_theme_functions_file_use_component_callback',
+            'wrapper' => 'dt_file_use_component_wrapper',
+            'method' => 'replace',
+            'effect' => 'fade',
+          ],
+        ];
+
+        $form['field']['settings']['dt']['use_component_wrapper'] = [
+          '#type' => 'container',
+          '#attributes' => [
+            'id' => [
+              'dt_file_use_component_wrapper',
+            ],
+          ],
+        ];
+
+        // Option if it's to display the upload button.
+        $form['field']['settings']['dt']['show_upload'] = [
+          '#type' => 'checkbox',
+          '#title' => t('Show the upload button'),
+          '#default_value' => $check_upload,
+          '#ajax' => [
+            'event' => 'change',
+            'callback' => '_nexteuropa_theme_functions_file_show_upload_callback',
+            'wrapper' => 'dt_file_show_upload_wrapper',
+            'method' => 'replace',
+            'effect' => 'fade',
+          ],
+        ];
+
+        $form['field']['settings']['dt']['show_upload_wrapper'] = [
+          '#type' => 'container',
+          '#attributes' => [
+            'id' => [
+              'dt_file_show_upload_wrapper',
+            ],
+          ],
+        ];
+      }
+      break;
+
+    // To solve accessibility issue with for attribute in label.
+    case 'views_exposed_form':
+      $date_fields = [];
+      // Get all exposed fields.
+      foreach ($form['#info'] as $exposed => $filter_values) {
+        // Only process the date_pop up fields for search API related.
+        if (isset($form[$filter_values['value']]['#type'])) {
+          if ($form[$filter_values['value']]['#type'] == 'date_popup') {
+            array_push($date_fields, $filter_values['value']);
+          }
+        }
+        // Non search API have a different render array.
+        if (isset($form[$filter_values['value']]['value']['#type'])) {
+          // Only process the date_pop up fields for normal i related.
+          if ($form[$filter_values['value']]['value']['#type'] == 'date_popup') {
+            // Set the name title.
+            $form[$filter_values['value']]['#title'] = $filter_values['label'];
+            // Remove the current (date) label title.
+            unset($form['#info'][$exposed]['label']);
+            // Set the current (date) label to invisible.
+            $form[$filter_values['value']]['value']['#title_display'] = 'invisible';
+            // Process each element, we will have more information.
+            $form[$filter_values['value']]['#after_build'][]
+              = '_nexteuropa_theme_functions_datepopup_accessibilty_nosearchapi_build';
+          }
+        }
+      }
+
+      if (!empty($date_fields)) {
+        // Call our helper to manipulate labels.
+        $form = _nexteuropa_theme_functions_datepopup_accessibilty($form, $date_fields);
+      }
+      break;
+  }
+}
+
+/**
+ * Submit handler.
+ *
+ * @see nexteuropa_theme_functions_form_alter()
+ */
+function _nexteuropa_theme_functions_file_use_component_callback(&$form, &$form_state) {
+  $options = [
+    'option' => 'use_component',
+    'field_name' => $form['#field']['field_name'],
+    'bundle' => $form['#instance']['bundle'],
+  ];
+
+  return _nexteuropa_theme_functions_file_callback_helper($options);
+}
+
+/**
+ * Submit handler.
+ *
+ * @see nexteuropa_theme_functions_form_alter()
+ */
+function _nexteuropa_theme_functions_file_show_upload_callback(&$form, &$form_state) {
+  $options = [
+    'option' => 'show_upload',
+    'field_name' => $form['#field']['field_name'],
+    'bundle' => $form['#instance']['bundle'],
+  ];
+
+  return _nexteuropa_theme_functions_file_callback_helper($options);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function nexteuropa_theme_functions_theme() {
+  return [
+    'site_user_menu' => [
+      'file' => 'nexteuropa_theme_functions.theme.inc',
+      'variables' => [
+        'modifier' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function nexteuropa_theme_functions_block_info() {
+  // Block to display user name and the option to login/logout.
+  $blocks['nexteuropa_theme_functions_user_menu'] = [
+    'info' => t('User menu block'),
+  ];
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function nexteuropa_theme_functions_block_view($delta = '') {
+  $block = [];
+
+  switch ($delta) {
+    case 'nexteuropa_theme_functions_user_menu':
+      if (user_is_logged_in()) {
+        $block['content'] = _nexteuropa_theme_functions_get_blocks_content($delta);
+      }
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ *
+ * Here we add extra modifiers to the file markup.
+ */
+function nexteuropa_theme_functions_preprocess_file_entity(&$variables) {
+  // Remove the field folder to avoid to be rendered in frontend.
+  unset($variables['content']['field_folder']);
+
+  switch ($variables['type']) {
+    case 'image':
+      _nexteuropa_theme_functions_file_caption($variables, 'field_caption');
+      break;
+
+    case 'video':
+      // Adds the modifier class file--video.
+      $variables['classes_array'][] = 'file--video';
+
+      _nexteuropa_theme_functions_file_caption($variables, 'field_video_description');
+      break;
+
+  }
+}
+
+

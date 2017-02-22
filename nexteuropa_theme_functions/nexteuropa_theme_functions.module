@@ -206,7 +206,7 @@ function nexteuropa_theme_functions_theme() {
  */
 function nexteuropa_theme_functions_block_info() {
   // Block to display user name and the option to login/logout.
-  $blocks['next_eutheme_functions_user_menu'] = [
+  $blocks['dt_shared_functions_user_menu'] = [
     'info' => t('User menu block'),
   ];
 
@@ -220,7 +220,7 @@ function nexteuropa_theme_functions_block_view($delta = '') {
   $block = [];
 
   switch ($delta) {
-    case 'next_eutheme_functions_user_menu':
+    case 'dt_shared_functions_user_menu':
       if (user_is_logged_in()) {
         $block['content'] = _nexteuropa_theme_functions_get_blocks_content($delta);
       }

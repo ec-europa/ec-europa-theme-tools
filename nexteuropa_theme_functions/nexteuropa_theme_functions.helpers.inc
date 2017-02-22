@@ -185,7 +185,7 @@ function _nexteuropa_theme_functions_get_blocks_content($delta) {
   $result = [];
 
   switch ($delta) {
-    case 'next_eutheme_functions_user_menu':
+    case 'dt_shared_functions_user_menu':
       $result = [
         '#markup' => theme('site_user_menu'),
       ];

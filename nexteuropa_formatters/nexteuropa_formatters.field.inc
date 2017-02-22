@@ -644,7 +644,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           // Label to display.
           $label = isset($instance['label']) ? $instance['label'] : '';
           // Make the phone value a link, if possible.
-          $telf = dt_shared_function_phonetohtml($label, $item['safe_value']);
+          $telf = _nexteuropa_theme_functions_phonetohtml($label, $item['safe_value']);
           $element[$delta] = [
             '#markup' => $telf,
           ];

@@ -253,5 +253,3 @@ function nexteuropa_theme_functions_preprocess_file_entity(&$variables) {
 
   }
 }
-
-

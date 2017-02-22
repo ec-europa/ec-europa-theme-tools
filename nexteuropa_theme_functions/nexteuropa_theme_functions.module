@@ -63,9 +63,9 @@ function nexteuropa_theme_functions_form_alter(&$form, &$form_state, $form_id) {
         $bundle = $form['#instance']['bundle'];
         // Variable to hold the value if it's to use the DT component in the
         // front end.
-        $check_use = variable_get('nexteuropa_theme_functions_dt_file_use_component_' . $bundle . '_' . $field_name, TRUE);
+        $check_use = variable_get('dt_shared_functions_dt_file_use_component_' . $bundle . '_' . $field_name, TRUE);
         // Variable to hold the value if upload button is displayed.
-        $check_upload = variable_get('nexteuropa_theme_functions_dt_file_show_upload_' . $bundle . '_' . $field_name, TRUE);
+        $check_upload = variable_get('dt_shared_functions_dt_file_show_upload_' . $bundle . '_' . $field_name, TRUE);
 
         // Adding settings for the file upload component.
         $form['field']['settings']['dt'] = [

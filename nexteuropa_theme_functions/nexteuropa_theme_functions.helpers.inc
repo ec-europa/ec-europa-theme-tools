@@ -66,9 +66,9 @@ function _nexteuropa_theme_functions_file_caption(&$variables, $field_name) {
  * @see nexteuropa_theme_functions_form_alter()
  */
 function _nexteuropa_theme_functions_file_callback_helper($options) {
-  $now = variable_get('nexteuropa_theme_functions_dt_file_' . $options['option'] . '_' . $options['bundle'] . '_' . $options['field_name'], TRUE);
+  $now = variable_get('dt_shared_functions_dt_file_' . $options['option'] . '_' . $options['bundle'] . '_' . $options['field_name'], TRUE);
   if (!$now) {
-    variable_set('nexteuropa_theme_functions_dt_file_' . $options['option'] . '_' . $options['bundle'] . '_' . $options['field_name'], TRUE);
+    variable_set('dt_shared_functions_dt_file_' . $options['option'] . '_' . $options['bundle'] . '_' . $options['field_name'], TRUE);
     $class = 'status';
     if ($options['option'] == 'use_component') {
       $message = t('You will use the dt file upload component in your frontend theme.');
@@ -78,7 +78,7 @@ function _nexteuropa_theme_functions_file_callback_helper($options) {
     }
   }
   else {
-    variable_set('nexteuropa_theme_functions_dt_file_' . $options['option'] . '_' . $options['bundle'] . '_' . $options['field_name'], FALSE);
+    variable_set('dt_shared_functions_dt_file_' . $options['option'] . '_' . $options['bundle'] . '_' . $options['field_name'], FALSE);
     $class = 'warning';
     if ($options['option'] == 'use_component') {
       $message = t('You will not use anymore the dt file upload component in your frontend theme.');

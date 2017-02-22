@@ -633,8 +633,10 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   ];
 
   $render_array['button'] = [
-    '#type' => 'markup',
-    '#markup' => l($file_text, $url['path'], array_merge($options, $url['options'])),
+    '#type' => 'link',
+    '#title' => $file_text,
+    '#href' => $url['path'],
+    '#options' => array_merge($options, $url['options']),
   ];
 
   if ($modifier == "file--link") {
@@ -647,5 +649,6 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     unset($render_array['button']);
   }
 
+  drupal_alter('nexteuropa_formatter_file', $render_array);
   return drupal_render($render_array);
 }

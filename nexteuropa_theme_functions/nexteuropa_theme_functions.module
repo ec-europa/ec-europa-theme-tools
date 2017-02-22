@@ -5,6 +5,8 @@
  * This file contains the shared functions for the Next Europa theme.
  */
 
+include_once 'nexteuropa_theme_functions.helpers.inc';
+
 /**
  * Generates "<a href=tel:" tag for the contact phone field.
  *

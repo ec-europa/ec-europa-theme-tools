@@ -539,7 +539,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   // Get our full language string.
   if (isset($file->entity->language) || isset($file->language)) {
     $language_to_use = isset($file->entity->language) ? entity_translation_get_existing_language('node', $file->entity) : $file->language;
-    $file_language_string = _dt_shared_functions_get_language_obj($language_to_use, 'native');
+    $file_language_string = _nexteuropa_theme_functions_get_language_obj($language_to_use, 'native');
     if (!$subfile && module_exists('locale') && isset($GLOBALS['language_content']->language)) {
       $file_language_string = locale($file_language_string, NULL, $GLOBALS['language_content']->language);
     }

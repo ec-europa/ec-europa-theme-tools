@@ -6,6 +6,23 @@
  */
 
 /**
+ * Helper function to get the readable language from a language code.
+ * This function also exists in dt_shared_functions feature, cloned here to
+ * allow use without dependency.
+ *
+ * @param string $langcode
+ *   The langcode to get the language object for.
+ *
+ * @return object
+ *   The language object.
+ */
+function _nexteuropa_theme_functions_get_language_obj($langcode, $type = 'name') {
+  $languages = locale_language_list($type);
+
+  return isset($languages[$langcode]) ? $languages[$langcode] : NULL;
+}
+
+/**
  * Helper function for contact phone fields.
  *
  * This function returns an array that will help

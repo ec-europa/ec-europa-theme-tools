@@ -2,6 +2,7 @@ name = DT EUROPA Settings
 description = Settings for the Europa theme
 core = 7.x
 package = NextEuropa Digital Transformation
+php = 5.5
 dependencies[] = breakpoints
 dependencies[] = ctools
 dependencies[] = dt_header_background

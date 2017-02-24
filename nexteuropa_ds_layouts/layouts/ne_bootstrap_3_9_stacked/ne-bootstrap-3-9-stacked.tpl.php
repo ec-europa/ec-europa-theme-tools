@@ -38,6 +38,7 @@
     </<?php print $central_wrapper; ?>>
   </div>
 
+
 </<?php print $layout_wrapper; ?>>
 
 <?php if (!empty($drupal_render_children)): ?>

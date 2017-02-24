@@ -7,32 +7,35 @@
 ?>
 
 <div <?php print $layout_attributes; ?> class="<?php print $classes; ?>">
-<?php if (isset($title_suffix['contextual_links'])) : ?>
+
+<?php if (isset($title_suffix['contextual_links'])): ?>
   <?php print render($title_suffix['contextual_links']); ?>
 <?php endif; ?>
-<?php if (!isset($hidelink) || (isset($hidelink) && $hidelink == FALSE)) : ?>
-  <a href="<?php print $node_url; ?>" class="listing__item-link">
+
+<?php if (!isset($prevent_link)): ?>
+  <div class="listing__item-link">
+<?php else: ?>
+  <div class="listing__item-nolink">
 <?php endif; ?>
 
-  <div class="featured-item">
-    <?php if (!empty($featured_image)) : ?>
-    <div class="featured-item__image">
-      <?php print $featured_image; ?>
+    <div class="featured-item">
+      <?php if (!empty($featured_image)): ?>
+        <div class="featured-item__image">
+          <?php print $featured_image; ?>
+        </div>
+      <?php endif; ?>
+      <section class="featured-item__content">
+        <div class="meta meta--header">
+          <?php print $meta; ?>
+        </div>
+        <?php print $main; ?>
+      </section>
     </div>
-    <?php endif; ?>
-    <section class="featured-item__content">
-      <div class="meta meta--header">
-        <?php print $meta;  ?>
-      </div>
-      <?php print $main; ?>
-    </section>
+
   </div>
 
-<?php if (!isset($hidelink) || (isset($hidelink) && $hidelink == FALSE)) : ?>
-  </a>
-<?php endif; ?>
 </div>
 
-<?php if (!empty($drupal_render_children)) : ?>
+<?php if (!empty($drupal_render_children)): ?>
   <?php print $drupal_render_children; ?>
 <?php endif; ?>

@@ -122,9 +122,9 @@ function nexteuropa_ds_layouts_ds_layout_info() {
     'is_nexteuropa' => TRUE,
   ];
 
-  $layouts['ne_2col_sidebar_no_link'] = [
-    'label' => t('NE: 2col - sidebar without link'),
-    'path' => $path . '/layouts/ne_2col_sidebar_no_link',
+  $layouts['ne_2col_sidebar'] = [
+    'label' => t('NE: 2col - sidebar'),
+    'path' => $path . '/layouts/ne_2col_sidebar',
     'regions' => [
       'main' => t('Main'),
       'second' => t('Second'),
@@ -137,25 +137,6 @@ function nexteuropa_ds_layouts_ds_layout_info() {
   $layouts['ne_1col'] = [
     'label' => t('NE: 1col'),
     'path' => $path . '/layouts/ne_1col',
-    'regions' => [
-      'main' => t('Main'),
-    ],
-    'form' => TRUE,
-    'image' => TRUE,
-    'is_nexteuropa' => TRUE,
-  ];
-
-  /*
-   * This is a temporary custom solution to add the hitme library that was made
-   * by Roel, to be possible to have two links with different actions in the
-   * same block.
-   *
-   * @todo: after having a ticket that will improve the markup of NE Bootstrap
-   * template files to be HTML5, then this should be removed.
-   */
-  $layouts['ne_1col_hitme'] = [
-    'label' => t('NE: 1col hitme'),
-    'path' => $path . '/layouts/ne_1col_hitme',
     'regions' => [
       'main' => t('Main'),
     ],
@@ -185,18 +166,6 @@ function nexteuropa_ds_layouts_ds_layout_info() {
       'featured_image' => t('Featured image'),
       'meta' => t('Meta'),
       'main' => t('Main content'),
-    ],
-    'form' => TRUE,
-    'image' => TRUE,
-    'is_nexteuropa' => TRUE,
-  ];
-
-  $layouts['ne_2col_hitme'] = [
-    'label' => t('NE: 2col hitme'),
-    'path' => $path . '/layouts/ne_2col_hitme',
-    'regions' => [
-      'main' => t('Main'),
-      'second' => t('Second'),
     ],
     'form' => TRUE,
     'image' => TRUE,

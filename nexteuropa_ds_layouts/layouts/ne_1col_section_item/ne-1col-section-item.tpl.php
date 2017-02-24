@@ -8,7 +8,12 @@
 
 <div class="listing listing--navigation">
 
-  <a href="<?php print url($node->path['source']); ?>" class="listing__item-link">
+<?php if (!isset($prevent_link)): ?>
+  <div class="listing__item-link">
+<?php else: ?>
+  <div class="listing__item-nolink">
+<?php endif; ?>
+
     <h2 class="listing__section-title">
       <?php print $title; ?>
     </h2>
@@ -18,7 +23,8 @@
         <?php print $description; ?>
       </p>
     <?php endif; ?>
-  </a>
+
+  </div>
 
   <?php if ($children): ?>
     <?php print $children; ?>

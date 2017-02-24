@@ -1,0 +1,8 @@
+#OSX files
+.DS_Store
+
+# Ignore metadata from common editors and IDEs.
+*.sublime-project
+*.sublime-workspace
+.idea/
+nbproject/

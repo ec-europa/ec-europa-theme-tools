@@ -5,14 +5,16 @@
  * Display Suite NE Bootstrap Three Columns Stacked.
  */
 
-  // Add sidebar classes so that we can apply the correct width in css.
-  // Second block is needed to activate display suite support on forms.
+// Add sidebar classes so that we can apply the correct width in css.
+// Second block is needed to activate display suite support on forms.
 ?>
 
-<<?php print $layout_wrapper; print $layout_attributes; ?> class="<?php print $classes; ?>">
+<<?php print $layout_wrapper . $layout_attributes; ?> class="<?php print $classes; ?>">
+
   <?php if (isset($title_suffix['contextual_links'])): ?>
     <?php print render($title_suffix['contextual_links']); ?>
   <?php endif; ?>
+
   <div class="row">
     <<?php print $left_header_wrapper; ?> class="col-lg-9 <?php print $left_header_classes; ?>">
       <?php print $left_header; ?>
@@ -30,8 +32,9 @@
       <?php print $central; ?>
     </<?php print $central_wrapper; ?>>
   </div>
-</<?php print $layout_wrapper ?>>
+
+</<?php print $layout_wrapper; ?>>
 
 <?php if (!empty($drupal_render_children)): ?>
-  <?php print $drupal_render_children ?>
+  <?php print $drupal_render_children; ?>
 <?php endif; ?>

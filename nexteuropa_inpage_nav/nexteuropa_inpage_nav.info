@@ -1,6 +1,6 @@
 name = In-page navigation
-description = Generates a list of links for headings of a long page
-package = NextEuropa Digital Transformation
+description = Generates a list of links for headings of a long page.
 core = 7.x
+package = NextEuropa Digital Transformation
 php = 5.5
 multisite_version = 2.2

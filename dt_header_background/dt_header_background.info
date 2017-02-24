@@ -1,5 +1,5 @@
-name = DT Header Background
-description = Enables the header background functionality
+name = Header Background
+description = Header background functionality.
 core = 7.x
 package = NextEuropa Digital Transformation
 php = 5.5

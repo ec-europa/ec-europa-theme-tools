@@ -1,5 +1,5 @@
 name = NextEuropa views
-description = Views style plugins created for Nexteuropa BEM components
+description = Views style plugins created for NextEuropa BEM components.
 core = 7.x
 package = NextEuropa Digital Transformation
 dependencies[] = views

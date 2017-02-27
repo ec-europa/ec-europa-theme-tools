@@ -1,4 +1,4 @@
-name = NextEuropa Theme shared functions
+name = NextEuropa Theme functions
 description = This module contains shared functions for the NextEuropa theme.
 core = 7.x
 package = NextEuropa Digital Transformation

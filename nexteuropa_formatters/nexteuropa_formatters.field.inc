@@ -589,7 +589,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             foreach ($items as $delta => $item) {
               $node_wrapper = entity_metadata_wrapper('node', $entity);
               $date = format_date($item['value'], 'ec_date_j_f_y');
-              if ($date_updated = $node_wrapper->field_core_date_updated->value()) {
+
+              if ($node_wrapper->__isset('field_core_date_updated') && $date_updated = $node_wrapper->field_core_date_updated->value()) {
                 $last_update_text = t('(last update on: @date)', ['@date' => format_date($date_updated, 'ec_date_j_f_y')]);
                 $element[$delta] = [
                   '#markup' => '<span class="context-nav__item">' . $date . ' ' . $last_update_text . '</span>',

@@ -26,7 +26,7 @@ function dt_europa_settings_ds_custom_fields_info() {
     ),
     'use_token' => 1,
   );
-  $export['content_type_label'] = $ds_field;
+  $export['europa_content_type_label'] = $ds_field;
 
   return $export;
 }

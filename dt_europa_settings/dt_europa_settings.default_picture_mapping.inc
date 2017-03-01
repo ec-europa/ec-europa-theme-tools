@@ -1,8 +1,7 @@
 <?php
-
 /**
  * @file
- * Dt_europa_settings.default_picture_mapping.inc.
+ * dt_europa_settings.default_picture_mapping.inc
  */
 
 /**

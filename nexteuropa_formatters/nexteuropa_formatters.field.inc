@@ -718,8 +718,9 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           if ($item['value'] > 0) {
+            $feedback = t('Feedback');
             $element[$delta] = [
-              '#markup' => '<span class="icon ' . $class . '">' . t('Feedback') . ' (' . $item['value'] . ')</span>',
+              '#markup' => '<span class="icon ' . $class . '">' . $feedback . ' (' . $item['value'] . ')</span>',
             ];
           }
         }

@@ -7,8 +7,6 @@
 
 /**
  * Helper function to get the readable language from a language code.
- * This function also exists in dt_shared_functions feature, cloned here to
- * allow use without dependency.
  *
  * @param string $langcode
  *   The langcode to get the language object for.

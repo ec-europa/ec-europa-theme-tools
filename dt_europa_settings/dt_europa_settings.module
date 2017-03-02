@@ -6,3 +6,55 @@
  */
 
 include_once 'dt_europa_settings.features.inc';
+
+/**
+ * Implements hook_form_alter().
+ */
+function dt_europa_settings_form_alter(&$form, &$form_state) {
+  if ($form['#form_id'] == 'system_theme_settings') {
+    // Build the form.
+    $form['europa'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Europa settings'),
+    ];
+
+    $form['europa']['field_introduction'] = [
+      '#type' => 'select',
+      '#title' => t('Choose a field to be diplayed in the page header for views pages and nodes'),
+      '#description' => t('You can choose one of the existing fields with type "long text"'),
+      '#options' => _dt_europa_settings_textfields(),
+      '#weight' => -1,
+      // @codingStandardsIgnoreLine
+      '#default_value' => variable_get('ec_europa_introduction_field', FALSE),
+    ];
+
+    $form['#submit'][] = "_dt_europa_settings_theme_settings_submit";
+  }
+}
+
+/**
+ * Helper function to retrieve the text fields.
+ */
+function _dt_europa_settings_textfields() {
+  $fields = field_read_fields(['type' => 'text_long']);
+  $list = [];
+
+  foreach ($fields as $field_name => $field) {
+    if (strpos($field_name, 'field') !== FALSE) {
+      $list[$field_name] = $field_name;
+    }
+  }
+
+  return $list;
+}
+
+/**
+ * Custom submit function for the theme setting form.
+ */
+function _dt_europa_settings_theme_settings_submit(&$form, &$form_state) {
+  // Save the variable for the intorduction field.
+  $field_name = $form_state['values']['field_introduction'];
+  if (!empty($field_name)) {
+    variable_set('ec_europa_introduction_field', $field_name);
+  }
+}

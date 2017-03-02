@@ -6,6 +6,7 @@
  */
 
 if (!function_exists('theme_site_user_menu')) {
+
   /**
    * Returns HTML for the element.
    *
@@ -47,4 +48,5 @@ if (!function_exists('theme_site_user_menu')) {
 
     return theme('item_list', $variables);
   }
+
 }

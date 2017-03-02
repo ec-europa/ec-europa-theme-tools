@@ -1,5 +1,5 @@
-name = Next Europa theme shared functions
-description = This module contains shared functions for the Next Europa theme.
+name = NextEuropa Theme functions
+description = This module contains shared functions for the NextEuropa theme.
 core = 7.x
 package = NextEuropa Digital Transformation
 php = 5.5

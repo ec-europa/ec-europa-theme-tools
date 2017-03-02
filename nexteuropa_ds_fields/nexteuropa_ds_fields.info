@@ -1,8 +1,7 @@
-name = Nexteuropa Display Suite fields
-description  = "Generic Display Suite fields"
-package = "NextEuropa Digital Transformation"
+name = NextEuropa Display Suite fields
+description = Generic Display Suite fields.
 core = 7.x
-
+package = NextEuropa Digital Transformation
 dependencies[] = ds
 php = 5.5
 multisite_version = 2.2

@@ -15,6 +15,12 @@
   <?php print render($title_suffix['contextual_links']); ?>
 <?php endif; ?>
 
+<?php if (!empty($second)): ?>
+  <<?php print $second_wrapper; ?> class="column-second <?php print $second_classes; ?>">
+    <?php print $second; ?>
+  </<?php print $second_wrapper; ?>>
+<?php endif; ?>
+
 <?php if (!isset($prevent_link)): ?>
   <div class="listing__item-link">
 <?php else: ?>
@@ -30,5 +36,5 @@
 </div>
 
 <?php if (!empty($drupal_render_children)): ?>
-  <?php print $drupal_render_children; ?>
+  <?php print $drupal_render_children ?>
 <?php endif; ?>

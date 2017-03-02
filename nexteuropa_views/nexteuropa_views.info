@@ -1,11 +1,10 @@
-name = Nexteuropa views
-description  = Views style plugins created for Nexteuropa BEM components
-package = "NextEuropa Digital Transformation"
+name = NextEuropa views
+description = Views style plugins created for NextEuropa BEM components.
 core = 7.x
+package = NextEuropa Digital Transformation
+dependencies[] = views
+php = 5.5
 files[] = views_plugin_style_nexteuropa_listing.inc
 files[] = views_plugin_style_nexteuropa_context_nav.inc
 files[] = views_handler_nexteuropa_views_area_result.inc
-
-dependencies[] = views
-php = 5.5
 multisite_version = 2.2

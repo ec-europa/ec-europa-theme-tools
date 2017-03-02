@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * dt_europa_settings.default_breakpoints.inc

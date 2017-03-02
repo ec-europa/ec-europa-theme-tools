@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * dt_europa_settings.features.inc
@@ -13,6 +12,9 @@ function dt_europa_settings_ctools_plugin_api($module = NULL, $api = NULL) {
     return array("version" => "1");
   }
   if ($module == "breakpoints" && $api == "default_breakpoints") {
+    return array("version" => "1");
+  }
+  if ($module == "ds" && $api == "ds") {
     return array("version" => "1");
   }
   if ($module == "picture" && $api == "default_picture_mapping") {

@@ -269,15 +269,12 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
   // Save the variable for the "overrides" checkbox.
   $override = $form_state['values']['per_content_type'] == 1 ? TRUE : FALSE;
   variable_set('dt_header_background_per_content_type', $override);
-
   // Save the variable for the selected content types.
   $activate_listing = $form_state['values']['activate_listing'] == 1 ? TRUE : FALSE;
   variable_set('dt_header_background_activate_listing', $activate_listing);
-
   // Save the variable for the selected image field.
   $image_field = !empty($form_state['values']['dt_header_background_field']) ? $form_state['values']['dt_header_background_field'] : FALSE;
   variable_set('dt_header_background_field', $image_field);
-
   // Save the variable for the selected content types.
   $selected_ct = array_keys(array_filter($form_state['values']['which_content_type']));
   // We disable the default ct options so we don't have them in the form values.

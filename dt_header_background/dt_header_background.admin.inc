@@ -65,6 +65,17 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       '#title' => t('DT Header background'),
     ];
 
+    $form['header']['dt_header_background_field'] = [
+      '#type' => 'fieldset',
+      '#title' => t('DT Header background'),
+      '#type' => 'select',
+      '#title' => t('Choose an image field to be used to set the background image on a node'),
+      '#description' => t('You can choose one of the existing fields with type "image" or "file"'),
+      '#options' => _dt_header_background_image_field(),
+      '#weight' => -1,
+      '#default_value' => variable_get('dt_header_background_field', FALSE),
+    ];
+
     $form['header']['dt_header_background_default'] = [
       '#type' => 'managed_file',
       '#title' => t('Default image for the header background'),
@@ -263,6 +274,10 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
   $activate_listing = $form_state['values']['activate_listing'] == 1 ? TRUE : FALSE;
   variable_set('dt_header_background_activate_listing', $activate_listing);
 
+  // Save the variable for the selected image field.
+  $image_field = !empty($form_state['values']['dt_header_background_field']) ? $form_state['values']['dt_header_background_field'] : FALSE;
+  variable_set('dt_header_background_field', $image_field);
+
   // Save the variable for the selected content types.
   $selected_ct = array_keys(array_filter($form_state['values']['which_content_type']));
   // We disable the default ct options so we don't have them in the form values.
@@ -315,4 +330,20 @@ function _dt_header_background_clear_css() {
   ];
 
   return $form['reset'];
+}
+
+/**
+ * Helper function to retrieve the availble image fields.
+ */
+function _dt_header_background_image_field() {
+  $fields = field_read_fields(['type' => ['image', 'file', 'media']]);
+  $list[] = t('Select an option');
+
+  foreach ($fields as $field_name => $field) {
+    if (strpos($field_name, 'field') !== FALSE) {
+      $list[$field_name] = $field_name;
+    }
+  }
+
+  return $list;
 }

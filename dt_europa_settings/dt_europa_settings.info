@@ -27,6 +27,7 @@ features[ctools][] = strongarm:strongarm:1
 features[ctools][] = ds:ds:1
 features[features_api][] = api:2
 features[ds_fields][] = europa_content_type_label
+features[ds_fields][] = europa_collapse_button
 features[image][] = header_image_breakpoints_theme_europa_medium_1x
 features[image][] = header_image_breakpoints_theme_europa_medium_2x
 features[image][] = header_image_breakpoints_theme_europa_mobile_1x

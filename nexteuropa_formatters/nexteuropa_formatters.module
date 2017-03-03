@@ -519,9 +519,10 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
  */
 function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = FALSE, $is_external = FALSE, $url = []) {
   if (empty($url)) {
-    if (!$url = file_create_url($file->uri)) {
+    if (!$url['path'] = file_create_url($file->uri)) {
       return NULL;
     }
+    $url['options'] = [];
   }
   // Define the file icon class.
   $icons_available = ['image', 'audio', 'video'];
@@ -635,8 +636,8 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   $render_array['button'] = [
     '#type' => 'link',
     '#title' => $file_text,
-    '#href' => $url,
-    '#options' => $options,
+    '#href' => $url['path'],
+    '#options' => array_merge($options, $url['options']),
   ];
 
   if ($modifier == "file--link") {

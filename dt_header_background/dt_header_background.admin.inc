@@ -96,7 +96,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
 
     $form['header']['views'] = [
       '#type' => 'fieldset',
-      '#title' => t('Activate the Header Background on views page'),
+      '#title' => t('Activate the Header Background on views pages'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     ];

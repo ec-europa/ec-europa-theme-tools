@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * dt_europa_settings.ds.inc
+ * nexteuropa_ds_fields.ds.inc
  */
 
 /**
  * Implements hook_ds_custom_fields_info().
  */
-function dt_europa_settings_ds_custom_fields_info() {
+function nexteuropa_ds_fields_ds_custom_fields_info() {
   $export = array();
 
   $ds_field = new stdClass();
@@ -30,7 +30,7 @@ function dt_europa_settings_ds_custom_fields_info() {
 
   $ds_field = new stdClass();
   $ds_field->api_version = 1;
-  $ds_field->field = 'collapse_button';
+  $ds_field->field = 'europa_collapse_button';
   $ds_field->label = 'Collapse button';
   $ds_field->field_type = 5;
   $ds_field->entities = array(

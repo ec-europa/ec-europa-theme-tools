@@ -5,6 +5,8 @@
  * nexteuropa_ds_fields.module
  */
 
+include_once 'nexteuropa_ds_fields.features.inc';
+
 /**
  * Implements hook_ds_fields_info().
  */

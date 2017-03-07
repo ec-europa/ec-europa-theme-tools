@@ -41,7 +41,7 @@ function nexteuropa_ds_fields_ds_custom_fields_info() {
   $ds_field->ui_limit = '';
   $ds_field->properties = array(
     'code' => array(
-      'value' => '<button class="btn btn-collapse" type="button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><span class="toggling-text"></span>[node:field-core-collapse-button-text]<i class="icon icon--blue-dark icon--down"></i></button>',
+      'value' => '<button class="btn btn-collapse" type="button" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse"><span class="toggling-text"></span><i class="icon icon--blue-dark"></i></button>',
       'format' => 'full_html',
     ),
     'use_token' => 1,

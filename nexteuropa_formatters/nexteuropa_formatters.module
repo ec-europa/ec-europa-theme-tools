@@ -496,7 +496,7 @@ function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
  * @return string
  *   The rendered output.
  */
-function theme_ds_field_nexteuropa_formatters_context_nav($variables) {
+function theme_ds_field_nexteuropa_formatters_context_nav_item($variables) {
   $element = $variables['element'];
   $label_rendered = '';
 
@@ -530,7 +530,7 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
     'theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'),
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
     'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
-    'theme_ds_field_nexteuropa_formatters_context_nav' => t('Nexteuropa: Contextual nav item'),
+    'theme_ds_field_nexteuropa_formatters_context_nav_item' => t('Nexteuropa: Contextual nav item'),
   ];
 }
 

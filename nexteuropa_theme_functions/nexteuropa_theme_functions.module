@@ -137,7 +137,9 @@ function nexteuropa_theme_functions_form_alter(&$form, &$form_state, $form_id) {
           // Only process the date_pop up fields for normal i related.
           if ($form[$filter_values['value']]['value']['#type'] == 'date_popup') {
             // Set the name title.
-            $form[$filter_values['value']]['#title'] = $filter_values['label'];
+            if (isset($filter_values['label'])) {
+              $form[$filter_values['value']]['#title'] = $filter_values['label'];
+            }
             // Remove the current (date) label title.
             unset($form['#info'][$exposed]['label']);
             // Set the current (date) label to invisible.

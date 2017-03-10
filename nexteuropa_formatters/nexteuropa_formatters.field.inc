@@ -720,7 +720,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           if ($item['value'] > 0) {
             $renderable = [
               '#prefix' => '<span class="icon ' . $class . '">',
-              '#markup' => t('Feedback ( !item_value )', array('!item_value' => $item['value'])),
+              '#markup' => t('Feedback (!item_value)', ['!item_value' => $item['value']]),
               '#suffix' => '</span>',
             ];
 

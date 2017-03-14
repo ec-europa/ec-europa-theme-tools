@@ -144,8 +144,12 @@ function nexteuropa_formatters_field_formatter_info() {
         'modifier' => '',
       ],
     ],
+    'listing_title_with_link' => [
+      'label' => t('(h3) Listing title: with link'),
+      'field types' => ['text', 'text_long'], 
+    ],
     'listing_title' => [
-      'label' => t('Listing title (h3)'),
+      'label' => t('(h3) Listing title: no link'),
       'field types' => ['text', 'text_long'],
     ],
     'listing_title_element' => [
@@ -390,6 +394,8 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
     case 'link_listing_title':
     case 'listing_title':
     case 'listing_title_element':
+    case 'listing_title_element':
+    case 'listing_title_with_link':
       $class = 'listing__title';
       break;
 
@@ -698,6 +704,35 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         foreach ($items as $delta => $item) {
           $element[$delta] = [
             '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
+          ];
+        }
+        break;
+
+      case 'listing_title_with_link':
+        $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+        $base_path = 'node/';
+
+        switch ($entity_type) {
+          case 'taxonomy_term':
+            $base_path = 'taxonomy/term/';
+            $entity_key = 'tid'; 
+            break;
+
+          case 'user':
+            $base_path = 'user/';
+            $entity_key = 'uid';
+            break;
+
+          case 'node': 
+            $base_path = 'node/';
+            $entity_key = 'nid';
+        }
+
+        foreach ($items as $delta => $item) {
+          $link = l($item['value'], $base_path . $entity->{$entity_key});
+          kpr($link);
+          $element[$delta] = [
+            '#markup' => '<h3 class="' . $class . '">' . $item['value'] . '</h3>',
           ];
         }
         break;

@@ -360,7 +360,6 @@ function nexteuropa_formatters_ds_field_settings_alter(&$field_settings, $form, 
         $field_settings[$field]['formatter_settings']['ft']['meta_modifier'] = $form_state['formatter_settings'][$field]['ft']['meta_modifier'];
       }
       elseif ($form_state['formatter_settings'][$field]['ft']['func'] == 'theme_ds_field_nexteuropa_formatters_listing_title') {
-        kpr('ciao');
         $field_settings[$field]['formatter_settings']['ft']['listing_title_link'] = $form_state['formatter_settings'][$field]['ft']['listing_title_link'];
       }
     }

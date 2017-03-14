@@ -416,30 +416,30 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
  *   The rendered output.
  */
 function theme_ds_field_nexteuropa_formatters_listing_title($variables) {
-  // Default classes.
-  $classes = ['listing__title'];
-  $entity_type = $variables['element']['#entity_type'];
+    // Default classes.
+    $classes = ['listing__title'];
+    $entity_type = $variables['element']['#entity_type'];
 
-  // Our default render array.
-  $subrender = [
-    '#prefix' => '<h3 class="' . implode(' ', $classes) . '">',
-    '#suffix' => '</h3>',
-  ];
+    // Our default render array.
+    $subrender = [
+      '#prefix' => '<h3 class="' . implode(' ', $classes) . '">',
+      '#suffix' => '</h3>',
+    ];
 
-  // Build the output.
-  $output = '';
-  foreach ($variables['items'] as $item) {
-    if ($variables['ds-config']['listing_title_link']) {
-      $uri = entity_uri($entity_type, $variables['element']['#object']);
-      $path = url($uri['path']);
-      $item['#markup'] = l(strip_tags($item['#markup']), $path);
+    // Build the output.
+    $output = '';
+    foreach ($variables['items'] as $item) {
+      if ($variables['ds-config']['listing_title_link']) {
+        $uri = entity_uri($entity_type, $variables['element']['#object']);
+        $path = url($uri['path']);
+        $item['#markup'] = l(strip_tags($item['#markup']), $path);
+      }
+
+      $item_render = $subrender + ['#markup' => drupal_render($item)];
+      $output .= drupal_render($item_render);
     }
 
-    $item_render = $subrender + ['#markup' => drupal_render($item)];
-    $output .= drupal_render($item_render);
-  }
-
-  return $output;
+    return $output;
 }
 
 /**

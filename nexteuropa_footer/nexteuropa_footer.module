@@ -1,0 +1,75 @@
+<?php
+/**
+ * @file
+ * Code for the Nexteuropa footer feature.
+ */
+
+include_once 'nexteuropa_footer.features.inc';
+
+/**
+ * @file
+ * Code for the nexteuropa_footer feature.
+ */
+
+/**
+ * Implements hook_block_info().
+ */
+function nexteuropa_footer_block_info() {
+  $blocks['nexteuropa_footer_site_switcher'] = [
+    'info' => t('Footer site switcher'),
+  ];
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function nexteuropa_footer_block_view($delta = '') {
+  $block = [];
+
+  switch ($delta) {
+    case 'nexteuropa_footer_site_switcher':
+      $block['content'] = _nexteuropa_footer_blocks_content($delta);
+      break;
+  }
+
+  return $block;
+}
+
+/**
+ * A module-defined block content function.
+ *
+ * @param string $delta
+ *   The delta.
+ *
+ * @return array
+ *   Result to be rendered.
+ */
+function _nexteuropa_footer_blocks_content($delta) {
+  $result = [];
+
+  switch ($delta) {
+    case 'nexteuropa_footer_site_switcher':
+      $result = [
+        '#markup' => theme('site_switcher_menu', ['modifier' => '']),
+      ];
+      break;
+  }
+
+  return $result;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function nexteuropa_footer_theme($existing, $type, $theme, $path) {
+  return [
+    'site_switcher_menu' => [
+      'file' => 'nexteuropa_footer.theme.inc',
+      'variables' => [
+        'modifier' => NULL,
+      ],
+    ],
+  ];
+}

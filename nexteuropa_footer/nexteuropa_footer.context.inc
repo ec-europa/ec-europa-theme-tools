@@ -26,6 +26,12 @@ function nexteuropa_footer_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'menu-menu-nexteuropa-inst-links' => array(
+          'module' => 'menu',
+          'delta' => 'menu-nexteuropa-inst-links',
+          'region' => 'footer_right',
+          'weight' => '-10',
+        ),
         'menu-menu-nexteuropa-social-media' => array(
           'module' => 'menu',
           'delta' => 'menu-nexteuropa-social-media',
@@ -57,4 +63,3 @@ function nexteuropa_footer_context_default_contexts() {
 
   return $export;
 }
-

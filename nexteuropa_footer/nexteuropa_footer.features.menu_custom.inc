@@ -22,7 +22,15 @@ function nexteuropa_footer_menu_default_menu_custom() {
   $menus['menu-nexteuropa-service-links'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',
     'title' => 'Nexteuropa service links',
-    'description' => 'Links to be put in the banner, according to IPG',
+    'description' => 'Links to be put in the footer',
+    'language' => 'und',
+    'i18n_mode' => 5,
+  );
+
+  $menus['menu-nexteuropa-inst-links'] = array(
+    'menu_name' => 'menu-nexteuropa-inst-links',
+    'title' => 'European Union',
+    'description' => 'Links to be put in the footer',
     'language' => 'und',
     'i18n_mode' => 5,
   );
@@ -31,6 +39,7 @@ function nexteuropa_footer_menu_default_menu_custom() {
   // Included for use with string extractors like potx.
   t('Follow the European Commission');
   t('Nexteuropa service links');
+  t('Nexteuropa institutionals links');
 
 
   return $menus;

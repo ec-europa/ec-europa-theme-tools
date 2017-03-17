@@ -534,7 +534,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   // If the file is internal, we have additional information.
   if (!$is_external) {
     $file_extension = drupal_strtoupper(pathinfo($file->uri, PATHINFO_EXTENSION));
-    $file_size = format_size($file->filesize);
+    $file_size = nexteuropa_theme_functions_format_size($file->filesize);
   }
 
   // Get our full language string.
@@ -598,8 +598,8 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   }
 
   $file_text = t('Download');
-  if (isset($file_extension, $file->filesize)) {
-    $file_text .= '<span class="sr-only">' . $file_extension . ' - ' . format_size($file->filesize) . '</span>';
+  if (isset($file_extension, $file_size)) {
+    $file_text .= '<span class="sr-only">' . $file_extension . ' - ' . $file_size . '</span>';
   }
 
   // Build the render array.

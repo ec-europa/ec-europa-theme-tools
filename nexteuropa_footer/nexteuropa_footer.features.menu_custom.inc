@@ -18,6 +18,14 @@ function nexteuropa_footer_menu_default_menu_custom() {
     'language' => 'und',
     'i18n_mode' => 5,
   );
+  // Exported menu: menu-nexteuropa-inst-links.
+  $menus['menu-nexteuropa-site-links'] = array(
+    'menu_name' => 'menu-nexteuropa-site-links',
+    'title' => 'European commission',
+    'description' => 'Links to be put in the footer',
+    'language' => 'und',
+    'i18n_mode' => 5,
+  );
   // Exported menu: menu-nexteuropa-service-links.
   $menus['menu-nexteuropa-service-links'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',

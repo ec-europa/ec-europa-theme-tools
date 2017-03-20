@@ -38,9 +38,9 @@ function nexteuropa_footer_context_default_contexts() {
           'region' => 'footer_middle',
           'weight' => '-10',
         ),
-        'nexteuropa_footer-nexteuropa_footer_site_switcher' => array(
-          'module' => 'nexteuropa_footer',
-          'delta' => 'nexteuropa_footer_site_switcher',
+        'menu-menu-nexteuropa-site-links' => array(
+          'module' => 'menu',
+          'delta' => 'menu-nexteuropa-site-links',
           'region' => 'footer_left',
           'weight' => '-10',
         ),

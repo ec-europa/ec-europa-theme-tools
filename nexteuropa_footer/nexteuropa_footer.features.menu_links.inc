@@ -11,14 +11,14 @@ function nexteuropa_footer_menu_default_menu_links() {
   $menu_links = array();
 
   // Exported menu link: menu-nexteuropa-inst-links_eu-institutions:https://europa.eu/european-union/about-eu/institutions-bodies_en.
-  $menu_links['menu-nexteuropa-inst-links_eu-institutions:https://europa.eu/european-union/about-eu/institutions-bodies_en'] = array(
+  $menu_links['menu-nexteuropa-inst-links_eu-institutions:https://europa.eu/european-union/about-eu/institutions-bodies'] = array(
     'menu_name' => 'menu-nexteuropa-inst-links',
-    'link_path' => 'https://europa.eu/european-union/about-eu/institutions-bodies_en',
+    'link_path' => 'https://europa.eu/european-union/about-eu/institutions-bodies',
     'router_path' => '',
     'link_title' => 'EU institutions',
     'options' => array(
       'alter' => TRUE,
-      'identifier' => 'menu-nexteuropa-inst-links_eu-institutions:https://europa.eu/european-union/about-eu/institutions-bodies_en',
+      'identifier' => 'menu-nexteuropa-inst-links_eu-institutions:https://europa.eu/european-union/about-eu/institutions-bodies',
       'attributes' => array(
         'data-display-title' => 1,
         'data-hide-children' => 0,
@@ -45,14 +45,14 @@ function nexteuropa_footer_menu_default_menu_links() {
     'menu_links_customized' => 1,
   );
   // Exported menu link: menu-nexteuropa-inst-links_european-union:https://europa.eu/.
-  $menu_links['menu-nexteuropa-inst-links_european-union:https://europa.eu/'] = array(
+  $menu_links['menu-nexteuropa-inst-links_european-union:https://europa.eu/european-union/index'] = array(
     'menu_name' => 'menu-nexteuropa-inst-links',
-    'link_path' => 'https://europa.eu/',
+    'link_path' => 'https://europa.eu/european-union/index',
     'router_path' => '',
     'link_title' => 'European Union',
     'options' => array(
       'alter' => TRUE,
-      'identifier' => 'menu-nexteuropa-inst-links_european-union:https://europa.eu/',
+      'identifier' => 'menu-nexteuropa-inst-links_european-union:https://europa.eu/european-union/index',
       'attributes' => array(
         'data-display-title' => 1,
         'data-hide-children' => 0,
@@ -110,16 +110,16 @@ function nexteuropa_footer_menu_default_menu_links() {
     'menu_links_customized' => 1,
   );
  
-  // Exported menu link: menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact_en.
-  $menu_links['menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact_en'] = array(
+  // Exported menu link: menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact.
+  $menu_links['menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',
-    'link_path' => 'https://ec.europa.eu/info/contact_en',
+    'link_path' => 'https://ec.europa.eu/info/contact',
     'router_path' => '',
     'link_title' => 'Contact',
     'options' => array(
       'title' => 'http://ec.europa.eu/info/contact',
       'alter' => TRUE,
-      'identifier' => 'menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact_en',
+      'identifier' => 'menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact',
     ),
     'module' => 'menu',
     'hidden' => 0,
@@ -133,9 +133,9 @@ function nexteuropa_footer_menu_default_menu_links() {
   );
 
   // Exported menu link: menu-nexteuropa-service-links_cookies:https://ec.europa.eu/info/cookies_en.
-  $menu_links['menu-nexteuropa-service-links_cookies:https://ec.europa.eu/info/cookies_en'] = array(
+  $menu_links['menu-nexteuropa-service-links_cookies:https://ec.europa.eu/info/cookies'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',
-    'link_path' => 'https://ec.europa.eu/info/cookies_en',
+    'link_path' => 'https://ec.europa.eu/info/cookies',
     'router_path' => '',
     'link_title' => 'Cookies',
     'options' => array(
@@ -154,7 +154,7 @@ function nexteuropa_footer_menu_default_menu_links() {
         'style' => '',
       ),
       'alter' => TRUE,
-      'identifier' => 'menu-nexteuropa-service-links_cookies:https://ec.europa.eu/info/cookies_en',
+      'identifier' => 'menu-nexteuropa-service-links_cookies:https://ec.europa.eu/info/cookies',
     ),
     'module' => 'menu',
     'hidden' => 0,
@@ -203,9 +203,9 @@ function nexteuropa_footer_menu_default_menu_links() {
   );
 
   // Exported menu link: menu-nexteuropa-service-links_legal-notice:https://ec.europa.eu/info/legal-notice_en.
-  $menu_links['menu-nexteuropa-service-links_legal-notice:https://ec.europa.eu/info/legal-notice_en'] = array(
+  $menu_links['menu-nexteuropa-service-links_legal-notice:https://ec.europa.eu/info/legal-notice'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',
-    'link_path' => 'https://ec.europa.eu/info/legal-notice_en',
+    'link_path' => 'https://ec.europa.eu/info/legal-notice',
     'router_path' => '',
     'link_title' => 'Legal notice',
     'options' => array(
@@ -224,7 +224,7 @@ function nexteuropa_footer_menu_default_menu_links() {
         'style' => '',
       ),
       'alter' => TRUE,
-      'identifier' => 'menu-nexteuropa-service-links_legal-notice:https://ec.europa.eu/info/legal-notice_en',
+      'identifier' => 'menu-nexteuropa-service-links_legal-notice:https://ec.europa.eu/info/legal-notice',
     ),
     'module' => 'menu',
     'hidden' => 0,
@@ -237,14 +237,14 @@ function nexteuropa_footer_menu_default_menu_links() {
     'menu_links_customized' => 1,
   );
   // Exported menu link: menu-nexteuropa-service-links_resources-for-partners:http://ec.europa.eu/info/resources-partners_en.
-  $menu_links['menu-nexteuropa-service-links_resources-for-partners:http://ec.europa.eu/info/resources-partners_en'] = array(
+  $menu_links['menu-nexteuropa-service-links_resources-for-partners:http://ec.europa.eu/info/resources-partners'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',
-    'link_path' => 'http://ec.europa.eu/info/resources-partners_en',
+    'link_path' => 'http://ec.europa.eu/info/resources-partners',
     'router_path' => '',
     'link_title' => 'Resources for partners',
     'options' => array(
       'alter' => TRUE,
-      'identifier' => 'menu-nexteuropa-service-links_resources-for-partners:http://ec.europa.eu/info/resources-partners_en',
+      'identifier' => 'menu-nexteuropa-service-links_resources-for-partners:http://ec.europa.eu/info/resources-partners',
       'menu_token_link_uuid' => '',
       'attributes' => array(
         'data-display-title' => 1,
@@ -358,13 +358,13 @@ function nexteuropa_footer_menu_default_menu_links() {
   );
 
   // Exported menu link: menu-nexteuropa-social-media_twitter:https://twitter.com/eu_commission.
-  $menu_links['menu-nexteuropa-site-links_commissionanditspriorities:https://ec.europa.eu/'] = array(
+  $menu_links['menu-nexteuropa-site-links_commissionanditspriorities:https://ec.europa.eu/commission/index'] = array(
     'menu_name' => 'menu-nexteuropa-site-links',
-    'link_path' => 'https://ec.europa.eu/',
+    'link_path' => 'https://ec.europa.eu/commission/index',
     'router_path' => '',
     'link_title' => 'Commission and it\'s priorities',
     'options' => array(
-      'identifier' => 'menu-nexteuropa-site-links_commissionanditspriorities:https://ec.europa.eu/',
+      'identifier' => 'menu-nexteuropa-site-links_commissionanditspriorities:https://ec.europa.eu/commission/index',
       'alter' => TRUE,
       'attributes' => array(
         'data-display-title' => 1,
@@ -384,13 +384,13 @@ function nexteuropa_footer_menu_default_menu_links() {
   );
 
   // Exported menu link: menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info.
-  $menu_links['menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info'] = array(
+  $menu_links['menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info/index'] = array(
     'menu_name' => 'menu-nexteuropa-site-links',
-    'link_path' => 'https://ec.europa.eu/info',
+    'link_path' => 'https://ec.europa.eu/info/index',
     'router_path' => '',
     'link_title' => 'Policies, information and services',
     'options' => array(
-      'identifier' => 'menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info',
+      'identifier' => 'menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info/index',
       'alter' => TRUE,
       'attributes' => array(
         'data-display-title' => 1,
@@ -412,87 +412,17 @@ function nexteuropa_footer_menu_default_menu_links() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Commission and it\'s priorities');
-  t('Commission and it\'s priorities');
   t('About the Commission\'s new web presence');
-  t('Advertência jurídica');
-  t('Avis juridique');
-  t('Aviso jurídico');
-  t('Aviz juridic');
-  t('Avviż legali');
   t('Contact');
-  t('Contacto');
-  t('Contatti');
-  t('Cookie-k');
-  t('Cookie-urile');
   t('Cookies');
-  t('Cookies testemunhos de conexão');
-  t('ELi institutsioonid');
-  t('ES iestādēm');
-  t('ES institucijas');
-  t('EU institutions');
-  t('EU intézményei');
-  t('EU-instellingen');
-  t('EU-institutionerna');
-  t('EU-institutionerne');
-  t('EU:n toimielimet');
+  t('Resources for partners');
   t('Europa Analytics');
   t('European Union');
-  t('Evästeet');
-  t('Eπικοινωνία');
+  t('European Commission');
+  t('Policies, information and services');
   t('Facebook');
-  t('Fianáin');
-  t('Fógra dlíthiúil');
-  t('Informacja prawna');
-  t('Institiúidí an Aontais Eorpaigh');
-  t('Institucijama EU-a');
-  t('Institucije EU');
-  t('Instituciones de la UE');
-  t('Instituições da UE');
-  t('Institutions de l’UE');
-  t('Instituțiile UE');
-  t('Instytucje UE');
-  t('Istituzioni dell\'UE');
-  t('Istituzzjonijiet tal-UE');
-  t('Jogi nyilatkozat');
-  t('Juridische mededeling');
-  t('Juridisk meddelelse');
-  t('Juridisks paziņojums');
-  t('Kakor ”cookies”');
-  t('Kapcsolatfelvétel');
-  t('Kolačići');
-  t('Kontakt');
-  t('Kontaktai');
-  t('Kontakti');
-  t('Kontaktné údaje');
-  t('Kuntatt');
-  t('Küpsised');
-  t('Legal notice');
-  t('Note legali');
-  t('Oikeudellinen huomautus');
-  t('Orgány EU');
-  t('Other social media');
-  t('Piškotki');
-  t('Pliki cookie');
-  t('Pravna obavijest');
-  t('Pravno obvestilo');
-  t('Právne upozornenie');
-  t('Právní upozornění');
-  t('Rechtlicher Hinweis');
-  t('Resources for partners');
-  t('Rättsligt meddelande');
-  t('Slapukai');
-  t('Súbory cookie');
-  t('Sīkdatnes');
-  t('Teagmháil');
-  t('Teisinė informacija');
   t('Twitter');
-  t('Yhteydenotot');
-  t('Õigusteave');
-  t('Όργανα της ΕΕ');
-  t('Ανακοίνωση νομικού περιεχομένου');
-  t('Бисквитки');
-  t('За контакти');
-  t('Правна информация');
+  t('Other social media');
 
   return $menu_links;
 }

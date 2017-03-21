@@ -10,7 +10,7 @@
 function _nexteuropa_footer_translations() {
 
   $items['menu-nexteuropa-social-media']['title'] = [
-    'title' => 'Follow the European Commission',
+    'title' => t('Follow the European Commission'),
   ];
 
   $items['menu-nexteuropa-social-media']['items'][] = [
@@ -177,7 +177,7 @@ function _nexteuropa_footer_translations() {
   ];
 
   $items['menu-nexteuropa-site-links']['title'] = [
-    'title' => 'European Commission',
+    'title' => t('European Commission'),
     'languages' => [
       'bg' => 'Европейска комисия',
       'cs' => 'Evropská komise',

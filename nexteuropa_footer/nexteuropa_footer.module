@@ -8,13 +8,8 @@ include_once 'nexteuropa_footer.features.inc';
 include_once 'inc/nexteuropa_footer_translations.inc';
 
 /**
- * @file
- * Code for the nexteuropa_footer feature.
- */
-
-/**
  * Implements hook_theme_registry_alter().
- * Copy pasted.
+ * Copy pasted implementation.
  */
 function nexteuropa_footer_theme_registry_alter(&$theme_registry) {
   // Defined path to the current module.
@@ -32,7 +27,6 @@ function nexteuropa_footer_theme_registry_alter(&$theme_registry) {
     }
   }
 }
-
 
 /**
  * Helper function to get the mlid basing on the link name.
@@ -54,7 +48,10 @@ function _nexteuropa_footer_item_name_get($title, $menu) {
 }
 
 /**
- * Helper function to get the mlid basing on the link name.
+ * Translate menu items.
+ *
+ * @return array $logs
+ *  Saved info about updated items.
  */
 function _nexteuropa_footer_translate() {
   $items =_nexteuropa_footer_translations();
@@ -66,8 +63,10 @@ function _nexteuropa_footer_translate() {
       foreach ($item['title']['languages'] as $lang => $translation) {
         i18n_string_translation_update($name, $translation, $lang);
         
-        $logs['title'][]['menu_name'] = $menu_name;
-        $logs['title'][]['lang'] = $lang;
+        $logs['title'][] = [
+          'menu_name' => $menu_name,
+          'lang' => $lang,
+        ];
       }
     }
     // Set the menu items translations.
@@ -79,12 +78,15 @@ function _nexteuropa_footer_translate() {
         foreach ($menu_item['languages'] as $lang => $translation) {
           i18n_string_translation_update($name, $translation, $lang);
           
-          $logs['item'][]['menu_name'] = $menu_name;
-          $logs['item'][]['mlid'] = $mlid;
-          $logs['item'][]['lang'] = $lang;
+          $logs['item'][] = [
+            'menu_name' => $menu_name,
+            'mlid' => $mlid,
+            'lang' => $lang,
+          ];
         }
       }
     }
   }
+
   return $logs;
 }

@@ -37,7 +37,7 @@ function dt_europa_settings_form_alter(&$form, &$form_state) {
  */
 function _dt_europa_settings_textfields() {
   $fields = field_read_fields(['type' => 'text_long']);
-  $list = [];
+  $list[] = t('Select an option');
 
   foreach ($fields as $field_name => $field) {
     if (strpos($field_name, 'field') !== FALSE) {

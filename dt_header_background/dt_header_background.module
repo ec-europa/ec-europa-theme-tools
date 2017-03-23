@@ -221,3 +221,14 @@ function _dt_header_background_handle_header_background($entity_wrapper = NULL, 
     file_unmanaged_save_data($css, $uri, FILE_EXISTS_REPLACE);
   }
 }
+
+/**
+ * Implements hook_help().
+ */
+function dt_header_background_help($path, $arg) {
+  switch ($path) {
+    // Main module help for the dt_header_background module
+    case 'admin/help#dt_header_background':
+      return '<p>' . t('Header background module requires class "@class" to be defined on the template that displays the full-node content.', array('@class' => ".page-header--image")) . '</p>';
+  }
+}

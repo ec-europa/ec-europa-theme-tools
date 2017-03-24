@@ -30,6 +30,42 @@ function nexteuropa_ds_fields_ds_custom_fields_info() {
 
   $ds_field = new stdClass();
   $ds_field->api_version = 1;
+  $ds_field->field = 'europa_user_fullname_first';
+  $ds_field->label = 'Full name (name first)';
+  $ds_field->field_type = 5;
+  $ds_field->entities = array(
+    'user' => 'user',
+  );
+  $ds_field->ui_limit = '';
+  $ds_field->properties = array(
+    'code' => array(
+      'value' => '[user:field-firstname] [user:field-lastname]',
+      'format' => 'basic_html',
+    ),
+    'use_token' => 1,
+  );
+  $export['europa_user_fullname_first'] = $ds_field;
+
+  $ds_field = new stdClass();
+  $ds_field->api_version = 1;
+  $ds_field->field = 'europa_user_fullname_last';
+  $ds_field->label = 'Full name (surname first)';
+  $ds_field->field_type = 5;
+  $ds_field->entities = array(
+    'user' => 'user',
+  );
+  $ds_field->ui_limit = '';
+  $ds_field->properties = array(
+    'code' => array(
+      'value' => '[user:field-lastname] [user:field-firstname]',
+      'format' => 'basic_html',
+    ),
+    'use_token' => 1,
+  );
+  $export['europa_user_fullname_last'] = $ds_field;
+
+  $ds_field = new stdClass();
+  $ds_field->api_version = 1;
   $ds_field->field = 'europa_collapse_button';
   $ds_field->label = 'Collapse button';
   $ds_field->field_type = 5;

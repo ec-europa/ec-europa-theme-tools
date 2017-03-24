@@ -144,8 +144,12 @@ function nexteuropa_formatters_field_formatter_info() {
         'modifier' => '',
       ],
     ],
+    'listing_title_with_link' => [
+      'label' => t('(h3) Listing title: with link'),
+      'field types' => ['text', 'text_long'],
+    ],
     'listing_title' => [
-      'label' => t('Listing title (h3)'),
+      'label' => t('(h3) Listing title: no link'),
       'field types' => ['text', 'text_long'],
     ],
     'listing_title_element' => [
@@ -390,6 +394,8 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
     case 'link_listing_title':
     case 'listing_title':
     case 'listing_title_element':
+    case 'listing_title_element':
+    case 'listing_title_with_link':
       $class = 'listing__title';
       break;
 
@@ -462,6 +468,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
   if (!empty($items)) {
     $formatter = $display['type'];
     $pull_right = !empty($display['settings']['align_right']) ? ' pull-right' : '';
+    $entity_uri = entity_uri($entity_type, $entity);
+    $entity_path = url($entity_uri['path']);
 
     switch ($formatter) {
       // Formatter for the structured content view mode.
@@ -697,7 +705,18 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           $element[$delta] = [
-            '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
+            '#markup' => '<h3 class="' . $class . '">' . $item['value'] . '</h3>',
+          ];
+        }
+        break;
+
+      case 'listing_title_with_link':
+        $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+
+        foreach ($items as $delta => $item) {
+          $link = l($item['value'], $entity_path);
+          $element[$delta] = [
+            '#markup' => '<h3 class="' . $class . '">' . $link . '</h3>',
           ];
         }
         break;
@@ -706,7 +725,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
 
         foreach ($items as $delta => $item) {
-          $link = l($item['value'], 'node/' . $entity->nid, ['attributes' => ['class' => $class]]);
+          $link = l($item['value'], $entity_path, ['attributes' => ['class' => $class]]);
 
           $element[$delta] = [
             '#markup' => $link,

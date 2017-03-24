@@ -29,7 +29,7 @@ function _dt_europa_settings_get_token_type() {
  */
 function _dt_europa_settings_content_language($node) {
   // Load potential relevant languages in the correct fallback order.
-  $content_language_order = _dt_shared_functions_content_language_order();
+  $content_language_order = _dt_europa_settings_content_language_order();
   $content_language = $node->language;
   // Find first available translation that is applicable.
   if (!empty($content_language_order)) {

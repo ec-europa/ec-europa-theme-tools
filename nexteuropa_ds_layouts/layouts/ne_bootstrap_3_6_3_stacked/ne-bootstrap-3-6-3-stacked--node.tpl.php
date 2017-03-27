@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Display Suite NE Bootstrap Three-Nine Stacked Conditional Sidebar.
+ * Display Suite NE Bootstrap Three-Six-Three Stacked.
  */
 ?>
 
@@ -61,27 +61,15 @@
 
       <div class="row">
         <a id="main-content" tabindex="-1"></a>
-      <?php if (!empty($left)): ?>
-        <<?php print $left_wrapper; ?> class="col-md-3 <?php print $left_classes; ?>">
+        <<?php print $left_wrapper; ?> class="col-lg-3 <?php print $left_classes; ?>">
           <?php print $left; ?>
         </<?php print $left_wrapper; ?>>
-        <section class="section col-md-9 <?php print $central_classes; ?>">
-      <?php else: ?>
-        <section class="section col-md-12 <?php print $central_classes; ?>">
-      <?php endif; ?>
+        <section class="col-md-6 <?php print $central_classes; ?>">
           <?php print $central; ?>
         </section>
-      </div>
-
-      <div class="row">
-      <?php if (!empty($bottom_left)): ?>
-        <<?php print $bottom_left_wrapper; ?> class="col-md-3 <?php print $bottom_left_classes; ?>">
-          <?php print $bottom_left; ?>
-        </<?php print $bottom_left_wrapper; ?>>
-      <?php endif; ?>
-        <section class="section <?php print (!empty($bottom_left) ? 'col-md-9 ' : 'col-md-12 ') . $bottom_central_classes; ?>">
-          <?php print $bottom_central; ?>
-        </section>
+        <<?php print $right_wrapper; ?> class="col-lg-3 <?php print $right_classes; ?>">
+          <?php print $right; ?>
+        </<?php print $right_wrapper; ?>>
       </div>
 
     </div>

@@ -540,6 +540,38 @@ function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
 }
 
 /**
+ * Theming function for context nav items.
+ *
+ * @param array $variables
+ *   The array containing information for the field.
+ *
+ * @return string
+ *   The rendered output.
+ */
+function theme_ds_field_nexteuropa_formatters_context_nav_item($variables) {
+  $field = $variables['element'];
+  $elements_rendered = '';
+
+  $skeleton = _nexteuropa_formatters_get_context_nav_wrapper($field['#title']);
+
+  foreach ($field['#items'] as $element) {
+    $value = $element['value'];
+
+    $element = [
+      '#prefix' => '<span class="context-nav__item">',
+      '#markup' => $value,
+      '#suffix' => '</span>',
+    ];
+
+    $elements_rendered .= drupal_render($element);
+  }
+
+  $skeleton['#markup'] = $elements_rendered;
+
+  return  drupal_render($skeleton);
+}
+
+/**
  * Implements hook_ds_field_theme_functions_info().
  *
  * Adds a new select option.
@@ -550,6 +582,7 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
     'theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'),
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
     'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
+    'theme_ds_field_nexteuropa_formatters_context_nav_item' => t('Nexteuropa: Contextual nav item'),
   ];
 }
 

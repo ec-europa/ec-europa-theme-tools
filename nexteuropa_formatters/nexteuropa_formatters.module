@@ -557,10 +557,6 @@ function theme_ds_field_nexteuropa_formatters_context_nav_item($variables) {
   foreach ($field['#items'] as $element) {
     $value = $element['value'];
 
-    if (isset($element['value2'])) {
-      $value .=  ' ' . t('to') . ' ' . $element['value2'];
-    }
-
     $element = [
       '#prefix' => '<span class="context-nav__item">',
       '#markup' => $value,

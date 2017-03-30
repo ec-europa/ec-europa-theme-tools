@@ -718,13 +718,11 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           if ($item['value'] > 0) {
-            $renderable = [
+            $element[$delta] = [
               '#prefix' => '<span class="icon ' . $class . '">',
               '#markup' => t('Feedback (!item_value)', ['!item_value' => $item['value']]),
               '#suffix' => '</span>',
             ];
-
-            $element[$delta] = drupal_render($renderable);
           }
         }
         break;

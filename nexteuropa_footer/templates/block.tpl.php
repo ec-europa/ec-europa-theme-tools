@@ -49,15 +49,15 @@
 <section id="<?php print $block_html_id; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
   <?php print render($title_prefix); ?>
-  <?php if (!empty($title)) : ?>
+  <?php if (!empty($title)): ?>
     <h3<?php print $title_attributes; ?>><?php print $title; ?></h3>
-  <?php endif;?>
+  <?php endif; ?>
   <?php print render($title_suffix); ?>
 
   <?php if (!empty($content)): ?>
   <div class="block__content">
-    <?php print $content ?>
+    <?php print $content; ?>
   </div>
-  <?php endif;?>
+  <?php endif; ?>
 
 </section>

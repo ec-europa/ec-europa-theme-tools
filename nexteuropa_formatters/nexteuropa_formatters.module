@@ -317,6 +317,20 @@ function nexteuropa_formatters_ds_field_theme_functions_settings_form_alter_alte
       ],
     ],
   ];
+
+  $form['ft']['listing_title_link'] = [
+    '#title' => 'Link',
+    '#type' => 'checkbox',
+    '#default_value' => isset($field_settings['listing_title_link']) ? 1 : FALSE,
+    '#description' => t('Select if you want a a link for this field'),
+    '#states' => [
+      'visible' => [
+        ':input[name$="[ft][func]"]' => [
+          'value' => 'theme_ds_field_nexteuropa_formatters_listing_title',
+        ],
+      ],
+    ],
+  ];
 }
 
 /**
@@ -340,12 +354,16 @@ function nexteuropa_formatters_module_implements_alter(&$implementations, $hook)
  * make sure that our custom settings are stored in the $field_settings array.
  */
 function nexteuropa_formatters_ds_field_settings_alter(&$field_settings, $form, &$form_state) {
-  foreach ($form_state['formatter_settings'] as $field => $setting) {
-    if (
-      isset($form_state['formatter_settings'][$field]['ft']['func']) &&
-      $form_state['formatter_settings'][$field]['ft']['func'] == 'theme_ds_field_nexteuropa_formatters_meta_item'
-    ) {
-      $field_settings[$field]['formatter_settings']['ft']['meta_modifier'] = $form_state['formatter_settings'][$field]['ft']['meta_modifier'];
+  if (!empty($form_state['formatter_settings'])) {
+    foreach ($form_state['formatter_settings'] as $field => $setting) {
+      if (isset($form_state['formatter_settings'][$field]['ft']['func'])) {
+        if ($form_state['formatter_settings'][$field]['ft']['func'] == 'theme_ds_field_nexteuropa_formatters_meta_item') {
+          $field_settings[$field]['formatter_settings']['ft']['meta_modifier'] = $form_state['formatter_settings'][$field]['ft']['meta_modifier'];
+        }
+        elseif ($form_state['formatter_settings'][$field]['ft']['func'] == 'theme_ds_field_nexteuropa_formatters_listing_title') {
+          $field_settings[$field]['formatter_settings']['ft']['listing_title_link'] = $form_state['formatter_settings'][$field]['ft']['listing_title_link'];
+        }
+      }
     }
   }
 }
@@ -383,6 +401,42 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
   // Build the output.
   $output = '';
   foreach ($variables['items'] as $item) {
+    $item_render = $subrender + ['#markup' => drupal_render($item)];
+    $output .= drupal_render($item_render);
+  }
+
+  return $output;
+}
+
+/**
+ * This is a basic theme_ds_field implementation.
+ *
+ * @param array $variables
+ *   The array containing information for the field.
+ *
+ * @return string
+ *   The rendered output.
+ */
+function theme_ds_field_nexteuropa_formatters_listing_title($variables) {
+  // Default classes.
+  $classes = ['listing__title'];
+  $entity_type = $variables['element']['#entity_type'];
+
+  // Our default render array.
+  $subrender = [
+    '#prefix' => '<h3 class="' . implode(' ', $classes) . '">',
+    '#suffix' => '</h3>',
+  ];
+
+  // Build the output.
+  $output = '';
+  foreach ($variables['items'] as $item) {
+    if ($variables['ds-config']['listing_title_link']) {
+      $uri = entity_uri($entity_type, $variables['element']['#object']);
+      $path = url($uri['path']);
+      $item['#markup'] = l(strip_tags($item['#markup']), $path);
+    }
+
     $item_render = $subrender + ['#markup' => drupal_render($item)];
     $output .= drupal_render($item_render);
   }
@@ -488,15 +542,49 @@ function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
 }
 
 /**
+ * Theming function for context nav items.
+ *
+ * @param array $variables
+ *   The array containing information for the field.
+ *
+ * @return string
+ *   The rendered output.
+ */
+function theme_ds_field_nexteuropa_formatters_context_nav_item($variables) {
+  $field = $variables['element'];
+  $elements_rendered = '';
+
+  $skeleton = _nexteuropa_formatters_get_context_nav_wrapper($field['#title']);
+
+  foreach ($field['#items'] as $element) {
+    $value = $element['value'];
+
+    $element = [
+      '#prefix' => '<span class="context-nav__item">',
+      '#markup' => $value,
+      '#suffix' => '</span>',
+    ];
+
+    $elements_rendered .= drupal_render($element);
+  }
+
+  $skeleton['#markup'] = $elements_rendered;
+
+  return  drupal_render($skeleton);
+}
+
+/**
  * Implements hook_ds_field_theme_functions_info().
  *
  * Adds a new select option.
  */
 function nexteuropa_formatters_ds_field_theme_functions_info() {
   return [
+    'theme_ds_field_nexteuropa_formatters_listing_title' => t('Nexteuropa: Listing title (h3)'),
     'theme_ds_field_nexteuropa_formatters_meta_item' => t('Nexteuropa: Meta item'),
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
     'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
+    'theme_ds_field_nexteuropa_formatters_context_nav_item' => t('Nexteuropa: Contextual nav item'),
   ];
 }
 
@@ -534,7 +622,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   // If the file is internal, we have additional information.
   if (!$is_external) {
     $file_extension = drupal_strtoupper(pathinfo($file->uri, PATHINFO_EXTENSION));
-    $file_size = format_size($file->filesize);
+    $file_size = nexteuropa_theme_functions_format_size($file->filesize);
   }
 
   // Get our full language string.
@@ -598,8 +686,8 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   }
 
   $file_text = t('Download');
-  if (isset($file_extension, $file->filesize)) {
-    $file_text .= '<span class="sr-only">' . $file_extension . ' - ' . format_size($file->filesize) . '</span>';
+  if (isset($file_extension, $file_size)) {
+    $file_text .= '<span class="sr-only">' . $file_extension . ' - ' . $file_size . '</span>';
   }
 
   // Build the render array.

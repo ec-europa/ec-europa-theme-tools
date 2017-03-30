@@ -144,8 +144,12 @@ function nexteuropa_formatters_field_formatter_info() {
         'modifier' => '',
       ],
     ],
+    'listing_title_with_link' => [
+      'label' => t('(h3) Listing title: with link'),
+      'field types' => ['text', 'text_long'],
+    ],
     'listing_title' => [
-      'label' => t('Listing title (h3)'),
+      'label' => t('(h3) Listing title: no link'),
       'field types' => ['text', 'text_long'],
     ],
     'listing_title_element' => [
@@ -390,6 +394,8 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
     case 'link_listing_title':
     case 'listing_title':
     case 'listing_title_element':
+    case 'listing_title_element':
+    case 'listing_title_with_link':
       $class = 'listing__title';
       break;
 
@@ -462,6 +468,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
   if (!empty($items)) {
     $formatter = $display['type'];
     $pull_right = !empty($display['settings']['align_right']) ? ' pull-right' : '';
+    $entity_uri = entity_uri($entity_type, $entity);
+    $entity_path = url($entity_uri['path']);
 
     switch ($formatter) {
       // Formatter for the structured content view mode.
@@ -697,7 +705,18 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           $element[$delta] = [
-            '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
+            '#markup' => '<h3 class="' . $class . '">' . $item['value'] . '</h3>',
+          ];
+        }
+        break;
+
+      case 'listing_title_with_link':
+        $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+
+        foreach ($items as $delta => $item) {
+          $link = l($item['value'], $entity_path);
+          $element[$delta] = [
+            '#markup' => '<h3 class="' . $class . '">' . $link . '</h3>',
           ];
         }
         break;
@@ -706,7 +725,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
 
         foreach ($items as $delta => $item) {
-          $link = l($item['value'], 'node/' . $entity->nid, ['attributes' => ['class' => $class]]);
+          $link = l($item['value'], $entity_path, ['attributes' => ['class' => $class]]);
 
           $element[$delta] = [
             '#markup' => $link,
@@ -718,9 +737,10 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           if ($item['value'] > 0) {
-            $feedback = t('Feedback');
             $element[$delta] = [
-              '#markup' => '<span class="icon ' . $class . '">' . $feedback . ' (' . $item['value'] . ')</span>',
+              '#prefix' => '<span class="icon ' . $class . '">',
+              '#markup' => t('Feedback (!item_value)', ['!item_value' => $item['value']]),
+              '#suffix' => '</span>',
             ];
           }
         }
@@ -1247,93 +1267,6 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
       }
     }
   }
-}
-
-/**
- * Implements hook_ds_fields_info().
- */
-function nexteuropa_formatters_ds_fields_info($entity_type) {
-  $fields = [];
-
-  // President.
-  $fields['cwt_team_president'] = [
-    'title' => t('Team: President (View: team members, president)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members',
-      'view_display' => 'block_1',
-    ],
-  ];
-
-  // Team role.
-  $fields['cwt_team_role'] = [
-    'title' => t('Team: Role (View: team members, commissioners hierarchy, role arg)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members',
-      'view_display' => 'block_2',
-      'views_arguments' => ['role'],
-    ],
-  ];
-
-  // Team project team.
-  $fields['cwt_team_project_team'] = [
-    'title' => t('Team: Project team (View: team members by domain)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members_by_domain',
-      'view_display' => 'block',
-    ],
-  ];
-
-  // Team name.
-  $fields['cwt_team_name'] = [
-    'title' => t('Team: Name (View: team members, commissioners hierarchy, name arg)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members',
-      'view_display' => 'block_3',
-      'view_arguments' => ['name'],
-    ],
-  ];
-
-  return ['node' => $fields];
-}
-
-/**
- * Helper function to display test title.
- *
- * @param array $field
- *   The field array to work with.
- *
- * @return mixed
- *   The rendered view or false.
- */
-function _nexteuropa_formatters_theme_ds_team_field($field) {
-  $view_machine_name = isset($field['properties']['view_machine_name']) ? $field['properties']['view_machine_name'] : NULL;
-  $view_display = isset($field['properties']['view_display']) ? $field['properties']['view_display'] : NULL;
-  $view_arguments = isset($field['properties']['view_arguments']) ? $field['properties']['view_arguments'] : NULL;
-
-  if ($view_machine_name) {
-    // Load: Views: team members, Commissioners Hierarchy.
-    $view = views_get_view($view_machine_name);
-    $view->set_display($view_display);
-    $view->set_arguments($view_arguments);
-    $view->pre_execute();
-    $view->execute();
-
-    return $view->render();
-  }
-
-  return FALSE;
 }
 
 /**

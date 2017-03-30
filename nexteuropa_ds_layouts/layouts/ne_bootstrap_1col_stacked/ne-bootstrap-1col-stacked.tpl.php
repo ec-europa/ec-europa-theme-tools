@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Display Suite NE Bootstrap Three-Nine Stacked.
+ * Display Suite NE Bootstrap One Column Stacked.
  */
 ?>
 
@@ -19,6 +19,7 @@
         <?php print render($header_bottom); ?>
       </div>
     </nav>
+  <?php if (!empty($left_header)): ?>
     <div class="container-fluid page-header__hero-title">
       <div class="row padding-reset">
         <<?php print $left_header_wrapper; ?> class="col-lg-9 <?php print $left_header_classes; ?>">
@@ -32,6 +33,7 @@
       <?php endif; ?>
       </div>
     </div>
+  <?php endif; ?>
   </div>
 
 <?php if (!empty($utility)): ?>
@@ -44,31 +46,27 @@
 
   <div class="page-content">
     <div class="container-fluid">
+      <div class="row<?php print isset($ceiling) ? ' ' . $ceiling : ''; ?>">
 
-    <?php if (!empty($top) || !empty($local_tabs) || !empty($messages)): ?>
-      <div class="row">
-        <section class="section section--content-top col-md-12 <?php print $top_classes; ?>">
-        <?php if (!empty($local_tabs)): ?>
-          <?php print $local_tabs; ?>
+        <?php if (!empty($top) || !empty($local_tabs) || !empty($messages)): ?>
+          <div class="row">
+            <section class="section section--content-top col-md-12 <?php print $top_classes; ?>">
+              <?php print $top; ?>
+            <?php if (!empty($local_tabs)): ?>
+              <?php print $local_tabs; ?>
+            <?php endif; ?>
+            <?php if (!empty($messages)): ?>
+              <?php print $messages; ?>
+            <?php endif; ?>
+            </section>
+          </div>
         <?php endif; ?>
-        <?php if (!empty($messages)): ?>
-          <?php print $messages; ?>
-        <?php endif; ?>
-          <?php print $top; ?>
-        </section>
-      </div>
-    <?php endif; ?>
 
-      <div class="row">
         <a id="main-content" tabindex="-1"></a>
-        <<?php print $left_wrapper; ?> class="col-md-3 <?php print $left_classes; ?>">
-          <?php print $left; ?>
-        </<?php print $left_wrapper; ?>>
-        <section class="section col-md-9 <?php print $central_classes; ?>">
+        <section class="section col-md-12 <?php print $central_classes; ?>">
           <?php print $central; ?>
         </section>
       </div>
-
     </div>
   </div>
 

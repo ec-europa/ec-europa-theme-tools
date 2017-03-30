@@ -11,12 +11,12 @@
  * @see drush_parse_command()
  */
 function nexteuropa_footer_drush_command() {
-  $items = array();
+  $items = [];
 
   $items['ec-footer-translate'] = [
-    'description' => "Translate ec footer menu items",
+    'description' => t('Translate EC Footer menu items.'),
     'options' => [
-      'all' => 'Generate all the menu items',
+      'all' => t('Generate all the menu items.'),
     ],
     'drupal dependencies' => ['features'],
     'aliases' => ['ecfooter'],
@@ -31,7 +31,7 @@ function nexteuropa_footer_drush_command() {
 function nexteuropa_footer_drush_help($section) {
   switch ($section) {
     case 'drush:ec-footer-translate':
-      return dt("Translate ec footer menu items");
+      return dt('Translate EC Footer menu items.');
   }
 }
 
@@ -42,12 +42,12 @@ function drush_nexteuropa_footer_ec_footer_translate($all = TRUE) {
   if ($all && $logs = _nexteuropa_footer_translate()) {
     foreach ($logs['title'] as $title) {
       $tokens = ['@menu_name' => $title['menu_name'], '@lang' => $title['lang']];
-      drush_print(dt('Menu: @menu_name title translation: "@lang" updated', $tokens));
+      drush_print(dt('Menu @menu_name title translation: "@lang" updated.', $tokens));
     }
 
     foreach ($logs['item'] as $title) {
       $tokens = ['@mlid' => $title['mlid'], '@lang' => $title['lang']];
-      drush_print(dt('menu item: @mlid translation: "@lang" updated.', $tokens));
+      drush_print(dt('Menu item @mlid translation: "@lang" updated.', $tokens));
     }
   }
 }

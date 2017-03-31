@@ -64,7 +64,6 @@ features[picture_mapping][] = highlight_image
 features[picture_mapping][] = teaser_image
 features[variable][] = ds_extras_field_template
 features[variable][] = theme_europa_settings
-features[variable][] = node_admin_theme
 features_exclude[dependencies][strongarm] = strongarm
 features_exclude[dependencies][ctools] = ctools
 multisite_version = 2.2

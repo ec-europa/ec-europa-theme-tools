@@ -58,13 +58,13 @@ class LanguageTokenHandler extends TokenAbstractHandler {
     $token = _dt_europa_settings_get_token_type();
     // And the token.
     $data['tokens'][$token][self::CONTENT_LANGUAGE] = [
-      'name' => t("Europa Content language"),
-      'description' => t("The real language of the content - not the interface."),
+      'name' => t('Europa Content language'),
+      'description' => t('The real language of the content - not the interface.'),
       'type' => $token,
     ];
     $data['tokens'][$token][self::INTERFACE_LANGUAGE] = [
-      'name' => t("Europa Interface language"),
-      'description' => t("The langauge of the interface."),
+      'name' => t('Europa Interface language'),
+      'description' => t('The language of the interface.'),
       'type' => $token,
     ];
   }

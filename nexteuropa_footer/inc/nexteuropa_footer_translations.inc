@@ -8,6 +8,7 @@
  * Helper function to get the mlid basing on the link name.
  */
 function _nexteuropa_footer_translations() {
+  $items = [];
 
   $items['menu-nexteuropa-social-media']['title'] = [
     'title' => t('Follow the European Commission'),
@@ -353,5 +354,6 @@ function _nexteuropa_footer_translations() {
       'sv' => 'EU-institutionerna',
     ],
   ];
+
   return $items;
 }

@@ -12,6 +12,7 @@ dependencies[] = nexteuropa_theme_functions
 dependencies[] = nexteuropa_views
 dependencies[] = picture
 dependencies[] = retina_images
+registry_autoload[] = PSR-4
 php = 5.5
 features[breakpoint_group][] = europa
 features[breakpoints][] = breakpoints.theme.europa.medium

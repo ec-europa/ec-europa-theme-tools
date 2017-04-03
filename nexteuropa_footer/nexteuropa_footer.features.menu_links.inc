@@ -78,7 +78,7 @@ function nexteuropa_footer_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
-  
+
   // Exported menu link: menu-nexteuropa-service-links_about-the-commissions-new-web-presence:https://ec.europa.eu/info/about-commissions-new-web-presence.
   $menu_links['menu-nexteuropa-service-links_about-the-commissions-new-web-presence:https://ec.europa.eu/info/about-commissions-new-web-presence'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',
@@ -109,7 +109,7 @@ function nexteuropa_footer_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
- 
+
   // Exported menu link: menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact.
   $menu_links['menu-nexteuropa-service-links_contact:https://ec.europa.eu/info/contact'] = array(
     'menu_name' => 'menu-nexteuropa-service-links',

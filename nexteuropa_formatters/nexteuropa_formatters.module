@@ -570,7 +570,7 @@ function theme_ds_field_nexteuropa_formatters_context_nav_item($variables) {
 
   $skeleton['#markup'] = $elements_rendered;
 
-  return  drupal_render($skeleton);
+  return drupal_render($skeleton);
 }
 
 /**

@@ -9,7 +9,6 @@ module_load_include('inc', 'nexteuropa_footer_translations', 'inc/nexteuropa_foo
 
 /**
  * Implements hook_theme_registry_alter().
- * Copy pasted implementation.
  */
 function nexteuropa_footer_theme_registry_alter(&$theme_registry) {
   // Defined path to the current module.
@@ -51,10 +50,10 @@ function _nexteuropa_footer_item_name_get($title, $menu) {
  * Translate menu items.
  *
  * @return array $logs
- *  Saved info about updated items.
+ *   Saved info about updated items.
  */
 function _nexteuropa_footer_translate() {
-  $items =_nexteuropa_footer_translations();
+  $items = _nexteuropa_footer_translations();
   $logs = [];
   // Set the menu title translations.
   foreach ($items as $menu_name => $item) {
@@ -62,7 +61,7 @@ function _nexteuropa_footer_translate() {
       $name = 'menu:menu:' . $menu_name . ':title';
       foreach ($item['title']['languages'] as $lang => $translation) {
         i18n_string_translation_update($name, $translation, $lang);
-        
+
         $logs['title'][] = [
           'menu_name' => $menu_name,
           'lang' => $lang,
@@ -77,7 +76,7 @@ function _nexteuropa_footer_translate() {
         $name = 'menu:item:' . $mlid . ':title';
         foreach ($menu_item['languages'] as $lang => $translation) {
           i18n_string_translation_update($name, $translation, $lang);
-          
+
           $logs['item'][] = [
             'menu_name' => $menu_name,
             'mlid' => $mlid,

@@ -36,16 +36,16 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Overige sociale netwerken',
       'pl' => 'Inne serwisy społecznościowe',
       'pt-pt' => 'Outras redes sociais',
-      'ro' => 'Alte rețele sociale', 
+      'ro' => 'Alte rețele sociale',
       'sk' => 'Iné sociálne siete',
       'sl' => 'Druga družbena omrežja',
-      'fi' => 'Muut yhteisöpalvelut', 
+      'fi' => 'Muut yhteisöpalvelut',
       'sv' => 'Andra sociala medier',
     ],
   ];
 
   $items['menu-nexteuropa-service-links']['items'][] = [
-    'title' => t('About the Commission\'s new web presence'),
+    'title' => t("About the Commission's new web presence"),
     'weight' => '0',
     'languages' => [
       'bg' => 'За новото присъствие на Комисията в интернет',
@@ -66,10 +66,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Over de nieuwe website van de Europese Commissie',
       'pl' => 'Informacje o nowej generacji stron internetowych Komisji',
       'pt-pt' => 'Sobre a nova presença da Comissão na Web',
-      'ro' => 'Despre noul portal al Comisiei', 
+      'ro' => 'Despre noul portal al Comisiei',
       'sk' => 'Nová prezentácia Komisie na internete',
       'sl' => 'O novi spletni prisotnosti Evropske komisije',
-      'fi' => 'Tietoa komission verkkosivujen uudistuksesta', 
+      'fi' => 'Tietoa komission verkkosivujen uudistuksesta',
       'sv' => 'Om kommissionens nya webbplats',
     ],
   ];
@@ -77,8 +77,7 @@ function _nexteuropa_footer_translations() {
   $items['menu-nexteuropa-service-links']['items'][] = [
     'title' => t('Resources for partners'),
     'weight' => '1',
-    'languages' => [
-    ],
+    'languages' => [],
   ];
 
   $items['menu-nexteuropa-service-links']['items'][] = [
@@ -103,10 +102,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Cookies',
       'pl' => 'Pliki cookie',
       'pt-pt' => 'Cookies testemunhos de conexãob',
-      'ro' => 'Cookie-urile', 
+      'ro' => 'Cookie-urile',
       'sk' => 'Súbory cookie',
       'sl' => 'Piškotki',
-      'fi' => 'Evästeet', 
+      'fi' => 'Evästeet',
       'sv' => 'Kakor ”cookies',
     ],
   ];
@@ -133,10 +132,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Juridische mededeling',
       'pl' => 'Informacja prawna',
       'pt-pt' => 'Advertência jurídica',
-      'ro' => 'Aviz juridic', 
+      'ro' => 'Aviz juridic',
       'sk' => 'Právne upozornenie',
       'sl' => 'Pravno obvestilo',
-      'fi' => 'Oikeudellinen huomautus', 
+      'fi' => 'Oikeudellinen huomautus',
       'sv' => 'Rättsligt meddelande',
     ],
   ];
@@ -163,10 +162,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Contact',
       'pl' => 'Kontakt',
       'pt-pt' => 'Contacto',
-      'ro' => 'Contact', 
+      'ro' => 'Contact',
       'sk' => 'Kontaktné údaje',
       'sl' => 'Kontakt',
-      'fi' => 'Yhteydenotot', 
+      'fi' => 'Yhteydenotot',
       'sv' => 'Kontakt',
     ],
   ];
@@ -198,16 +197,16 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Europese Commissie',
       'pl' => 'Komisja Europejska',
       'pt-pt' => 'Comissão Europeia',
-      'ro' => 'Comisia Europeană', 
+      'ro' => 'Comisia Europeană',
       'sk' => 'Európska komisia',
       'sl' => 'Evropska komisija',
-      'fi' => 'Euroopan komissio', 
+      'fi' => 'Euroopan komissio',
       'sv' => 'Europeiska kommissionen',
     ],
   ];
 
   $items['menu-nexteuropa-site-links']['items'][] = [
-    'title' => t('Commission and it\'s priorities'),
+    'title' => t("Commission and it's priorities"),
     'weight' => '0',
     'languages' => [
       'bg' => 'Комисията и нейните приоритети',
@@ -228,10 +227,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Commissarissen en prioriteiten',
       'pl' => 'Komisja i jej priorytety',
       'pt-pt' => 'As prioridades da Comissão',
-      'ro' => 'Comisia și prioritățile sale', 
+      'ro' => 'Comisia și prioritățile sale',
       'sk' => 'Komisia a jej priority',
       'sl' => 'Komisija in njene prednostne naloge',
-      'fi' => 'Komissio ja sen toiminnan painopisteet', 
+      'fi' => 'Komissio ja sen toiminnan painopisteet',
       'sv' => 'Kommissionen och dess prioriteringar',
     ],
   ];
@@ -258,10 +257,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Beleid, informatie en diensten',
       'pl' => 'Obszary polityki, informacje i usługi',
       'pt-pt' => 'Políticas, informações e serviços',
-      'ro' => 'Informații și domenii de interes', 
+      'ro' => 'Informații și domenii de interes',
       'sk' => 'Politiky, informácie a služby',
       'sl' => 'Politike, informacije in službe',
-      'fi' => 'Politiikan alat, palvelut, tietolähteet', 
+      'fi' => 'Politiikan alat, palvelut, tietolähteet',
       'sv' => 'Politikområden, information och tjänster',
     ],
   ];
@@ -287,10 +286,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Europese Unie',
       'pl' => 'Unia Europejska',
       'pt-pt' => 'União Europeia',
-      'ro' => 'Uniunea Europeană ', 
+      'ro' => 'Uniunea Europeană ',
       'sk' => 'Európska únia',
       'sl' => 'Evropska unija',
-      'fi' => 'Euroopan unioni', 
+      'fi' => 'Euroopan unioni',
       'sv' => 'Europeiska unionen',
     ],
   ];
@@ -317,10 +316,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'Europese Unie',
       'pl' => 'Unia Europejska',
       'pt-pt' => 'União Europeia',
-      'ro' => 'Uniunea Europeană ', 
+      'ro' => 'Uniunea Europeană ',
       'sk' => 'Európska únia',
       'sl' => 'Evropska unija',
-      'fi' => 'Euroopan unioni', 
+      'fi' => 'Euroopan unioni',
       'sv' => 'Europeiska unionen',
     ],
   ];
@@ -347,10 +346,10 @@ function _nexteuropa_footer_translations() {
       'nl' => 'EU-instellingen',
       'pl' => 'Instytucje UE',
       'pt-pt' => 'Instituições da UE',
-      'ro' => 'Instituțiile UE', 
+      'ro' => 'Instituțiile UE',
       'sk' => 'Inštitúcie EÚ',
       'sl' => 'Institucije EU',
-      'fi' => 'EU:n toimielimeti', 
+      'fi' => 'EU:n toimielimeti',
       'sv' => 'EU-institutionerna',
     ],
   ];

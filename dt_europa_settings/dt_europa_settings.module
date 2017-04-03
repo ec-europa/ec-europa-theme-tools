@@ -81,7 +81,7 @@ function dt_europa_settings_translated_menu_link_alter(&$item, $map) {
   ];
 
   if (in_array($item['menu_name'], $menus)) {
-    //@todo Remove this.
+    // @todo Remove this.
     if ($item['title'] != 'Europa Analytics') {
       $item['href'] = token_replace($item['href'] . '_[europa_tokens:europa_interface_language]', $item, []);
     }

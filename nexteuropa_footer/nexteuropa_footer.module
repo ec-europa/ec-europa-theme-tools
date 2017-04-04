@@ -5,7 +5,7 @@
  */
 
 include_once 'nexteuropa_footer.features.inc';
-module_load_include('inc', 'nexteuropa_footer_translations', 'inc/nexteuropa_footer_translations');
+module_load_include('inc', 'nexteuropa_footer', 'inc/nexteuropa_footer_translations');
 
 /**
  * Implements hook_theme_registry_alter().

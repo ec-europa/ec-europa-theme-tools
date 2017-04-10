@@ -38,6 +38,18 @@ function dt_europa_settings_form_alter(&$form, &$form_state) {
       '#default_value' => variable_get('ec_europa_introduction_field', FALSE),
     ];
 
+    $form['europa']['site_switcher'] = [
+      '#type' => 'radios',
+      '#title' => t('Choose which site your website belongs to'),
+      // @codingStandardsIgnoreLine
+      '#default_value' => variable_get('ec_europa_site_switcher', 'Informational'),
+      '#options' => [
+        t('Informational'),
+        t('Political'),
+      ],
+      '#weight' => 0,
+    ];
+
     $form['#submit'][] = '_dt_europa_settings_theme_settings_submit';
   }
 }
@@ -67,6 +79,9 @@ function _dt_europa_settings_theme_settings_submit(&$form, &$form_state) {
   if (!empty($field_name)) {
     variable_set('ec_europa_introduction_field', $field_name);
   }
+
+  $switcher = $form_state['values']['site_switcher'];
+  variable_set('ec_europa_site_switcher', $switcher);
 }
 
 /**

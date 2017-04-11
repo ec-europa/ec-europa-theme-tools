@@ -26,6 +26,12 @@ function dt_europa_settings_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'nexteuropa_theme_functions-dt_shared_functions_user_menu' => array(
+          'module' => 'nexteuropa_theme_functions',
+          'delta' => 'dt_shared_functions_user_menu',
+          'region' => 'header_top',
+          'weight' => '-11',
+        ),
         'menu-menu-nexteuropa-site-links' => array(
           'module' => 'menu',
           'delta' => 'menu-nexteuropa-site-links',

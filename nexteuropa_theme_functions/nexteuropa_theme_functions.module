@@ -223,9 +223,7 @@ function nexteuropa_theme_functions_block_view($delta = '') {
 
   switch ($delta) {
     case 'dt_shared_functions_user_menu':
-      if (user_is_logged_in()) {
-        $block['content'] = _nexteuropa_theme_functions_get_blocks_content($delta);
-      }
+      $block['content'] = _nexteuropa_theme_functions_get_blocks_content($delta);
       break;
   }
 

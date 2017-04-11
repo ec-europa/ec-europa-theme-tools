@@ -201,9 +201,18 @@ function _nexteuropa_theme_functions_get_blocks_content($delta) {
 
   switch ($delta) {
     case 'dt_shared_functions_user_menu':
-      $result = [
-        '#markup' => theme('site_user_menu'),
-      ];
+      if (user_is_logged_in()) {
+        $result = [
+          '#markup' => theme('site_user_menu'),
+        ];
+      }
+      else {
+        if (module_exists('ecas')) {
+          $result = [
+            '#markup' => l(t('Log in'), 'ecas', ['attributes' => ['class' => ['site-user-menu__list']]]),
+          ];
+        }
+      }
       break;
   }
 

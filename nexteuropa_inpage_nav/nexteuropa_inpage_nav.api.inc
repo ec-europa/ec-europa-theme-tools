@@ -8,10 +8,10 @@
 /**
  * Alter hook for the inpage navigation.
  *
- * @param string $field
- *   The the field it is currently acting on.
- * @param object $element
- *   The render array.
+ * @param array $element
+ *   Render array for the entity.
+ * @param array $ds_field_settings
+ *   The ds field settings it is currently acting on.
  *
  * @return array
  *   The array returned should contain all the required information to put and
@@ -26,7 +26,7 @@
  *       the same structure as other elements. Only used for field groups.
  *   {code}
  */
-function hook_nexteuropa_inpage_nav_add($field, $element) {
+function hook_nexteuropa_inpage_nav_add($element, $ds_field_settings) {
   // Example.
   return [
     $element['field_name']['#field_name'] => [

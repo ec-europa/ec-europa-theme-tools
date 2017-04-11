@@ -6,12 +6,11 @@
  */
 
 /**
- * Define Display Suite layouts.
- *
- * @return array
- *   A collection of layouts.
+ * Implements hook_ds_layout_info_alter().
  */
-function nexteuropa_ds_layouts_ds_layout_info() {
+function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
+  // Remove all layouts not created by this module.
+  $layouts = [];
   $path = drupal_get_path('module', 'nexteuropa_ds_layouts');
 
   $layouts['ne_bootstrap_3_6_3_stacked'] = [

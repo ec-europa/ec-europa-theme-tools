@@ -10,6 +10,7 @@ dependencies[] = nexteuropa_formatters
 dependencies[] = nexteuropa_inpage_nav
 dependencies[] = nexteuropa_theme_functions
 dependencies[] = nexteuropa_views
+dependencies[] = nexteuropa_footer
 dependencies[] = picture
 dependencies[] = retina_images
 registry_autoload[] = PSR-4

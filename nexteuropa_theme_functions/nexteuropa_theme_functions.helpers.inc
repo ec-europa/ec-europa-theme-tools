@@ -200,16 +200,17 @@ function _nexteuropa_theme_functions_get_blocks_content($delta) {
   $result = [];
 
   switch ($delta) {
-    case 'dt_shared_functions_user_menu':
+    case 'nexteuropa_user_menu':
       if (user_is_logged_in()) {
         $result = [
           '#markup' => theme('site_user_menu'),
         ];
       }
       else {
-        if (module_exists('ecas')) {
+        if (variable_get('ec_europa_user_login')) {
+          $path = module_exists('ecas') ? 'ecas' : 'user';
           $result = [
-            '#markup' => l(t('Log in'), 'ecas', ['attributes' => ['class' => ['site-user-menu__list']]]),
+            '#markup' => l(t('Log in'), $path, ['attributes' => ['class' => ['site-user-menu__list']]]),
           ];
         }
       }

@@ -40,12 +40,12 @@ function dt_europa_settings_form_alter(&$form, &$form_state) {
 
     $form['europa']['site_switcher'] = [
       '#type' => 'radios',
-      '#title' => t('Choose which site your website belongs to'),
+      '#title' => t('Choose which site your website belongs to:'),
       // @codingStandardsIgnoreLine
-      '#default_value' => variable_get('ec_europa_site_switcher', 'Informational'),
+      '#default_value' => variable_get('ec_europa_site_switcher', 'informational'),
       '#options' => [
-        t('Informational'),
-        t('Political'),
+        'informational' => t('Informational'),
+        'political' => t('Political'),
       ],
       '#weight' => 0,
     ];

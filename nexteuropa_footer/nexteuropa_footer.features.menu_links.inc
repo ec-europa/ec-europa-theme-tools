@@ -368,6 +368,7 @@ function nexteuropa_footer_menu_default_menu_links() {
       'alter' => TRUE,
       'attributes' => array(
         'data-display-title' => 1,
+        'name' => 'political',
         'class' => '',
         'data-remove-class' => 0,
       ),
@@ -394,6 +395,7 @@ function nexteuropa_footer_menu_default_menu_links() {
       'alter' => TRUE,
       'attributes' => array(
         'data-display-title' => 1,
+        'name' => 'informational',
         'class' => '',
         'data-remove-class' => 0,
       ),

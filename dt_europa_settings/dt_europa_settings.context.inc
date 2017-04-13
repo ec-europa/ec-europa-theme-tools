@@ -26,9 +26,9 @@ function dt_europa_settings_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'nexteuropa_theme_functions-dt_shared_functions_user_menu' => array(
+        'nexteuropa_theme_functions-nexteuropa_user_menu' => array(
           'module' => 'nexteuropa_theme_functions',
-          'delta' => 'dt_shared_functions_user_menu',
+          'delta' => 'nexteuropa_user_menu',
           'region' => 'header_top',
           'weight' => '-11',
         ),

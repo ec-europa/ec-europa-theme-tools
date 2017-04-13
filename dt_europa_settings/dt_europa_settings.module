@@ -158,7 +158,7 @@ function dt_europa_settings_handle_user_menu($op) {
     $message = t('You activated the user menu, you are going to find it in the top right corner.');
   }
   else {
-    if (!empty($context->reactions['block']['blocks']['nexteuropa_theme_functions-dt_shared_functions_user_menu'])) {
+    if (!empty($context->reactions['block']['blocks']['nexteuropa_theme_functions-nexteuropa_user_menu'])) {
       unset($context->reactions['block']['blocks']['nexteuropa_theme_functions-nexteuropa_user_menu']);
       $message = t('You disabled the user menu, it will not appear anymore in the top right corner.');
     }

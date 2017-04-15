@@ -38,46 +38,6 @@ function dt_europa_settings_form_alter(&$form, &$form_state) {
       '#default_value' => variable_get('ec_europa_introduction_field', FALSE),
     ];
 
-    $form['europa']['site_switcher'] = [
-      '#type' => 'radios',
-      '#title' => t('Choose which site your website belongs to:'),
-      // @codingStandardsIgnoreLine
-      '#default_value' => variable_get('ec_europa_site_switcher', 'informational'),
-      '#options' => [
-        'informational' => t('Informational'),
-        'political' => t('Political'),
-      ],
-      '#weight' => 0,
-    ];
-
-    $form['europa']['user'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Europa settings for the user menu'),
-    ];
-
-    $form['europa']['user']['user_menu'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Do you want to show the user menu logged in users?'),
-      // @codingStandardsIgnoreLine
-      '#default_value' => variable_get('ec_europa_show_user_menu', 0),
-      '#weight' => 0,
-    ];
-
-    $form['europa']['user']['user_login'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Do you want to show the login link?'),
-      // @codingStandardsIgnoreLine
-      '#default_value' => variable_get('ec_europa_user_login', 0),
-      '#weight' => 0,
-      '#states' => [
-        'visible' => [
-          ':input[name="user_menu"]' => [
-            'checked' => TRUE,
-          ],
-        ],
-      ],
-    ];
-
     $form['#submit'][] = '_dt_europa_settings_theme_settings_submit';
   }
 }
@@ -107,18 +67,6 @@ function _dt_europa_settings_theme_settings_submit(&$form, &$form_state) {
   if (!empty($field_name)) {
     variable_set('ec_europa_introduction_field', $field_name);
   }
-
-  $switcher = $form_state['values']['site_switcher'];
-  variable_set('ec_europa_site_switcher', $switcher);
-
-  $user_menu = $form_state['values']['user_menu'];
-  if (variable_get('ec_europa_show_user_menu') !== $user_menu) {
-    variable_set('ec_europa_show_user_menu', $user_menu);
-    dt_europa_settings_handle_user_menu($user_menu);
-  }
-
-  $user_login = $form_state['values']['user_login'];
-  variable_set('ec_europa_user_login', $user_login);
 }
 
 /**
@@ -138,32 +86,4 @@ function dt_europa_settings_translated_menu_link_alter(&$item, $map) {
       $item['href'] = token_replace($item['href'] . '_[europa_tokens:europa_interface_language]', $item, []);
     }
   }
-}
-
-/**
- * Helper function to enable or disable the user menu in the topbar.
- */
-function dt_europa_settings_handle_user_menu($op) {
-  $context = module_invoke('context', 'load', 'ec_europa_topbar');
-
-  $user_login = [
-    'module' => 'nexteuropa_theme_functions',
-    'delta' => 'nexteuropa_user_menu',
-    'region' => 'header_top',
-    'weight' => -11,
-  ];
-
-  if ($op) {
-    $context->reactions['block']['blocks']['nexteuropa_theme_functions-nexteuropa_user_menu'] = $user_login;
-    $message = t('You activated the user menu, you are going to find it in the top right corner.');
-  }
-  else {
-    if (!empty($context->reactions['block']['blocks']['nexteuropa_theme_functions-nexteuropa_user_menu'])) {
-      unset($context->reactions['block']['blocks']['nexteuropa_theme_functions-nexteuropa_user_menu']);
-      $message = t('You disabled the user menu, it will not appear anymore in the top right corner.');
-    }
-  }
-
-  module_invoke('context', 'save', $context);
-  drupal_set_message($message, 'status', FALSE);
 }

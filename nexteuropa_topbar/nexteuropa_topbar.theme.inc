@@ -2,24 +2,23 @@
 
 /**
  * @file
- * Site user menu.
+ * Nexteuropa user menu.
  */
 
-if (!function_exists('theme_site_user_menu')) {
+/**
+ * Returns HTML for the element.
+ *
+ * @param mixed $variables
+ *   An associative array containing:
+ *   - modifier: The modifier applied to the element.
+ *
+ * @return string
+ *   The markup itself.
+ */
+function theme_nexteuropa_user_menu($variables) {
+  global $user;
 
-  /**
-   * Returns HTML for the element.
-   *
-   * @param mixed $variables
-   *   An associative array containing:
-   *   - modifier: The modifier applied to the element.
-   *
-   * @return string
-   *   The markup itself.
-   */
-  function theme_site_user_menu($variables) {
-    global $user;
-
+  if (user_is_logged_in()) {
     if (module_exists('ecas')) {
       $logout_url = url('/ecaslogout');
     }
@@ -45,8 +44,13 @@ if (!function_exists('theme_site_user_menu')) {
         ],
       ],
     ];
-
     return theme('item_list', $variables);
   }
-
+  else {
+    if (variable_get('ec_europa_user_login')) {
+      $path = module_exists('ecas') ? 'ecas' : 'user';
+      $login = l(t('Log in'), $path, ['attributes' => ['class' => ['site-user-menu__list']]]);
+      return $login;
+    }
+  }
 }

@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * dt_europa_settings.context.inc
+ * Nexteuropa_topbar.context.inc.
  */
 
 /**
  * Implements hook_context_default_contexts().
  */
-function dt_europa_settings_context_default_contexts() {
+function nexteuropa_topbar_context_default_contexts() {
   $export = array();
 
   $context = new stdClass();
@@ -26,12 +26,6 @@ function dt_europa_settings_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'nexteuropa_theme_functions-nexteuropa_user_menu' => array(
-          'module' => 'nexteuropa_theme_functions',
-          'delta' => 'nexteuropa_user_menu',
-          'region' => 'header_top',
-          'weight' => '-11',
-        ),
         'menu-menu-nexteuropa-site-links' => array(
           'module' => 'menu',
           'delta' => 'menu-nexteuropa-site-links',

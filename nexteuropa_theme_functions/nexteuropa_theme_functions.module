@@ -190,47 +190,6 @@ function _nexteuropa_theme_functions_file_show_upload_callback(&$form, &$form_st
 }
 
 /**
- * Implements hook_theme().
- */
-function nexteuropa_theme_functions_theme() {
-  return [
-    'site_user_menu' => [
-      'file' => 'nexteuropa_theme_functions.theme.inc',
-      'variables' => [
-        'modifier' => NULL,
-      ],
-    ],
-  ];
-}
-
-/**
- * Implements hook_block_info().
- */
-function nexteuropa_theme_functions_block_info() {
-  // Block to display user name and the option to login/logout.
-  $blocks['nexteuropa_user_menu'] = [
-    'info' => t('User menu block'),
-  ];
-
-  return $blocks;
-}
-
-/**
- * Implements hook_block_view().
- */
-function nexteuropa_theme_functions_block_view($delta = '') {
-  $block = [];
-
-  switch ($delta) {
-    case 'nexteuropa_user_menu':
-      $block['content'] = _nexteuropa_theme_functions_get_blocks_content($delta);
-      break;
-  }
-
-  return $block;
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  *
  * Here we add extra modifiers to the file markup.

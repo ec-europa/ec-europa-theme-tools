@@ -47,7 +47,7 @@ function theme_nexteuropa_user_menu($variables) {
     return theme('item_list', $variables);
   }
   else {
-    if (variable_get('ec_europa_user_login')) {
+    if (theme_get_setting('ec_europa_user_login', 'europa')) {
       $path = module_exists('ecas') ? 'ecas' : 'user';
       $login = l(t('Log in'), $path, ['attributes' => ['class' => ['site-user-menu__list']]]);
       return $login;

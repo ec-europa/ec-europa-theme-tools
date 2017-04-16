@@ -10,77 +10,68 @@ include_once 'nexteuropa_topbar.helpers.inc';
 include_once 'nexteuropa_topbar.theme.inc';
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_form_system_theme_settings_alter().
  */
-function nexteuropa_topbar_form_alter(&$form, &$form_state) {
-  if ($form['#form_id'] == 'system_theme_settings') {
-    // Build the form.
-    if (empty($form['europa'])) {
-      $form['europa'] = [
-        '#type' => 'fieldset',
-        '#title' => t('Europa settings'),
-      ];
-    }
-
-    $form['europa']['site_switcher'] = [
-      '#type' => 'radios',
-      '#title' => t('Choose which site your website belongs to:'),
-      // @codingStandardsIgnoreLine
-      '#default_value' => variable_get('ec_europa_site_switcher', 'informational'),
-      '#options' => [
-        'informational' => t('Informational'),
-        'political' => t('Political'),
-      ],
-      '#weight' => 0,
-    ];
-
-    $form['europa']['user'] = [
+function nexteuropa_topbar_form_system_theme_settings_alter(&$form, &$form_state) {
+  // Build the form.
+  if (empty($form['europa'])) {
+    $form['europa'] = [
       '#type' => 'fieldset',
-      '#title' => t('Europa settings for the user menu'),
+      '#title' => t('Europa settings'),
     ];
+  }
 
-    $form['europa']['user']['user_menu'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Do you want to show the user menu logged in users?'),
-      // @codingStandardsIgnoreLine
-      '#default_value' => variable_get('ec_europa_show_user_menu', 0),
-      '#weight' => 0,
-    ];
+  $form['europa']['ec_europa_site_switcher'] = [
+    '#type' => 'radios',
+    '#title' => t('Choose which site your website belongs to:'),
+    '#default_value' => theme_get_setting('ec_europa_site_switcher', 'europa'),
+    '#options' => [
+      'informational' => t('Informational'),
+      'political' => t('Political'),
+    ],
+    '#description' => t('This will determine the default selected tab in the site switcher'),
+    '#weight' => 0,
+  ];
 
-    $form['europa']['user']['user_login'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Do you want to show the login link?'),
-      // @codingStandardsIgnoreLine
-      '#default_value' => variable_get('ec_europa_user_login', 0),
-      '#weight' => 0,
-      '#states' => [
-        'visible' => [
-          ':input[name="user_menu"]' => [
-            'checked' => TRUE,
-          ],
+  $form['europa']['user'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Europa settings for the user menu'),
+  ];
+
+  $form['europa']['user']['ec_europa_user_menu'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do you want to show the user menu logged in users?'),
+    '#default_value' => theme_get_setting('ec_europa_user_menu', 'europa'),
+    '#description' => t('The user menu contains info about the logged in user and links to login/logout (it handle ecas login as well)'),
+    '#weight' => 0,
+  ];
+
+  $form['europa']['user']['ec_europa_user_login'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do you want to show the login link?'),
+    '#default_value' => theme_get_setting('ec_europa_user_login', 'europa'),
+    '#weight' => 0,
+    '#description' => t('You can choose to hide the login link keeping this unchecked'),
+    '#states' => [
+      'visible' => [
+        ':input[name="ec_europa_user_menu"]' => [
+          'checked' => TRUE,
         ],
       ],
-    ];
+    ],
+  ];
 
-    $form['#submit'][] = '_nexteuropa_topbar_theme_settings_submit';
-  }
+  $form['#submit'][] = '_nexteuropa_topbar_theme_settings_submit';
 }
 
 /**
  * Custom submit function for the theme setting form.
  */
 function _nexteuropa_topbar_theme_settings_submit(&$form, &$form_state) {
-  $switcher = $form_state['values']['site_switcher'];
-  variable_set('ec_europa_site_switcher', $switcher);
-
-  $user_menu = $form_state['values']['user_menu'];
-  if (variable_get('ec_europa_show_user_menu') !== $user_menu) {
-    variable_set('ec_europa_show_user_menu', $user_menu);
+  $user_menu = $form_state['values']['ec_europa_user_menu'];
+  if (theme_get_setting('ec_europa_user_menu', 'europa') !== $user_menu) {
     _nexteuropa_topbar_handle_user_menu($user_menu);
   }
-
-  $user_login = $form_state['values']['user_login'];
-  variable_set('ec_europa_user_login', $user_login);
 }
 
 /**

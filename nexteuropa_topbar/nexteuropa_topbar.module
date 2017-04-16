@@ -61,6 +61,8 @@ function nexteuropa_topbar_form_system_theme_settings_alter(&$form, &$form_state
     ],
   ];
 
+  $form_state['ec_europa_user_menu'] = $form['europa']['user']['ec_europa_user_menu']['#default_value'];
+
   $form['#submit'][] = '_nexteuropa_topbar_theme_settings_submit';
 }
 
@@ -68,9 +70,10 @@ function nexteuropa_topbar_form_system_theme_settings_alter(&$form, &$form_state
  * Custom submit function for the theme setting form.
  */
 function _nexteuropa_topbar_theme_settings_submit(&$form, &$form_state) {
-  $user_menu = $form_state['values']['ec_europa_user_menu'];
-  if (theme_get_setting('ec_europa_user_menu', 'europa') !== $user_menu) {
-    _nexteuropa_topbar_handle_user_menu($user_menu);
+  $old_user_menu = $form_state['ec_europa_user_menu'];
+  $new_user_menu = $form_state['values']['ec_europa_user_menu'];
+  if ($new_user_menu != $old_user_menu) {
+    _nexteuropa_topbar_handle_user_menu($new_user_menu);
   }
 }
 

@@ -25,10 +25,10 @@ function _nexteuropa_topbar_user_menu_info() {
 function _nexteuropa_topbar_handle_user_menu($op) {
   $context = module_invoke('context', 'load', 'ec_europa_topbar');
 
-  $user_login = _nexteuropa_topbar_user_menu_info();
+  $user_menu = _nexteuropa_topbar_user_menu_info();
 
   if ($op) {
-    $context->reactions['block']['blocks']['nexteuropa_topbar-nexteuropa_user_menu'] = $user_login;
+    $context->reactions['block']['blocks']['nexteuropa_topbar-nexteuropa_user_menu'] = $user_menu;
     $message = t('You activated the user menu, you are going to find it in the top right corner.');
   }
   else {

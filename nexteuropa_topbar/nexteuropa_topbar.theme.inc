@@ -9,8 +9,7 @@
  * Returns HTML for the element.
  *
  * @param mixed $variables
- *   An associative array containing:
- *   - modifier: The modifier applied to the element.
+ *   An associative array.
  *
  * @return string
  *   The markup itself.

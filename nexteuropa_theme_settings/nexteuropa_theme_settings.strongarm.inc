@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * dt_europa_settings.strongarm.inc
+ * nexteuropa_theme_settings.strongarm.inc
  */
 
 /**
  * Implements hook_strongarm().
  */
-function dt_europa_settings_strongarm() {
+function nexteuropa_theme_settings_strongarm() {
   $export = array();
 
   $strongarm = new stdClass();

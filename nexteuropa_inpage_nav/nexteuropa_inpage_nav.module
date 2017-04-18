@@ -33,13 +33,11 @@ function nexteuropa_inpage_nav_theme() {
 function nexteuropa_inpage_nav_ds_fields_info($entity_type) {
   $fields = [];
 
-  if ($entity_type == 'node') {
-    $fields['node']['in_page_navigation'] = [
-      'title' => t('Inpage navigation'),
-      'field_type' => DS_FIELD_TYPE_FUNCTION,
-      'function' => '_nexteuropa_inpage_nav_render_tmp',
-    ];
-  }
+  $fields[$entity_type]['in_page_navigation'] = [
+    'title' => t('Inpage navigation'),
+    'field_type' => DS_FIELD_TYPE_FUNCTION,
+    'function' => '_nexteuropa_inpage_nav_render_tmp',
+  ];
 
   return $fields;
 }
@@ -58,11 +56,11 @@ function _nexteuropa_inpage_nav_render_tmp($field) {
 }
 
 /**
- * Implements nexteuropa_inpage_nav_node_view_alter().
+ * Implements hook_entity_view_alter().
  *
  * When we request the inpage navigation, we add a pre render function.
  */
-function nexteuropa_inpage_nav_node_view_alter(&$build) {
+function nexteuropa_inpage_nav_entity_view_alter(&$build, $type) {
   if (isset($build['in_page_navigation'])) {
     $build['#pre_render'][] = '_nexteuropa_inpage_nav_build_inpage_nav';
   }

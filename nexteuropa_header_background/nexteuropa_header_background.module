@@ -5,14 +5,14 @@
  * Code for the header background feature.
  */
 
-module_load_include('inc', 'dt_header_background', 'dt_header_background.admin');
-define('DT_HEADER_BACKGROUND_DIR', 'public://css/header-backgrounds/');
-define('DT_HEADER_BACKGROUND_FIELD', variable_get('dt_header_background_field', FALSE));
+module_load_include('inc', 'nexteuropa_header_background', 'nexteuropa_header_background.admin');
+define('NEXTEUROPA_HEADER_BACKGROUND_DIR', 'public://css/header-backgrounds/');
+define('NEXTEUROPA_HEADER_BACKGROUND_FIELD', variable_get('nexteuropa_header_background_field', FALSE));
 
 /**
- * Implements hook_dt_header_background_info().
+ * Implements hook_nexteuropa_header_background_info().
  */
-function dt_header_background_dt_header_background_info() {
+function nexteuropa_header_background_nexteuropa_header_background_info() {
   return [
     [
       'view_mode' => 'full',
@@ -24,17 +24,17 @@ function dt_header_background_dt_header_background_info() {
 /**
  * Implements template_preprocess_node().
  */
-function dt_header_background_preprocess_node(&$variables) {
+function nexteuropa_header_background_preprocess_node(&$variables) {
   $header_back = FALSE;
   // Our checking value.
   $add_header = FALSE;
   // Get the settings for the content type visibility.
-  $selected = variable_get('dt_header_background_which_content_type', _dt_header_background_prepare_options('check_options'));
+  $selected = variable_get('nexteuropa_header_background_which_content_type', _nexteuropa_header_background_prepare_options('check_options'));
 
   // Check the modules, if we have a match we can stop.
-  foreach (module_implements('dt_header_background_info') as $module) {
+  foreach (module_implements('nexteuropa_header_background_info') as $module) {
     // The hook returns an array, so we have to check each of them.
-    foreach (module_invoke($module, 'dt_header_background_info') as $implementation) {
+    foreach (module_invoke($module, 'nexteuropa_header_background_info') as $implementation) {
       if ($implementation['view_mode'] == $variables['view_mode'] && ($implementation['content_type'] == '*' || $implementation['content_type'] == $variables['type'])) {
         $add_header = TRUE;
         break;
@@ -45,8 +45,8 @@ function dt_header_background_preprocess_node(&$variables) {
   // If we have the field and if we are viewing the node's page.
   if ($add_header && in_array($variables['node']->type, $selected)) {
     // Check if have a value for the field.
-    if (DT_HEADER_BACKGROUND_FIELD) {
-      $header_back = field_get_items('node', $variables['node'], DT_HEADER_BACKGROUND_FIELD);
+    if (NEXTEUROPA_HEADER_BACKGROUND_FIELD) {
+      $header_back = field_get_items('node', $variables['node'], NEXTEUROPA_HEADER_BACKGROUND_FIELD);
     }
     // Get the fid from the value or check for a default value.
     if ($header_back) {
@@ -54,23 +54,23 @@ function dt_header_background_preprocess_node(&$variables) {
     }
     else {
       $ct = $variables['node']->type;
-      $fid = variable_get('dt_header_background_' . $ct, FALSE);
+      $fid = variable_get('nexteuropa_header_background_' . $ct, FALSE);
       if (!$fid) {
-        $fid = variable_get('dt_header_background_default', FALSE);
+        $fid = variable_get('nexteuropa_header_background_default', FALSE);
       }
     }
 
     // Fid might be still unexistent.
     if ($fid) {
-      $uri = DT_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
+      $uri = NEXTEUROPA_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
       if (!file_exists($uri)) {
         // Prepare and store the css file.
-        _dt_header_background_handle_header_background(NULL, $fid);
+        _nexteuropa_header_background_handle_header_background(NULL, $fid);
       }
       // Set a variable available in the tpls.
       $variables['header_back'] = TRUE;
       // Add the css to the page.
-      $uri = DT_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
+      $uri = NEXTEUROPA_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
       drupal_add_css($uri, ['group' => CSS_THEME, 'every_page' => FALSE]);
     }
   }
@@ -79,18 +79,18 @@ function dt_header_background_preprocess_node(&$variables) {
 /**
  * Implements template_preprocess_page().
  */
-function dt_header_background_preprocess_page(&$variables) {
-  $activate = variable_get('dt_header_background_activate_listing', FALSE);
+function nexteuropa_header_background_preprocess_page(&$variables) {
+  $activate = variable_get('nexteuropa_header_background_activate_listing', FALSE);
 
   if ($activate) {
     $views_page = views_get_page_view();
 
     // If we are viewing a views generated page.
     if (is_object($views_page)) {
-      $fid = variable_get('dt_header_background_default', FALSE);
+      $fid = variable_get('nexteuropa_header_background_default', FALSE);
       $variables['header_back'] = TRUE;
       // Add the css to the page.
-      $uri = DT_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
+      $uri = NEXTEUROPA_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
       drupal_add_css($uri, ['group' => CSS_THEME, 'every_page' => FALSE]);
     }
   }
@@ -99,24 +99,24 @@ function dt_header_background_preprocess_page(&$variables) {
 /**
  * Implements hook_workbench_moderation_transition().
  */
-function dt_header_background_workbench_moderation_transition($node) {
+function nexteuropa_header_background_workbench_moderation_transition($node) {
   // Create the Entity wrapper and handle the header background image.
   $entity_wrapper = entity_metadata_wrapper('node', $node);
-  if (isset($node->{DT_HEADER_BACKGROUND_FIELD})
-    && NULL !== $entity_wrapper->{DT_HEADER_BACKGROUND_FIELD}->value()
+  if (isset($node->{NEXTEUROPA_HEADER_BACKGROUND_FIELD})
+    && NULL !== $entity_wrapper->{NEXTEUROPA_HEADER_BACKGROUND_FIELD}->value()
   ) {
-    _dt_header_background_handle_header_background($entity_wrapper);
+    _nexteuropa_header_background_handle_header_background($entity_wrapper);
   }
 }
 
 /**
  * Set the default header background image.
  */
-function _dt_header_background_set_default_header_background($ct = FALSE, $fid = FALSE) {
+function _nexteuropa_header_background_set_default_header_background($ct = FALSE, $fid = FALSE) {
   // We receive the fid only on a theme setting form submit.
   if (!$fid) {
     // Set the "default" image for the header background.
-    $filepath = drupal_realpath(drupal_get_path('module', 'dt_header_background') . '/images/header_background_default.png');
+    $filepath = drupal_realpath(drupal_get_path('module', 'nexteuropa_header_background') . '/images/header_background_default.png');
 
     if (file_exists($filepath)) {
       $file = (object) [
@@ -129,7 +129,7 @@ function _dt_header_background_set_default_header_background($ct = FALSE, $fid =
       // Copy the default image in the public folder.
       $file = file_copy($file, 'public://');
       $fid = $file->fid;
-      file_usage_add($file, 'dt_header_background', 'default', 1);
+      file_usage_add($file, 'nexteuropa_header_background', 'default', 1);
     }
   }
 
@@ -138,27 +138,27 @@ function _dt_header_background_set_default_header_background($ct = FALSE, $fid =
     $ct = 'default';
   }
 
-  variable_set('dt_header_background_' . $ct, $fid);
+  variable_set('nexteuropa_header_background_' . $ct, $fid);
 }
 
 /**
  * Helper function to generate css files for the header background.
  */
-function _dt_header_background_handle_header_background($entity_wrapper = NULL, $fid = FALSE) {
-  if (!$fid && DT_HEADER_BACKGROUND_FIELD) {
+function _nexteuropa_header_background_handle_header_background($entity_wrapper = NULL, $fid = FALSE) {
+  if (!$fid && NEXTEUROPA_HEADER_BACKGROUND_FIELD) {
     // We need the file id.
-    $fid = $entity_wrapper->{DT_HEADER_BACKGROUND_FIELD}->value()['fid'];
+    $fid = $entity_wrapper->{NEXTEUROPA_HEADER_BACKGROUND_FIELD}->value()['fid'];
   }
   // Load the managed file.
   $file = file_load($fid);
   // Build the uri for our css file.
-  $uri = DT_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
+  $uri = NEXTEUROPA_HEADER_BACKGROUND_DIR . 'header_background_' . $fid . '.css';
   // Get the real path basing on the uri.
   $filepath = drupal_realpath($uri);
 
   // If we already a this file no reasons to go further.
   if (!file_exists($filepath)) {
-    $dir = DT_HEADER_BACKGROUND_DIR;
+    $dir = NEXTEUROPA_HEADER_BACKGROUND_DIR;
     // Prepare the filesystem.
     file_prepare_directory($dir, FILE_CREATE_DIRECTORY);
     // Get all the breakpoints belonging to "this" theme.
@@ -225,10 +225,10 @@ function _dt_header_background_handle_header_background($entity_wrapper = NULL, 
 /**
  * Implements hook_help().
  */
-function dt_header_background_help($path, $arg) {
+function nexteuropa_header_background_help($path, $arg) {
   switch ($path) {
-    // Main module help for the dt_header_background module.
-    case 'admin/help#dt_header_background':
-      return '<p>' . t('Header background module requires class "@class" to be defined on the template that displays the full-node content.', array('@class' => ".page-header--image")) . '</p>';
+    // Main module help for the nexteuropa_header_background module.
+    case 'admin/help#nexteuropa_header_background':
+      return '<p>' . t('NextEuropa Header background module requires class "@class" to be defined on the template that displays the full-node content.', array('@class' => ".page-header--image")) . '</p>';
   }
 }

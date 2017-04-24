@@ -13,7 +13,7 @@
  *   'view_mode', the view mode to add the background for.
  *   'content_types', to limit it to the content type, * for all content types.
  */
-function hook_dt_header_background_info() {
+function hook_nexteuropa_header_background_info() {
   return [
     [
       'view_mode' => 'full',

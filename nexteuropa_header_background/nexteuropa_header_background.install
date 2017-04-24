@@ -10,14 +10,28 @@
  */
 function nexteuropa_header_background_enable() {
   // Activation message.
-  drupal_set_message(t('DT Header Background feature is now active on your site.'));
+  drupal_set_message(t('NextEuropa Header Background module is now active on your site.'));
 }
 
 /**
  * Implements hook_disable().
  */
 function nexteuropa_header_background_disable() {
-  drupal_set_message(t('DT Header Background feature is now disabled on your site.'));
+  drupal_set_message(t('NextEuropa Header Background module is now disabled on your site.'));
+}
+
+/**
+ * Implements hook_install().
+ */
+function nexteuropa_header_background_install() {
+  $modules = [
+    'dt_header_background',
+  ];
+
+  db_delete('system')
+    ->condition('name', $modules, 'IN')
+    ->condition('type', 'module')
+    ->execute();
 }
 
 /**
@@ -31,8 +45,22 @@ function nexteuropa_header_background_uninstall() {
   $content_types = node_type_get_types();
   foreach ($content_types as $machine_name => $content_type) {
     // Check if the content type holds the relevant field.
-    if (field_info_instance('node', 'field_core_header_image', $machine_name) !== NULL) {
+    if (field_info_instance('node', NEXTEUROPA_HEADER_BACKGROUND_FIELD, $machine_name) !== NULL) {
       variable_del('nexteuropa_header_background_' . $machine_name);
     }
   }
+}
+
+/**
+ * Implements hook_update().
+ */
+function nexteuropa_header_background_update_7001() {
+  $modules = [
+    'dt_header_background',
+  ];
+
+  db_delete('system')
+    ->condition('name', $modules, 'IN')
+    ->condition('type', 'module')
+    ->execute();
 }

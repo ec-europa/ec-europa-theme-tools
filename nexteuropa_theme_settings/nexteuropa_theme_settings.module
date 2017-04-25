@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Code for the DT europa settings feature.
+ * Code for the NextEuropa theme settings feature.
  */
 
 include_once 'nexteuropa_theme_settings.features.inc';

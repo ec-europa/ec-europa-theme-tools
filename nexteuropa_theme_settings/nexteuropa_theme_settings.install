@@ -25,7 +25,16 @@ function nexteuropa_theme_settings_disable() {
  * Implements hook_install().
  */
 function nexteuropa_theme_settings_install() {
+  $modules = [
+    'dt_europa_settings',
+  ];
+
+  db_delete('system')
+    ->condition('name', $modules, 'IN')
+    ->condition('type', 'module')
+    ->execute();
   $t = get_t();
+
   drupal_set_message($t('Europa settings are now installed on your site.'));
 }
 
@@ -40,7 +49,7 @@ function nexteuropa_theme_settings_uninstall() {
 /**
  * Delete {system} records for long-lost modules.
  */
-function nexteuropa_theme_settings_update_7100() {
+function nexteuropa_theme_settings_update_7101() {
   $modules = [
     'dt_europa_settings',
   ];

@@ -9,6 +9,7 @@ dependencies[] = nexteuropa_ds_layouts
 dependencies[] = nexteuropa_formatters
 dependencies[] = nexteuropa_inpage_nav
 dependencies[] = nexteuropa_theme_functions
+dependencies[] = nexteuropa_language_selector_site_popup
 dependencies[] = nexteuropa_views
 dependencies[] = picture
 dependencies[] = retina_images

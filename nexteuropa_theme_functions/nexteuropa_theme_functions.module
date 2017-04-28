@@ -12,10 +12,12 @@ include_once 'nexteuropa_theme_functions.helpers.inc';
  */
 function nexteuropa_theme_functions_form_system_theme_settings_alter(&$form, &$form_state) {
   // Build the form.
-  $form['europa'] = [
-    '#type' => 'fieldset',
-    '#title' => t('Europa settings'),
-  ];
+  if (empty($form['europa']['#type'])) {
+    $form['europa'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Europa settings'),
+    ];
+  }
 
   $form['europa']['field_introduction'] = [
     '#type' => 'select',

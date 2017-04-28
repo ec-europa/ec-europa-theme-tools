@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * dt_europa_settings.default_breakpoints.inc
+ * nexteuropa_theme_settings.default_breakpoints.inc
  */
 
 /**
  * Implements hook_default_breakpoints().
  */
-function dt_europa_settings_default_breakpoints() {
+function nexteuropa_theme_settings_default_breakpoints() {
   $export = array();
 
   $breakpoint = new stdClass();

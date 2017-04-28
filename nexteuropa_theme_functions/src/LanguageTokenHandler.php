@@ -1,13 +1,13 @@
 <?php
 
-namespace Drupal\dt_europa_settings;
+namespace Drupal\nexteuropa_theme_functions;
 
 use Drupal\nexteuropa_token\TokenAbstractHandler;
 
 /**
  * Class LanguageTokenHandler.
  *
- * @package Drupal\dt_europa_settings
+ * @package Drupal\nexteuropa_theme_settings
  */
 class LanguageTokenHandler extends TokenAbstractHandler {
 
@@ -22,14 +22,14 @@ class LanguageTokenHandler extends TokenAbstractHandler {
     $replacements = [];
 
     // Our tokens.
-    if ($type == _dt_europa_settings_get_token_type()) {
+    if ($type == _nexteuropa_theme_functions_get_token_type()) {
       foreach ($tokens as $name => $original) {
         switch ($name) {
           case self::CONTENT_LANGUAGE:
             if ($node = menu_get_object()) {
               $languages = language_list();
               // If we can load our node, we will use that for our language.
-              $content_language = _dt_europa_settings_content_language($node);
+              $content_language = _nexteuropa_theme_functions_content_language($node);
               $language_token_value = isset($languages[$content_language]) ? $languages[$content_language]->prefix : LANGUAGE_NONE;
             }
             else {
@@ -55,7 +55,7 @@ class LanguageTokenHandler extends TokenAbstractHandler {
    * {@inheritdoc}
    */
   public function hookTokenInfoAlter(&$data) {
-    $token = _dt_europa_settings_get_token_type();
+    $token = _nexteuropa_theme_functions_get_token_type();
     // And the token.
     $data['tokens'][$token][self::CONTENT_LANGUAGE] = [
       'name' => t('Europa Content language'),

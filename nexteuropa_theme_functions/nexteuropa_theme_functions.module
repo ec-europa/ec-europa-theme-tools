@@ -8,6 +8,28 @@
 include_once 'nexteuropa_theme_functions.helpers.inc';
 
 /**
+ * Implements hook_form_system_theme_settings_alter().
+ */
+function nexteuropa_theme_functions_form_system_theme_settings_alter(&$form, &$form_state) {
+  // Build the form.
+  if (empty($form['europa']['#type'])) {
+    $form['europa'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Europa settings'),
+    ];
+  }
+
+  $form['europa']['field_introduction'] = [
+    '#type' => 'select',
+    '#title' => t('Choose a field to be diplayed in the page header for views pages and nodes'),
+    '#description' => t('You can choose one of the existing fields with type "long text"'),
+    '#options' => _nexteuropa_theme_functions_textfields(),
+    '#weight' => -1,
+    '#default_value' => theme_get_setting('ec_europa_introduction_field', 'europa'),
+  ];
+}
+
+/**
  * Generates "<a href=tel:" tag for the contact phone field.
  *
  * If in the generation it fails it will return false.
@@ -190,49 +212,6 @@ function _nexteuropa_theme_functions_file_show_upload_callback(&$form, &$form_st
 }
 
 /**
- * Implements hook_theme().
- */
-function nexteuropa_theme_functions_theme() {
-  return [
-    'site_user_menu' => [
-      'file' => 'nexteuropa_theme_functions.theme.inc',
-      'variables' => [
-        'modifier' => NULL,
-      ],
-    ],
-  ];
-}
-
-/**
- * Implements hook_block_info().
- */
-function nexteuropa_theme_functions_block_info() {
-  // Block to display user name and the option to login/logout.
-  $blocks['dt_shared_functions_user_menu'] = [
-    'info' => t('User menu block'),
-  ];
-
-  return $blocks;
-}
-
-/**
- * Implements hook_block_view().
- */
-function nexteuropa_theme_functions_block_view($delta = '') {
-  $block = [];
-
-  switch ($delta) {
-    case 'dt_shared_functions_user_menu':
-      if (user_is_logged_in()) {
-        $block['content'] = _nexteuropa_theme_functions_get_blocks_content($delta);
-      }
-      break;
-  }
-
-  return $block;
-}
-
-/**
  * Implements hook_preprocess_HOOK().
  *
  * Here we add extra modifiers to the file markup.
@@ -296,5 +275,33 @@ function nexteuropa_theme_functions_format_size($size, $decimal_places = 1, $lan
       }
     }
     return str_replace('@size', round($size, $decimal_places), $unit);
+  }
+}
+
+/**
+ * Implements hook_nexteuropa_token_token_handlers().
+ */
+function nexteuropa_theme_functions_nexteuropa_token_token_handlers() {
+  return [
+    'language_handler' => '\Drupal\nexteuropa_theme_functions\LanguageTokenHandler',
+  ];
+}
+
+/**
+ * Implements hook_translated_menu_link_alter().
+ */
+function nexteuropa_theme_functions_translated_menu_link_alter(&$item, $map) {
+  // Make our single links coming from menu items language aware.
+  $menus = [
+    'menu-nexteuropa-service-links',
+    'menu-nexteuropa-inst-links',
+    'menu-nexteuropa-site-links',
+  ];
+
+  if (in_array($item['menu_name'], $menus)) {
+    // @todo Remove this.
+    if ($item['title'] != 'Europa Analytics') {
+      $item['href'] = token_replace($item['href'] . '_[europa_tokens:europa_interface_language]', $item, []);
+    }
   }
 }

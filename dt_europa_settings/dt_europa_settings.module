@@ -23,10 +23,12 @@ function dt_europa_settings_nexteuropa_token_token_handlers() {
 function dt_europa_settings_form_alter(&$form, &$form_state) {
   if ($form['#form_id'] == 'system_theme_settings') {
     // Build the form.
-    $form['europa'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Europa settings'),
-    ];
+    if (empty($form['europa'])) {
+      $form['europa'] = [
+        '#type' => 'fieldset',
+        '#title' => t('Europa settings'),
+      ];
+    }
 
     $form['europa']['field_introduction'] = [
       '#type' => 'select',

@@ -50,7 +50,7 @@ function nexteuropa_topbar_form_system_theme_settings_alter(&$form, &$form_state
     '#type' => 'checkbox',
     '#title' => t('Do you want to show the login link?'),
     '#default_value' => theme_get_setting('ec_europa_user_login', 'europa'),
-    '#weight' => 0,
+    '#weight' => 1,
     '#description' => t('You can choose to hide the login link keeping this unchecked'),
     '#states' => [
       'visible' => [

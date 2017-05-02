@@ -283,7 +283,7 @@ function nexteuropa_theme_functions_format_size($size, $decimal_places = 1, $lan
  */
 function nexteuropa_theme_functions_nexteuropa_token_token_handlers() {
   return [
-    'language_handler' => '\Drupal\nexteuropa_theme_functions\LanguageTokenHandler',
+    'nexteuropa_language_handler' => '\Drupal\nexteuropa_theme_functions\LanguageTokenHandler',
   ];
 }
 

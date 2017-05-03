@@ -16,6 +16,9 @@ function nexteuropa_language_selector_site_popup_install() {
     ->fields(['weight' => 999])
     ->condition('name', 'nexteuropa_language_selector_site_popup', '=')
     ->execute();
+
+  $t = get_t();
+  drupal_set_message($t('Nexteuropa language selector site popup settings are now installed on your site.'));
 }
 
 /**
@@ -26,6 +29,9 @@ function nexteuropa_language_selector_site_popup_install() {
 function nexteuropa_language_selector_site_popup_uninstall() {
   variable_del('nexteuropa_language_selector_site_popup_message');
   variable_del('dt_language_selector_site_splash_message');
+
+  $t = get_t();
+  drupal_set_message($t('Nexteuropa language selector site popup has been successfully uninstalled.'));
 }
 
 /**

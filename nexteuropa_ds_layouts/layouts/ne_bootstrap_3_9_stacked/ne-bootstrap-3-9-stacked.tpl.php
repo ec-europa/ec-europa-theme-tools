@@ -21,9 +21,11 @@
     </nav>
 
   <?php if (theme_get_setting('ec_europa_improved_website', 'europa')): ?>
+    <?php if (!$is_front || $is_front && theme_get_setting('ec_europa_improved_website_home', 'europa')): ?>
     <div class="container-fluid page-header__site-identification">
       <h3><?php print $site_name; ?></h3>
     </div>
+    <?php endif; ?>
   <?php endif; ?>
     
     <div class="container-fluid page-header__hero-title">

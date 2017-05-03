@@ -6,6 +6,21 @@
  */
 
 /**
+ * Implements hook_preprocess_block().
+ *
+ * Default implementation of language selector.
+ */
+function nexteuropa_language_selector_site_popup_preprocess_block(&$variables) {
+  if (isset($variables['block']->bid)
+    && $variables['block']->bid === 'language_selector_site-language_selector_site'
+  ) {
+    // Add accessibility js to control the tab flow.
+    drupal_add_js(drupal_get_path('module', 'nexteuropa_language_selector_site_popup') . '/js/nexteuropa_language_selector_site_popup.js');
+
+  }
+}
+
+/**
  * Implements hook_preprocess().
  *
  * This mostly is copy paste work from the splash_screen module. But I tend to
@@ -23,6 +38,7 @@ function nexteuropa_language_selector_site_popup_preprocess_splash(&$variables) 
 
   // Prepare links href when destination is set.
   // Use case: use site level language selector.
+  $options = [];
   if (isset($_GET['destination'])) {
     $href_array = drupal_parse_url($_GET['destination']);
     $href = $href_array['path'];
@@ -36,12 +52,11 @@ function nexteuropa_language_selector_site_popup_preprocess_splash(&$variables) 
       parse_str($href_array['query'], $parameters);
       $options['query'] = $parameters;
     }
-
-    $options['attributes']['class'] = "splash-page__btn-close";
-
-    // Also enable close button.
-    $variables['close_button'] = l(t('Close'), $href, $options);
   }
+  $options['attributes']['class'] = "splash-page__btn-close";
+
+  // Enable close button.
+  $variables['close_button'] = l(t('Close'), $href, $options);
 
   // Add enabled languages, if not in blacklist. Add all these languages to our
   // processed list.

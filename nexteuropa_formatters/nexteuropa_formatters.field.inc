@@ -30,7 +30,7 @@ function _nexteuropa_formatters_get_listing_view_modes() {
 function nexteuropa_formatters_field_formatter_info() {
   return [
     'context_nav_item' => [
-      'label' => t('Context nav item'),
+      'label' => t('NE: Context nav item'),
       'field types' => [
         'text',
         'entityreference',
@@ -48,7 +48,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'nexteuropa_tags' => [
-      'label' => t('Tags (NextEuropa)'),
+      'label' => t('NE: Tags'),
       'field types' => [
         'taxonomy_term_reference',
         'entityreference',
@@ -56,7 +56,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_button_default' => [
-      'label' => t('Link button default'),
+      'label' => t('NE: Link button default'),
       'field types' => [
         'link_field',
         'taxonomy_term_reference',
@@ -69,7 +69,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_button_download' => [
-      'label' => t('Download button'),
+      'label' => t('NE: Download button'),
       'field types' => [
         'link_field',
         'file',
@@ -79,7 +79,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_download' => [
-      'label' => t('Download file-link'),
+      'label' => t('NE: Download file-link'),
       'field types' => [
         'link_field',
       ],
@@ -88,7 +88,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_button_primary' => [
-      'label' => t('Link button primary'),
+      'label' => t('NE: Link button primary'),
       'field types' => [
         'link_field',
         'taxonomy_term_reference',
@@ -98,7 +98,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_button_secondary' => [
-      'label' => t('Link button secondary'),
+      'label' => t('NE: Link button secondary'),
       'field types' => [
         'link_field',
         'taxonomy_term_reference',
@@ -108,7 +108,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_button_call_for_action' => [
-      'label' => t('Link button call for action'),
+      'label' => t('NE: Link button call for action'),
       'field types' => [
         'link_field',
         'taxonomy_term_reference',
@@ -118,7 +118,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_button_block' => [
-      'label' => t('Link button block'),
+      'label' => t('NE: Link button block'),
       'field types' => [
         'link_field',
         'taxonomy_term_reference',
@@ -128,13 +128,13 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'link_button_two_column' => [
-      'label' => t('Link button two column'),
+      'label' => t('NE: Link button two column'),
       'field types' => [
         'link_field',
       ],
     ],
     'link_listing_title' => [
-      'label' => t('Listing title link'),
+      'label' => t('NE: Listing title link'),
       'field types' => [
         'link_field',
         'text',
@@ -144,16 +144,20 @@ function nexteuropa_formatters_field_formatter_info() {
         'modifier' => '',
       ],
     ],
+    'listing_title_with_link' => [
+      'label' => t('NE: (h3) Listing title: with link'),
+      'field types' => ['text', 'text_long'],
+    ],
     'listing_title' => [
-      'label' => t('Listing title (h3)'),
+      'label' => t('NE: (h3) Listing title: no link'),
       'field types' => ['text', 'text_long'],
     ],
     'listing_title_element' => [
-      'label' => t('Listing title element'),
+      'label' => t('NE: Listing title element'),
       'field types' => ['text'],
     ],
     'entity_reference_section' => [
-      'label' => t('Entity reference section group'),
+      'label' => t('NE: Entity reference section group'),
       'field types' => [
         'entityreference',
       ],
@@ -164,18 +168,18 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'telephone' => [
-      'label' => t('Telephone link'),
+      'label' => t('NE: Telephone link'),
       'field types' => ['text'],
     ],
     'text_number' => [
-      'label' => t('Text as number'),
+      'label' => t('NE: Text as number'),
       'field types' => ['text'],
       'settings' => [
         'suffix' => '',
       ],
     ],
     'label' => [
-      'label' => t('Label'),
+      'label' => t('NE: Label'),
       'field types' => [
         'text',
         'list_float',
@@ -187,7 +191,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'feedback_counter' => [
-      'label' => t('Feedback counter'),
+      'label' => t('NE: Feedback counter'),
       'field types' => [
         'number_integer',
         'number_decimal',
@@ -195,20 +199,20 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'collapsed_term' => [
-      'label' => t('Collapsed term (displays taxonomy term description in a collapsible way)'),
+      'label' => t('NE: Collapsed term (displays taxonomy term description in a collapsible way)'),
       'field types' => [
         'taxonomy_term_reference',
       ],
     ],
     'bold_last' => [
-      'label' => t('Bold last word'),
+      'label' => t('NE: Bold last word'),
       'field types' => [
         'taxonomy_term_reference',
         'text',
       ],
     ],
     'structured_content_links' => [
-      'label' => t('Structured content links'),
+      'label' => t('NE: Structured content links'),
       'field types' => [
         'entityreference',
         'link_field',
@@ -229,20 +233,20 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
   switch ($display['type']) {
     case 'context_nav_item':
       $element['expander_has_expander'] = [
-        '#title' => t('Has expander'),
+        '#title' => t('NE: Has expander'),
         '#type' => 'checkbox',
         '#size' => 1,
         '#default_value' => $settings['expander_has_expander'],
       ];
       $element['expander_trim_at'] = [
-        '#title' => t('Trim at'),
+        '#title' => t('NE: Trim at'),
         '#type' => 'textfield',
         '#size' => 2,
         '#default_value' => $settings['expander_trim_at'],
         '#element_validate' => ['element_validate_integer'],
       ];
       $element['expander_trim_to'] = [
-        '#title' => t('Trim to'),
+        '#title' => t('NE: Trim to'),
         '#type' => 'textfield',
         '#size' => 2,
         '#default_value' => $settings['expander_trim_to'],
@@ -253,18 +257,18 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
     case 'link_button_default':
       if ($field['type'] == 'entityreference') {
         $element['link_title'] = [
-          '#title' => t('Title'),
+          '#title' => t('NE: Title'),
           '#type' => 'textfield',
           '#default_value' => $settings['link_title'],
         ];
         $element['force_language_default'] = [
-          '#title' => t('Force the link to point to the default language.'),
+          '#title' => t('NE: Force the link to point to the default language.'),
           '#type' => 'checkbox',
           '#default_value' => $settings['force_language_default'],
         ];
       }
       $element['align_right'] = [
-        '#title' => t('Align the button to the right side of the page.'),
+        '#title' => t('NE: Align the button to the right side of the page.'),
         '#type' => 'checkbox',
         '#size' => 1,
         '#default_value' => $settings['align_right'],
@@ -274,7 +278,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
     case 'link_button_download':
     case 'link_download':
       $element['show_translations'] = [
-        '#title' => t('Show translations of the file'),
+        '#title' => t('NE: Show translations of the file'),
         '#type' => 'checkbox',
         '#size' => 1,
         '#default_value' => $settings['show_translations'],
@@ -286,7 +290,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
     case 'link_button_call_for_action':
     case 'link_button_block':
       $element['align_right'] = [
-        '#title' => t('Align the button to the right side of the page.'),
+        '#title' => t('NE: Align the button to the right side of the page.'),
         '#type' => 'checkbox',
         '#size' => 1,
         '#default_value' => $settings['align_right'],
@@ -302,7 +306,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
 
     case 'entity_reference_section':
       $element['use_content_language'] = [
-        '#title' => t('Use the content language for referenced items.'),
+        '#title' => t('NE: Use the content language for referenced items.'),
         '#type' => 'checkbox',
         '#default_value' => $settings['use_content_language'],
       ];
@@ -310,7 +314,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
 
     case 'text_number':
       $element['suffix'] = [
-        '#title' => t('Suffix'),
+        '#title' => t('NE: Suffix'),
         '#type' => 'textfield',
         '#size' => 2,
         '#default_value' => '',
@@ -319,7 +323,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
 
     case 'label':
       $element['label_modifiers'] = [
-        '#title' => t('Modifiers'),
+        '#title' => t('NE: Modifiers'),
         '#type' => 'textfield',
         '#description' => t('Separate multiple modifiers with commas'),
         '#default_value' => $settings['label_modifiers'],
@@ -328,12 +332,12 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
 
     case 'link_listing_title':
       $element['modifier'] = [
-        '#title' => t('Modifier'),
+        '#title' => t('NE: Modifier'),
         '#type' => 'select',
-        '#description' => t('Select the modifier'),
+        '#description' => t('NE: Select the modifier'),
         '#options' => [
-          '' => t('None'),
-          'two-columns' => t('Two columns'),
+          '' => t('NE: None'),
+          'two-columns' => t('NE: Two columns'),
         ],
         '#default_value' => $settings['modifier'],
       ];
@@ -390,6 +394,8 @@ function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
     case 'link_listing_title':
     case 'listing_title':
     case 'listing_title_element':
+    case 'listing_title_element':
+    case 'listing_title_with_link':
       $class = 'listing__title';
       break;
 
@@ -462,6 +468,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
   if (!empty($items)) {
     $formatter = $display['type'];
     $pull_right = !empty($display['settings']['align_right']) ? ' pull-right' : '';
+    $entity_uri = entity_uri($entity_type, $entity);
+    $entity_path = url($entity_uri['path']);
 
     switch ($formatter) {
       // Formatter for the structured content view mode.
@@ -697,7 +705,18 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
         foreach ($items as $delta => $item) {
           $element[$delta] = [
-            '#markup' => '<h3 class="' . $class . '">' . $item['safe_value'] . '</h3>',
+            '#markup' => '<h3 class="' . $class . '">' . $item['value'] . '</h3>',
+          ];
+        }
+        break;
+
+      case 'listing_title_with_link':
+        $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
+
+        foreach ($items as $delta => $item) {
+          $link = l($item['value'], $entity_path);
+          $element[$delta] = [
+            '#markup' => '<h3 class="' . $class . '">' . $link . '</h3>',
           ];
         }
         break;
@@ -706,7 +725,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         $class = _nexteuropa_formatters_field_formatter_view_classes($formatter);
 
         foreach ($items as $delta => $item) {
-          $link = l($item['value'], 'node/' . $entity->nid, ['attributes' => ['class' => $class]]);
+          $link = l($item['value'], $entity_path, ['attributes' => ['class' => $class]]);
 
           $element[$delta] = [
             '#markup' => $link,
@@ -1248,93 +1267,6 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
       }
     }
   }
-}
-
-/**
- * Implements hook_ds_fields_info().
- */
-function nexteuropa_formatters_ds_fields_info($entity_type) {
-  $fields = [];
-
-  // President.
-  $fields['cwt_team_president'] = [
-    'title' => t('Team: President (View: team members, president)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members',
-      'view_display' => 'block_1',
-    ],
-  ];
-
-  // Team role.
-  $fields['cwt_team_role'] = [
-    'title' => t('Team: Role (View: team members, commissioners hierarchy, role arg)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members',
-      'view_display' => 'block_2',
-      'views_arguments' => ['role'],
-    ],
-  ];
-
-  // Team project team.
-  $fields['cwt_team_project_team'] = [
-    'title' => t('Team: Project team (View: team members by domain)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members_by_domain',
-      'view_display' => 'block',
-    ],
-  ];
-
-  // Team name.
-  $fields['cwt_team_name'] = [
-    'title' => t('Team: Name (View: team members, commissioners hierarchy, name arg)'),
-    'field_type' => DS_FIELD_TYPE_FUNCTION,
-    'ui_limit' => ['team|*'],
-    'function' => '_nexteuropa_formatters_theme_ds_team_field',
-    'properties' => [
-      'view_machine_name' => 'team_members',
-      'view_display' => 'block_3',
-      'view_arguments' => ['name'],
-    ],
-  ];
-
-  return ['node' => $fields];
-}
-
-/**
- * Helper function to display test title.
- *
- * @param array $field
- *   The field array to work with.
- *
- * @return mixed
- *   The rendered view or false.
- */
-function _nexteuropa_formatters_theme_ds_team_field($field) {
-  $view_machine_name = isset($field['properties']['view_machine_name']) ? $field['properties']['view_machine_name'] : NULL;
-  $view_display = isset($field['properties']['view_display']) ? $field['properties']['view_display'] : NULL;
-  $view_arguments = isset($field['properties']['view_arguments']) ? $field['properties']['view_arguments'] : NULL;
-
-  if ($view_machine_name) {
-    // Load: Views: team members, Commissioners Hierarchy.
-    $view = views_get_view($view_machine_name);
-    $view->set_display($view_display);
-    $view->set_arguments($view_arguments);
-    $view->pre_execute();
-    $view->execute();
-
-    return $view->render();
-  }
-
-  return FALSE;
 }
 
 /**

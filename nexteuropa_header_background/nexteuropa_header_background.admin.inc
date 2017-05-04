@@ -6,23 +6,23 @@
  */
 
 /**
- * Prepare data for the dt_header_background.
+ * Prepare data for the nexteuropa_header_background.
  */
-function _dt_header_background_prepare_options($filter = FALSE) {
+function _nexteuropa_header_background_prepare_options($filter = FALSE) {
   // Get a list of the existing content types.
   $content_types = node_type_get_types();
-  $selected = variable_get('dt_header_background_which_content_type', []);
+  $selected = variable_get('nexteuropa_header_background_which_content_type', []);
   $types = [];
   $check_options = [];
   $options = [];
 
   foreach ($content_types as $machine_name => $content_type) {
-    // Exclude helper content types from the list.
+    // Exclude helper content types from the list (info website).
     $helper = variable_get('dt_node_settings_helper_node_type_' . $machine_name, 'not_found');
 
     if (!$helper || $helper == 'not_found') {
       // Default values for the which_content_type form element.
-      if (field_info_instance('node', 'field_core_header_image', $machine_name) !== NULL) {
+      if (field_info_instance('node', NEXTEUROPA_HEADER_BACKGROUND_FIELD, $machine_name) !== NULL) {
         $check_options[] = $machine_name;
       }
 
@@ -33,7 +33,7 @@ function _dt_header_background_prepare_options($filter = FALSE) {
       if (in_array($machine_name, $selected) || in_array($machine_name, $check_options)) {
         $types[$machine_name] = [
           'name' => $content_type->name,
-          'value' => variable_get('dt_header_background_' . $machine_name, FALSE),
+          'value' => variable_get('nexteuropa_header_background_' . $machine_name, FALSE),
         ];
       }
     }
@@ -55,17 +55,28 @@ function _dt_header_background_prepare_options($filter = FALSE) {
 /**
  * Implements hook_form_alter().
  */
-function dt_header_background_form_alter(&$form, &$form_state) {
+function nexteuropa_header_background_form_alter(&$form, &$form_state) {
   if ($form['#form_id'] == 'system_theme_settings') {
     // Get informations about content types.
-    $data = _dt_header_background_prepare_options();
+    $data = _nexteuropa_header_background_prepare_options();
     // Build the form.
     $form['header'] = [
       '#type' => 'fieldset',
       '#title' => t('DT Header background'),
     ];
 
-    $form['header']['dt_header_background_default'] = [
+    $form['header']['nexteuropa_header_background_field'] = [
+      '#type' => 'fieldset',
+      '#title' => t('DT Header background'),
+      '#type' => 'select',
+      '#title' => t('Choose an image field to be used to set the background image on a node'),
+      '#description' => t('You can choose one of the existing fields with type "image" or "file"'),
+      '#options' => _nexteuropa_header_background_image_field(),
+      '#weight' => -1,
+      '#default_value' => variable_get('nexteuropa_header_background_field', FALSE),
+    ];
+
+    $form['header']['nexteuropa_header_background_default'] = [
       '#type' => 'managed_file',
       '#title' => t('Default image for the header background'),
       '#upload_validators' => [
@@ -75,7 +86,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       ],
       '#progress_message' => t('Uploading the image'),
       '#progress_indicator' => 'throbber',
-      '#default_value' => variable_get('dt_header_background_default', FALSE),
+      '#default_value' => variable_get('nexteuropa_header_background_default', FALSE),
       '#required' => FALSE,
       '#upload_location' => 'public://',
       '#weight' => 0,
@@ -85,7 +96,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
 
     $form['header']['views'] = [
       '#type' => 'fieldset',
-      '#title' => t('Activate the Header Background on views page'),
+      '#title' => t('Activate the Header Background on views pages'),
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
     ];
@@ -93,7 +104,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
     $form['header']['views']['activate_listing'] = [
       '#type' => 'checkbox',
       '#title' => t('Would you like to be able to see this default image also in listing pages?'),
-      '#default_value' => variable_get('dt_header_background_activate_listing', FALSE),
+      '#default_value' => variable_get('nexteuropa_header_background_activate_listing', FALSE),
     ];
 
     if (!empty($data['options'])) {
@@ -115,7 +126,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
         '#type' => 'checkboxes',
         '#options' => $data['options'],
         '#description' => t('The content types using the header background field are selected and not editable by default.'),
-        '#default_value' => variable_get('dt_header_background_which_content_type', $data['check_options']),
+        '#default_value' => variable_get('nexteuropa_header_background_which_content_type', $data['check_options']),
       ];
 
       // Disable the default content type options.
@@ -134,14 +145,14 @@ function dt_header_background_form_alter(&$form, &$form_state) {
     $form['header']['overridable']['per_content_type'] = [
       '#type' => 'checkbox',
       '#title' => t('Would you like to be able to override the default image on a content type basis?'),
-      '#default_value' => variable_get('dt_header_background_per_content_type', FALSE),
+      '#default_value' => variable_get('nexteuropa_header_background_per_content_type', FALSE),
     ];
 
     $form['header']['overrides'] = [
       '#type' => 'fieldset',
       '#title' => t('Overrides per content type'),
       '#description' => t('This is the list of content types where you can set a different default background image for the header'),
-      '#prefix' => '<div id="dt_header_background_overrides">',
+      '#prefix' => '<div id="nexteuropa_header_background_overrides">',
       '#suffix' => '</div>',
       '#collapsible' => TRUE,
       '#collapsed' => FALSE,
@@ -155,10 +166,10 @@ function dt_header_background_form_alter(&$form, &$form_state) {
     $i = 1;
     foreach ($data['types'] as $machine_name => $header_background) {
       if ($header_background['value']) {
-        $form_state['storage']['dt_header_background_' . $machine_name] = $header_background['value'];
+        $form_state['storage']['nexteuropa_header_background_' . $machine_name] = $header_background['value'];
       }
 
-      $form['header']['overrides']['dt_header_background_' . $machine_name] = [
+      $form['header']['overrides']['nexteuropa_header_background_' . $machine_name] = [
         '#type' => 'managed_file',
         '#title' => t('Default image for the header background for the %ct content type', ['%ct' => $header_background['name']]),
         '#upload_validators' => [
@@ -192,7 +203,7 @@ function dt_header_background_form_alter(&$form, &$form_state) {
       '#prefix' => '<div id="header-reset">',
       '#suffix' => '<div class="description">' . t("Remove all the css files if needed.") . '</div></div>',
       '#ajax' => [
-        'callback' => '_dt_header_background_clear_css',
+        'callback' => '_nexteuropa_header_background_clear_css',
         'event' => 'click',
         'wrapper' => 'header-reset',
         'effect' => 'fade',
@@ -213,25 +224,25 @@ function dt_header_background_form_alter(&$form, &$form_state) {
     ", 'inline');
 
     // Add the default to the storage if needed.
-    $default = variable_get('dt_header_background_default', FALSE);
+    $default = variable_get('nexteuropa_header_background_default', FALSE);
 
     if ($default) {
-      $form_state['storage']['dt_header_background_default'] = $default;
+      $form_state['storage']['nexteuropa_header_background_default'] = $default;
     }
 
-    $form['#submit'][] = "_dt_header_background_theme_settings_submit";
+    $form['#submit'][] = "_nexteuropa_header_background_theme_settings_submit";
   }
 }
 
 /**
  * Custom submit function for the theme setting form.
  */
-function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
+function _nexteuropa_header_background_theme_settings_submit(&$form, &$form_state) {
   // Relevant inputs.
-  $keys = preg_grep('#dt_header_background_(.*?)#', array_keys($form_state['values']));
+  $keys = preg_grep('#nexteuropa_header_background_(.*?)#', array_keys($form_state['values']));
 
   foreach ($keys as $key) {
-    $ct = str_replace('dt_header_background_', '', $key);
+    $ct = str_replace('nexteuropa_header_background_', '', $key);
     // User uploaded a new image or there is already a value.
     $fids[$ct] = $form_state['values'][$key] == 0 ? FALSE : $form_state['values'][$key];
     // We store the previous value to be able to delete the css file.
@@ -239,7 +250,7 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
 
     if ($fids[$ct]) {
       if ($fids[$ct] != $prevs[$ct]) {
-        _dt_header_background_set_default_header_background($ct, $fids[$ct]);
+        _nexteuropa_header_background_set_default_header_background($ct, $fids[$ct]);
       }
     }
     // There's no default header background.
@@ -248,8 +259,8 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
       if ($prevs[$ct]) {
         $file = new stdClass();
         $file->fid = $prevs[$ct];
-        dt_header_background_file_delete($file);
-        file_usage_delete($file, 'dt_header_background');
+        nexteuropa_header_background_file_delete($file);
+        file_usage_delete($file, 'nexteuropa_header_background');
         variable_del($key);
       }
     }
@@ -257,26 +268,27 @@ function _dt_header_background_theme_settings_submit(&$form, &$form_state) {
 
   // Save the variable for the "overrides" checkbox.
   $override = $form_state['values']['per_content_type'] == 1 ? TRUE : FALSE;
-  variable_set('dt_header_background_per_content_type', $override);
-
+  variable_set('nexteuropa_header_background_per_content_type', $override);
   // Save the variable for the selected content types.
   $activate_listing = $form_state['values']['activate_listing'] == 1 ? TRUE : FALSE;
-  variable_set('dt_header_background_activate_listing', $activate_listing);
-
+  variable_set('nexteuropa_header_background_activate_listing', $activate_listing);
+  // Save the variable for the selected image field.
+  $image_field = !empty($form_state['values']['nexteuropa_header_background_field']) ? $form_state['values']['nexteuropa_header_background_field'] : FALSE;
+  variable_set('nexteuropa_header_background_field', $image_field);
   // Save the variable for the selected content types.
   $selected_ct = array_keys(array_filter($form_state['values']['which_content_type']));
   // We disable the default ct options so we don't have them in the form values.
-  $check_options = _dt_header_background_prepare_options('check_options');
+  $check_options = _nexteuropa_header_background_prepare_options('check_options');
   $which_content_type = array_merge($selected_ct, $check_options);
-  variable_set('dt_header_background_which_content_type', $which_content_type);
+  variable_set('nexteuropa_header_background_which_content_type', $which_content_type);
 }
 
 /**
  * Implements hook_file_delete().
  */
-function dt_header_background_file_delete($file) {
+function nexteuropa_header_background_file_delete($file) {
   $fid = $file->fid;
-  $file = drupal_realpath(DT_HEADER_BACKGROUND_DIR) . '/header_background_' . $fid . '.css';
+  $file = drupal_realpath(NEXTEUROPA_HEADER_BACKGROUND_DIR) . '/header_background_' . $fid . '.css';
   if (file_exists($file)) {
     drupal_unlink($file);
   }
@@ -285,8 +297,8 @@ function dt_header_background_file_delete($file) {
 /**
  * Helper function to delete all the generated css files.
  */
-function _dt_header_background_clear_css() {
-  $uri = DT_HEADER_BACKGROUND_DIR . '/header_background*.css';
+function _nexteuropa_header_background_clear_css() {
+  $uri = NEXTEUROPA_HEADER_BACKGROUND_DIR . '/header_background*.css';
   $dir = drupal_realpath($uri);
   // Remove all the css files that this module has generated.
   $deleted_files = 0;
@@ -315,4 +327,20 @@ function _dt_header_background_clear_css() {
   ];
 
   return $form['reset'];
+}
+
+/**
+ * Helper function to retrieve the availble image fields.
+ */
+function _nexteuropa_header_background_image_field() {
+  $fields = field_read_fields(['type' => ['image', 'file', 'media']]);
+  $list[] = t('Select an option');
+
+  foreach ($fields as $field_name => $field) {
+    if (strpos($field_name, 'field') !== FALSE) {
+      $list[$field_name] = $field_name;
+    }
+  }
+
+  return $list;
 }

@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * dt_europa_settings.features.inc
+ * nexteuropa_theme_settings.features.inc
  */
 
 /**
  * Implements hook_ctools_plugin_api().
  */
-function dt_europa_settings_ctools_plugin_api($module = NULL, $api = NULL) {
+function nexteuropa_theme_settings_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "breakpoints" && $api == "default_breakpoint_group") {
     return array("version" => "1");
   }
@@ -23,12 +23,15 @@ function dt_europa_settings_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
+  if ($module == "context" && $api == "context") {
+    return array("version" => "3");
+  }
 }
 
 /**
  * Implements hook_image_default_styles().
  */
-function dt_europa_settings_image_default_styles() {
+function nexteuropa_theme_settings_image_default_styles() {
   $styles = array();
 
   // Exported image style: header_image_breakpoints_theme_europa_medium_1x.

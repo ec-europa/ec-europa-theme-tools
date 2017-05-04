@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * dt_europa_settings.default_picture_mapping.inc
+ * nexteuropa_theme_settings.default_picture_mapping.inc
  */
 
 /**
  * Implements hook_default_picture_mapping().
  */
-function dt_europa_settings_default_picture_mapping() {
+function nexteuropa_theme_settings_default_picture_mapping() {
   $export = array();
 
   $picture_mapping = new PictureMapping();

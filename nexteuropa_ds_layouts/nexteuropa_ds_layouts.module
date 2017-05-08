@@ -13,9 +13,9 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   $layouts = [];
   $path = drupal_get_path('module', 'nexteuropa_ds_layouts');
 
-  $layouts['ne_bootstrap_3_6_3_stacked'] = [
-    'label' => t('NE Bootstrap: 3-6-3 stacked'),
-    'path' => $path . '/layouts/ne_bootstrap_3_6_3_stacked',
+  $layouts['ne_bootstrap_stacked'] = [
+    'label' => t('NE Bootstrap: stacked'),
+    'path' => $path . '/layouts/ne_bootstrap_stacked',
     'regions' => [
       'left_header' => t('Left Header'),
       'right_header' => t('Right Header'),
@@ -29,41 +29,9 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
     'is_nexteuropa' => TRUE,
   ];
 
-  $layouts['ne_bootstrap_3_9_stacked'] = [
-    'label' => t('NE Bootstrap: 3-9 stacked'),
-    'path' => $path . '/layouts/ne_bootstrap_3_9_stacked',
-    'regions' => [
-      'left_header' => t('Left Header'),
-      'right_header' => t('Right Header'),
-      'top' => t('Top'),
-      'left' => t('Left'),
-      'central' => t('Middle'),
-    ],
-    'form' => TRUE,
-    'image' => TRUE,
-    'is_nexteuropa' => TRUE,
-  ];
-
-  $layouts['ne_bootstrap_3_9_stacked_conditional'] = [
-    'label' => t('NE Bootstrap: 3-9(12) stacked conditional sidebar'),
-    'path' => $path . '/layouts/ne_bootstrap_3_9_stacked_conditional',
-    'regions' => [
-      'left_header' => t('Left Header'),
-      'right_header' => t('Right Header'),
-      'top' => t('Top'),
-      'left' => t('Left'),
-      'central' => t('Middle'),
-      'bottom_left' => t('Bottom Left'),
-      'bottom_central' => t('Bottom Middle'),
-    ],
-    'form' => TRUE,
-    'image' => TRUE,
-    'is_nexteuropa' => TRUE,
-  ];
-
-  $layouts['ne_bootstrap_3_9_advanced_top_conditional'] = [
-    'label' => t('NE Bootstrap: 3-9(12) advanced top conditional'),
-    'path' => $path . '/layouts/ne_bootstrap_3_9_advanced_top_conditional',
+  $layouts['ne_bootstrap_stacked_top'] = [
+    'label' => t('NE Bootstrap: stacked top'),
+    'path' => $path . '/layouts/ne_bootstrap_top',
     'regions' => [
       'left_header' => t('Left Header'),
       'right_header' => t('Right Header'),
@@ -74,6 +42,23 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
       'top_bottom_right' => t('Top bottom right'),
       'left' => t('Left'),
       'central' => t('Middle'),
+    ],
+    'form' => TRUE,
+    'image' => TRUE,
+    'is_nexteuropa' => TRUE,
+  ];
+
+  $layouts['ne_bootstrap_stacked_bottom'] = [
+    'label' => t('NE Bootstrap: stacked bottom'),
+    'path' => $path . '/layouts/ne_bootstrap_stacked_bottom',
+    'regions' => [
+      'left_header' => t('Left Header'),
+      'right_header' => t('Right Header'),
+      'top' => t('Top'),
+      'left' => t('Left'),
+      'central' => t('Middle'),
+      'bottom_left' => t('Bottom Left'),
+      'bottom_central' => t('Bottom Middle'),
     ],
     'form' => TRUE,
     'image' => TRUE,

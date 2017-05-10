@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Code for the NextEuropa TopBar feature.
+ */
+
+include_once 'nexteuropa_site_header.features.inc';
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ */
+function nexteuropa_site_header_form_system_theme_settings_alter(&$form, &$form_state) {
+  // Build the form.
+  if (empty($form['europa'])) {
+    $form['europa'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Europa settings'),
+    ];
+  }
+}

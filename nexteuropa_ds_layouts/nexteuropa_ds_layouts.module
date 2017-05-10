@@ -14,7 +14,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   $path = drupal_get_path('module', 'nexteuropa_ds_layouts');
 
   $layouts['ne_bootstrap_stacked'] = [
-    'label' => t('NE Bootstrap: stacked'),
+    'label' => t('NE Bootstrap: 3-col stacked'),
     'path' => $path . '/layouts/ne_bootstrap_stacked',
     'regions' => [
       'left_header' => t('Left Header'),
@@ -30,7 +30,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_bootstrap_stacked_top'] = [
-    'label' => t('NE Bootstrap: stacked top'),
+    'label' => t('NE Bootstrap: 3-col stacked top'),
     'path' => $path . '/layouts/ne_bootstrap_top',
     'regions' => [
       'left_header' => t('Left Header'),
@@ -49,7 +49,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_bootstrap_stacked_bottom'] = [
-    'label' => t('NE Bootstrap: stacked bottom'),
+    'label' => t('NE Bootstrap: 3-col stacked bottom'),
     'path' => $path . '/layouts/ne_bootstrap_stacked_bottom',
     'regions' => [
       'left_header' => t('Left Header'),
@@ -66,7 +66,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_bootstrap_1col_stacked'] = [
-    'label' => t('NE Bootstrap: 1col stacked'),
+    'label' => t('NE Bootstrap: 1-col stacked'),
     'path' => $path . '/layouts/ne_bootstrap_1col_stacked',
     'regions' => [
       'left_header' => t('Left Header'),
@@ -80,7 +80,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_bootstrap_1col_stacked_bottom_header'] = [
-    'label' => t('NE Bootstrap: 1col stacked with bottom header'),
+    'label' => t('NE Bootstrap: 1-col stacked with bottom header'),
     'path' => $path . '/layouts/ne_bootstrap_1col_stacked_bottom_header',
     'regions' => [
       'left_header' => t('Left Header'),
@@ -95,7 +95,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_2col'] = [
-    'label' => t('NE: 2col'),
+    'label' => t('NE: 2-col'),
     'path' => $path . '/layouts/ne_2col',
     'regions' => [
       'main' => t('Main'),
@@ -107,7 +107,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_2col_sidebar_no_link'] = [
-    'label' => t('NE: 2col - sidebar without link'),
+    'label' => t('NE: 2-col - sidebar without link'),
     'path' => $path . '/layouts/ne_2col_sidebar_no_link',
     'regions' => [
       'main' => t('Main'),
@@ -119,7 +119,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_1col'] = [
-    'label' => t('NE: 1col'),
+    'label' => t('NE: 1-col'),
     'path' => $path . '/layouts/ne_1col',
     'regions' => [
       'main' => t('Main'),
@@ -138,7 +138,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
    * template files to be HTML5, then this should be removed.
    */
   $layouts['ne_1col_hitme'] = [
-    'label' => t('NE: 1col hitme'),
+    'label' => t('NE: 1-col hitme'),
     'path' => $path . '/layouts/ne_1col_hitme',
     'regions' => [
       'main' => t('Main'),
@@ -149,7 +149,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_1col_section_item'] = [
-    'label' => t('NE: 1col section item'),
+    'label' => t('NE: 1-col section item'),
     'path' => $path . '/layouts/ne_1col_section_item',
     'regions' => [
       'title' => t('Title'),
@@ -176,7 +176,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   ];
 
   $layouts['ne_2col_hitme'] = [
-    'label' => t('NE: 2col hitme'),
+    'label' => t('NE: 2-col hitme'),
     'path' => $path . '/layouts/ne_2col_hitme',
     'regions' => [
       'main' => t('Main'),

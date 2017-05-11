@@ -21,7 +21,7 @@ function nexteuropa_footer_menu_default_menu_custom() {
   // Exported menu: menu-nexteuropa-inst-links.
   $menus['menu-nexteuropa-site-links'] = array(
     'menu_name' => 'menu-nexteuropa-site-links',
-    'title' => 'European commission',
+    'title' => 'European Commission',
     'description' => 'Links to be put in the footer',
     'language' => 'und',
     'i18n_mode' => 5,

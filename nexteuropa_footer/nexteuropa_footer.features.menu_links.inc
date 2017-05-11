@@ -357,14 +357,14 @@ function nexteuropa_footer_menu_default_menu_links() {
     'menu_links_customized' => 1,
   );
 
-  // Exported menu link: menu-nexteuropa-social-media_twitter:https://twitter.com/eu_commission.
-  $menu_links['menu-nexteuropa-site-links_commissionanditspriorities:https://ec.europa.eu/commission/index'] = array(
+  // Exported menu link: menu-nexteuropa-site-links_commission-and-its-priorities:https://ec.europa.eu/commission/index.
+  $menu_links['menu-nexteuropa-site-links_commission-and-its-priorities:https://ec.europa.eu/commission/index'] = array(
     'menu_name' => 'menu-nexteuropa-site-links',
     'link_path' => 'https://ec.europa.eu/commission/index',
     'router_path' => '',
     'link_title' => 'Commission and it\'s priorities',
     'options' => array(
-      'identifier' => 'menu-nexteuropa-site-links_commissionanditspriorities:https://ec.europa.eu/commission/index',
+      'identifier' => 'menu-nexteuropa-site-links_commission-and-its-priorities:https://ec.europa.eu/commission/index',
       'alter' => TRUE,
       'attributes' => array(
         'data-display-title' => 1,
@@ -384,19 +384,18 @@ function nexteuropa_footer_menu_default_menu_links() {
     'menu_links_customized' => 1,
   );
 
-  // Exported menu link: menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info.
-  $menu_links['menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info/index'] = array(
+  // Exported menu link: menu-nexteuropa-site-links_policies-information-and-services:https://ec.europa.eu/info/index.
+  $menu_links['menu-nexteuropa-site-links_policies-information-and-services:https://ec.europa.eu/info/index'] = array(
     'menu_name' => 'menu-nexteuropa-site-links',
     'link_path' => 'https://ec.europa.eu/info/index',
     'router_path' => '',
     'link_title' => 'Policies, information and services',
     'options' => array(
-      'identifier' => 'menu-nexteuropa-site-links_policiesinformationandservices:https://ec.europa.eu/info/index',
+      'identifier' => 'menu-nexteuropa-site-links_policies-information-and-services:https://ec.europa.eu/info/index',
       'alter' => TRUE,
       'attributes' => array(
         'data-display-title' => 1,
         'name' => 'informational',
-        'class' => '',
         'data-remove-class' => 0,
       ),
     ),

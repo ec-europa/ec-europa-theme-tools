@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Nexteuropa_topbar.context.inc.
+ * Nexteuropa_site_header.context.inc.
  */
 
 /**
@@ -53,6 +53,7 @@ function nexteuropa_site_header_context_default_contexts() {
   // Included for use with string extractors like potx.
   t('Activate this context to show the ec site header');
   t('digital transformation');
+
   $export['ec_europa_site_header'] = $context;
 
   return $export;

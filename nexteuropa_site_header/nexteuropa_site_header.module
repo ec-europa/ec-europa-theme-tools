@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Code for the NextEuropa TopBar feature.
+ * Code for the NextEuropa Site Header feature.
  */
 
 include_once 'nexteuropa_site_header.features.inc';

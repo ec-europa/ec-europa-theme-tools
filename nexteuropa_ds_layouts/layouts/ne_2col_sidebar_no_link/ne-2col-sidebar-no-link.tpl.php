@@ -17,7 +17,7 @@
 
 <?php if (!empty($second)): ?>
   <<?php print $main_wrapper; ?> class="listing__column-main listing__column-main--sidebar-next <?php print $main_classes; ?>">
-  <?php if (!isset($prevent_link)): ?>
+  <?php if (!isset($prevent_link) && !empty($node_url)): ?>
     <a href="<?php print $node_url; ?>" class="listing__item-link" title="<?php print $title; ?>"><span class="sr-only"><?php print $title; ?></span></a>
   <?php endif; ?>
     <?php print $main; ?>
@@ -27,7 +27,7 @@
     <?php print $second; ?>
   </<?php print $second_wrapper; ?>>
 <?php else: ?>
-  <?php if (!isset($prevent_link)): ?>
+  <?php if (!isset($prevent_link) && !empty($node_url)): ?>
     <a href="<?php print $node_url; ?>" class="listing__item-link" title="<?php print $title; ?>"><span class="sr-only"><?php print $title; ?></span></a>
   <?php endif; ?>
 

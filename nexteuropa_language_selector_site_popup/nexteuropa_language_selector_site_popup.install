@@ -22,6 +22,22 @@ function nexteuropa_language_selector_site_popup_install() {
 }
 
 /**
+ * Implements hook_enable().
+ */
+function nexteuropa_language_selector_site_popup_enable() {
+  $t = get_t();
+  drupal_set_message($t('Nexteuropa language selector site popup has been successfully enabled.'));
+}
+
+/**
+ * Implements hook_disable().
+ */
+function nexteuropa_language_selector_site_popup_disable() {
+  $t = get_t();
+  drupal_set_message($t('Nexteuropa language selector site popup has been successfully disabled.'));
+}
+
+/**
  * Implements hook_uninstall().
  *
  * Removes variables that are no longer needed.

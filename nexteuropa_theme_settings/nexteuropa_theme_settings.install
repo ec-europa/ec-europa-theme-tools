@@ -35,6 +35,8 @@ function nexteuropa_theme_settings_install() {
     ->execute();
   $t = get_t();
 
+  variable_set('node_admin_theme', TRUE);
+
   drupal_set_message($t('Europa settings are now installed on your site.'));
 }
 
@@ -58,4 +60,11 @@ function nexteuropa_theme_settings_update_7101() {
     ->condition('name', $modules, 'IN')
     ->condition('type', 'module')
     ->execute();
+}
+
+/**
+ * EUTHEME-250 - Enforce th usage of the backend theme for content editing.
+ */
+function nexteuropa_theme_settings_update_7102() {
+  variable_set('node_admin_theme', TRUE);
 }

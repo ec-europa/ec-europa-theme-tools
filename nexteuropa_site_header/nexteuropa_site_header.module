@@ -106,7 +106,11 @@ function _nexteuropa_site_header_handle_homepage($op) {
 function _nexteuropa_site_header_handle_multilingualism($op) {
   if ($op) {
     if (!module_exists('nexteuropa_language_selector_site_popup')) {
-      module_enable(['nexteuropa_language_selector_site_popup']);
+      module_enable([
+        'nexteuropa_language_selector_site_popup',
+        'splash_screen',
+      ]);
+
       $message = t('You activated the language switcher');
     }
   }

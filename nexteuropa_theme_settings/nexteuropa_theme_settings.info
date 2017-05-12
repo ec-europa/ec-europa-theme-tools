@@ -12,6 +12,7 @@ dependencies[] = nexteuropa_theme_functions
 dependencies[] = nexteuropa_views
 dependencies[] = nexteuropa_footer
 dependencies[] = nexteuropa_topbar
+dependencies[] = nexteuropa_site_header
 dependencies[] = picture
 dependencies[] = retina_images
 php = 5.5

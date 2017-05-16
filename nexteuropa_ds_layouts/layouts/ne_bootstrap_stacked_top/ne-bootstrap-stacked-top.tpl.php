@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Display Suite NE Bootstrap Three-Nine Stacked.
+ * Display Suite NE Bootstrap Three-Nine Advanced Top Conditional.
  */
 ?>
 
@@ -54,30 +54,68 @@
   <div class="page-content">
     <div class="container-fluid">
 
-    <?php if (!empty($top) || !empty($local_tabs) || !empty($messages)): ?>
+    <?php if (!empty($top_top) || !empty($local_tabs) || !empty($messages)): ?>
       <div class="row">
-        <section class="section section--content-top col-md-12 <?php print $top_classes; ?>">
+        <section class="section section--content-top col-md-12 <?php print $top_top_classes; ?>">
         <?php if (!empty($local_tabs)): ?>
           <?php print $local_tabs; ?>
         <?php endif; ?>
         <?php if (!empty($messages)): ?>
           <?php print $messages; ?>
         <?php endif; ?>
-          <?php print $top; ?>
+          <?php print $top_top; ?>
         </section>
+      </div>
+    <?php endif; ?>
+
+    <?php if (!empty($top_middle_left) || !empty($top_middle_right)): ?>
+      <div class="row">
+      <?php if (!empty($top_middle_left)): ?>
+        <<?php print $top_middle_left_wrapper; ?> class="section section--content-top-middle-left col-lg-5 <?php print $top_middle_left_classes; ?>">
+          <?php print $top_middle_left; ?>
+        </<?php print $top_middle_left_wrapper; ?>>
+      <?php endif; ?>
+
+      <?php if (!empty($top_middle_right)): ?>
+        <<?php print $top_middle_right_wrapper; ?> class="section section--content-top-middle-right col-lg-7 <?php print $top_middle_right_classes; ?>">
+          <?php print $top_middle_right; ?>
+        </<?php print $top_middle_right_wrapper; ?>>
+      <?php endif; ?>
+      </div>
+    <?php endif; ?>
+
+    <?php if (!empty($top_bottom_left) || !empty($top_bottom_right)): ?>
+      <div class="row">
+      <?php if (!empty($top_bottom_left)): ?>
+        <<?php print $top_bottom_left_wrapper; ?> class="section section--content-top-bottom-left col-lg-9 <?php print $top_bottom_left_classes; ?>">
+        <?php print $top_bottom_left; ?>
+        </<?php print $top_bottom_left_wrapper; ?>>
+      <?php endif; ?>
+
+      <?php if (!empty($top_bottom_right)): ?>
+        <<?php print $top_bottom_right_wrapper; ?> class="section section--content-top-bottom-right col-lg-3 <?php print $top_bottom_right_classes; ?>">
+        <?php print $top_bottom_right; ?>
+        </<?php print $top_bottom_right_wrapper; ?>>
+      <?php endif; ?>
       </div>
     <?php endif; ?>
 
       <div class="row">
         <a id="main-content" tabindex="-1"></a>
+      <?php if (!empty($left)): ?>
         <<?php print $left_wrapper; ?> class="col-md-3 <?php print $left_classes; ?>">
           <?php print $left; ?>
         </<?php print $left_wrapper; ?>>
-        <section class="section col-md-9 <?php print $central_classes; ?>">
+      <?php endif; ?>
+        <section class="<?php print $content_column_class; ?> <?php print $central_classes; ?>">
           <?php print $central; ?>
         </section>
       </div>
-
+    <?php if (!empty($right)): ?>
+      <<?php print $right_wrapper; ?> class="col-md-3 <?php print $right_classes; ?>">
+        <?php print $right; ?>
+      </<?php print $right_wrapper; ?>>
+    <?php endif; ?>
     </div>
   </div>
 

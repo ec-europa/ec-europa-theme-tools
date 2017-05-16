@@ -11,7 +11,9 @@
   <?php print render($title_suffix['contextual_links']); ?>
 <?php endif; ?>
 
+<?php if (!empty($node_url)): ?>
   <a href="<?php print $node_url; ?>" class="listing__item-link" title="<?php print $title; ?>"><span class="sr-only"><?php print $title; ?></span></a>
+<?php endif; ?>
 
   <h2 class="listing__section-title"><?php print $title; ?></h2>
 <?php if ($description && !$children): ?>

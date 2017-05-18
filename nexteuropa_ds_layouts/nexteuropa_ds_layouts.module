@@ -9,9 +9,27 @@
  * Implements hook_ds_layout_info_alter().
  */
 function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
-  // Remove all layouts not created by this module.
-  $layouts = [];
   $path = drupal_get_path('module', 'nexteuropa_ds_layouts');
+
+  // Removes all DS layouts that we don't require.
+  $layouts_not_allowed = [
+    'person',
+    'ds_1col',
+    'ds_1col_wrapper',
+    'ds_2col',
+    'ds_2col_fluid',
+    'ds_2col_stacked',
+    'ds_2col_stacked_fluid',
+    'ds_3col',
+    'ds_3col_equal_width',
+    'ds_3col_stacked',
+    'ds_3col_stacked_fluid',
+    'ds_3col_stacked_equal_width',
+    'ds_4col',
+  ];
+  $layouts = array_filter($layouts, function ($key) use ($layouts_not_allowed) {
+    return !in_array($key, $layouts_not_allowed);
+  }, ARRAY_FILTER_USE_KEY);
 
   $layouts['ne_bootstrap_stacked'] = [
     'label' => t('NE Bootstrap: 3-col stacked'),

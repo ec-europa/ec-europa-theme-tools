@@ -16,7 +16,7 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
   }
 
   $existing = $layouts;
-  $layouts = '';
+  $layouts = [];
 
   $layouts['ne_bootstrap_stacked'] = [
     'label' => t('NE Bootstrap: 3-col stacked'),

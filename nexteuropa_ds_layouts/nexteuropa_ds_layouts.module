@@ -9,9 +9,14 @@
  * Implements hook_ds_layout_info_alter().
  */
 function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
-  // Remove all layouts not created by this module.
-  $layouts = [];
   $path = drupal_get_path('module', 'nexteuropa_ds_layouts');
+  // Adding an exaplanatory text for existing templates.
+  foreach ($layouts as $template => $values) {
+    $layouts[$template]['label'] = t('Unsupported DS template: @existing_label', ['@existing_label' => $layouts[$template]['label']]);
+  }
+
+  $existing = $layouts;
+  $layouts = [];
 
   $layouts['ne_bootstrap_stacked'] = [
     'label' => t('NE Bootstrap: 3-col stacked'),
@@ -155,6 +160,9 @@ function nexteuropa_ds_layouts_ds_layout_info_alter(&$layouts) {
     'image' => TRUE,
     'is_nexteuropa' => TRUE,
   ];
+
+  // Putting our templates at the top of the list.
+  $layouts = array_merge($layouts, $existing);
 
   return $layouts;
 }

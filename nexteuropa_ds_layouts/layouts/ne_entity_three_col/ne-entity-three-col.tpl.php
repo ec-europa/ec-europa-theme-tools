@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Display Suite NE Bootstrap One Column Stacked With Bottom Header.
+ * Display Suite NE Bootstrap Three-Six-Three Stacked.
  */
 ?>
 
@@ -19,7 +19,7 @@
         <?php print render($header_bottom); ?>
       </div>
     </nav>
-
+  
   <?php if (theme_get_setting('ec_europa_improved_website', 'europa')): ?>
     <?php if (!$is_front || $is_front && theme_get_setting('ec_europa_improved_website_home', 'europa')): ?>
     <div class="container-fluid page-header__site-identification">
@@ -53,36 +53,40 @@
   </div>
 <?php endif; ?>
 
-<?php if (!empty($utility)): ?>
-  <div class="utility">
-    <div class="container-fluid">
-      <?php print render($utility); ?>
-    </div>
-  </div>
-<?php endif; ?>
-
   <div class="page-content">
     <div class="container-fluid">
 
-      <?php if (!empty($top) || !empty($local_tabs) || !empty($messages)): ?>
-        <div class="row">
-          <section class="section section--content-top col-md-12 <?php print $top_classes; ?>">
-          <?php if (!empty($local_tabs)): ?>
-            <?php print $local_tabs; ?>
-          <?php endif; ?>
-          <?php if (!empty($messages)): ?>
-            <?php print $messages; ?>
-          <?php endif; ?>
-            <?php print $top; ?>
-          </section>
-        </div>
-      <?php endif; ?>
+    <?php if (!empty($top) || !empty($local_tabs) || !empty($messages)): ?>
+      <div class="row">
+        <section class="section section--content-top col-md-12 <?php print $top_classes; ?>">
+        <?php if (!empty($local_tabs)): ?>
+          <?php print $local_tabs; ?>
+        <?php endif; ?>
+        <?php if (!empty($messages)): ?>
+          <?php print $messages; ?>
+        <?php endif; ?>
+          <?php print $top; ?>
+        </section>
+      </div>
+    <?php endif; ?>
 
       <div class="row">
         <a id="main-content" tabindex="-1"></a>
-        <section class="section col-md-12 <?php print $central_classes; ?>">
+      <?php if (!empty($left)): ?>
+        <<?php print $left_wrapper; ?> class="col-md-3 region-sidebar-first <?php print $left_classes; ?>">
+          <?php print $left; ?>
+        </<?php print $left_wrapper; ?>>
+      <?php endif; ?>
+
+        <section class="<?php print $content_column_class; ?> <?php print $central_classes; ?>">
           <?php print $central; ?>
         </section>
+
+      <?php if (!empty($right)): ?>
+        <<?php print $right_wrapper; ?> class="col-md-3 <?php print $right_classes; ?>">
+          <?php print $right; ?>
+        </<?php print $right_wrapper; ?>>
+      <?php endif; ?>
       </div>
 
     </div>

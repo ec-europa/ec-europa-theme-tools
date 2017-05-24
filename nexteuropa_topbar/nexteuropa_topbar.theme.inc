@@ -19,10 +19,10 @@ function theme_nexteuropa_user_menu($variables) {
 
   if (user_is_logged_in()) {
     if (module_exists('ecas')) {
-      $logout_url = url('/ecaslogout');
+      $logout_url = 'ecaslogout';
     }
     else {
-      $logout_url = url('/user/logout');
+      $logout_url = 'user/logout';
     }
 
     $items = [];

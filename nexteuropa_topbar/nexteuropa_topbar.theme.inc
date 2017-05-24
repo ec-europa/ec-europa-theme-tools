@@ -15,19 +15,12 @@
  *   The markup itself.
  */
 function theme_nexteuropa_user_menu($variables) {
-  global $user;
-
   if (user_is_logged_in()) {
-    if (module_exists('ecas')) {
-      $logout_url = url('/ecaslogout');
-    }
-    else {
-      $logout_url = url('/user/logout');
-    }
+    $logout_url = (module_exists('ecas') ? 'ecaslogout' : 'user/logout');
 
     $items = [];
     $items[] = [
-      'data' => t('Logged in as @username', ['@username' => format_username($user)]),
+      'data' => t('Logged in as @username', ['@username' => format_username($GLOBALS['user'])]),
       'class' => ['site-user-menu__option'],
     ];
     $items[] = [
@@ -47,9 +40,14 @@ function theme_nexteuropa_user_menu($variables) {
   }
   else {
     if (theme_get_setting('ec_europa_user_login', 'europa')) {
-      $path = module_exists('ecas') ? 'ecas' : 'user';
-      $login = l(t('Log in'), $path, ['attributes' => ['class' => ['site-user-menu__list']]]);
-      return $login;
+      $path = (module_exists('ecas') ? 'ecas' : 'user');
+      return l(t('Log in'), $path, [
+        'attributes' => [
+          'class' => [
+            'site-user-menu__list',
+          ],
+        ],
+      ]);
     }
   }
 }

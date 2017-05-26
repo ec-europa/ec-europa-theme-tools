@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @file
+ * Nexteuropa topbar install file.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function nexteuropa_topbar_enable() {
+  // Activation message.
+  $t = get_t();
+  drupal_set_message($t('NextEuropa TopBar module is now active on your site.'));
+}
+
+/**
+ * Implements hook_disable().
+ */
+function nexteuropa_topbar_disable() {
+  $t = get_t();
+  drupal_set_message($t('NextEuropa TopBar module is now disabled on your site.'));
+}
+
+/**
+ * Implements hook_install().
+ */
+function nexteuropa_topbar_install() {
+  // Enable the user menu on install if the setting has been overridden.
+  if ($user_menu = theme_get_setting('ec_europa_user_menu', 'europa')) {
+    _nexteuropa_topbar_handle_user_menu($user_menu);
+  }
+}

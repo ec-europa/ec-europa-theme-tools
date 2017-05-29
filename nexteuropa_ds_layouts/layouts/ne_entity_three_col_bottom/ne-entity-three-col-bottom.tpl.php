@@ -43,11 +43,11 @@
     </div>
   </div>
 
-<?php if (!empty($utility)): ?>
-  <div class="utility">
-    <div class="container-fluid">
-      <?php print render($utility); ?>
-    </div>
+<?php if (!empty($bottom_header)): ?>
+  <div class="page-bottom-header <?php print isset($header_bottom_modifier) ? $header_bottom_modifier : ''; ?>">
+    <<?php print $bottom_header_wrapper; ?> class="<?php print $bottom_header_classes; ?>">
+      <?php print $bottom_header; ?>
+    </<?php print $bottom_header_wrapper; ?>>
   </div>
 <?php endif; ?>
 
@@ -71,28 +71,38 @@
       <div class="row">
         <a id="main-content" tabindex="-1"></a>
       <?php if (!empty($left)): ?>
-        <<?php print $left_wrapper; ?> class="col-md-3 <?php print $left_classes; ?>">
+        <<?php print $left_wrapper; ?> class="col-md-3 region-sidebar-first <?php print $left_classes; ?>">
           <?php print $left; ?>
         </<?php print $left_wrapper; ?>>
-        <section class="section col-md-9 <?php print $central_classes; ?>">
-      <?php else: ?>
-        <section class="section col-md-12 <?php print $central_classes; ?>">
       <?php endif; ?>
+
+        <section class="<?php print $content_column_class; ?> <?php print $central_classes; ?>">
           <?php print $central; ?>
         </section>
+
+      <?php if (!empty($right)): ?>
+        <<?php print $right_wrapper; ?> class="col-md-3 <?php print $right_classes; ?>">
+          <?php print $right; ?>
+        </<?php print $right_wrapper; ?>>
+      <?php endif; ?>
       </div>
 
+    <?php if (!empty($bottom_left) || !empty($bottom_central)): ?>
       <div class="row">
       <?php if (!empty($bottom_left)): ?>
         <<?php print $bottom_left_wrapper; ?> class="col-md-3 <?php print $bottom_left_classes; ?>">
           <?php print $bottom_left; ?>
         </<?php print $bottom_left_wrapper; ?>>
       <?php endif; ?>
+
+      <?php if (!empty($bottom_left)): ?>
         <section class="section <?php print (!empty($bottom_left) ? 'col-md-9 ' : 'col-md-12 ') . $bottom_central_classes; ?>">
           <?php print $bottom_central; ?>
         </section>
+      <?php endif; ?>
       </div>
-
+    <?php endif; ?>
+    
     </div>
   </div>
 

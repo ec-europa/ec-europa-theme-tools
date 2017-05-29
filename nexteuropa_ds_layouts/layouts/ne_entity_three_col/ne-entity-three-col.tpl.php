@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Display Suite NE Bootstrap Three-Nine Stacked.
+ * Display Suite NE Bootstrap Three-Six-Three Stacked.
  */
 ?>
 
@@ -19,7 +19,7 @@
         <?php print render($header_bottom); ?>
       </div>
     </nav>
-
+  
   <?php if (theme_get_setting('ec_europa_improved_website', 'europa')): ?>
     <?php if (!$is_front || $is_front && theme_get_setting('ec_europa_improved_website_home', 'europa')): ?>
     <div class="container-fluid page-header__site-identification">
@@ -27,7 +27,8 @@
     </div>
     <?php endif; ?>
   <?php endif; ?>
-    
+  
+  <?php if (!empty($left_header)): ?>
     <div class="container-fluid page-header__hero-title">
       <div class="row padding-reset">
         <<?php print $left_header_wrapper; ?> class="col-lg-9 <?php print $left_header_classes; ?>">
@@ -41,13 +42,14 @@
       <?php endif; ?>
       </div>
     </div>
+  <?php endif; ?>
   </div>
 
-<?php if (!empty($utility)): ?>
-  <div class="utility">
-    <div class="container-fluid">
-      <?php print render($utility); ?>
-    </div>
+<?php if (!empty($bottom_header)): ?>
+  <div class="page-bottom-header <?php print isset($header_bottom_modifier) ? $header_bottom_modifier : ''; ?>">
+    <<?php print $bottom_header_wrapper; ?> class="<?php print $bottom_header_classes; ?>">
+      <?php print $bottom_header; ?>
+    </<?php print $bottom_header_wrapper; ?>>
   </div>
 <?php endif; ?>
 
@@ -70,12 +72,21 @@
 
       <div class="row">
         <a id="main-content" tabindex="-1"></a>
-        <<?php print $left_wrapper; ?> class="col-md-3 <?php print $left_classes; ?>">
+      <?php if (!empty($left)): ?>
+        <<?php print $left_wrapper; ?> class="col-md-3 region-sidebar-first <?php print $left_classes; ?>">
           <?php print $left; ?>
         </<?php print $left_wrapper; ?>>
-        <section class="section col-md-9 <?php print $central_classes; ?>">
+      <?php endif; ?>
+
+        <section class="<?php print $content_column_class; ?> <?php print $central_classes; ?>">
           <?php print $central; ?>
         </section>
+
+      <?php if (!empty($right)): ?>
+        <<?php print $right_wrapper; ?> class="col-md-3 <?php print $right_classes; ?>">
+          <?php print $right; ?>
+        </<?php print $right_wrapper; ?>>
+      <?php endif; ?>
       </div>
 
     </div>

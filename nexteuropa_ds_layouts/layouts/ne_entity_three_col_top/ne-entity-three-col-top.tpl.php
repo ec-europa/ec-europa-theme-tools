@@ -27,7 +27,8 @@
     </div>
     <?php endif; ?>
   <?php endif; ?>
-    
+  
+  <?php if (!empty($left_header)): ?>
     <div class="container-fluid page-header__hero-title">
       <div class="row padding-reset">
         <<?php print $left_header_wrapper; ?> class="col-lg-9 <?php print $left_header_classes; ?>">
@@ -41,13 +42,14 @@
       <?php endif; ?>
       </div>
     </div>
+  <?php endif; ?>
   </div>
 
-<?php if (!empty($utility)): ?>
-  <div class="utility">
-    <div class="container-fluid">
-      <?php print render($utility); ?>
-    </div>
+<?php if (!empty($bottom_header)): ?>
+  <div class="page-bottom-header <?php print isset($header_bottom_modifier) ? $header_bottom_modifier : ''; ?>">
+    <<?php print $bottom_header_wrapper; ?> class="<?php print $bottom_header_classes; ?>">
+      <?php print $bottom_header; ?>
+    </<?php print $bottom_header_wrapper; ?>>
   </div>
 <?php endif; ?>
 
@@ -107,11 +109,15 @@
           <?php print $left; ?>
         </<?php print $left_wrapper; ?>>
       <?php endif; ?>
-        <section class="section <?php print (!empty($left) ? 'col-md-9 ' : 'col-md-12 ') . $central_classes; ?>">
+        <section class="<?php print $content_column_class; ?> <?php print $central_classes; ?>">
           <?php print $central; ?>
         </section>
+      <?php if (!empty($right)): ?>
+        <<?php print $right_wrapper; ?> class="col-md-3 <?php print $right_classes; ?>">
+          <?php print $right; ?>
+        </<?php print $right_wrapper; ?>>
+      <?php endif; ?>
       </div>
-
     </div>
   </div>
 

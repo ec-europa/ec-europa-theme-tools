@@ -43,11 +43,11 @@
     </div>
   </div>
 
-<?php if (!empty($utility)): ?>
-  <div class="utility">
-    <div class="container-fluid">
-      <?php print render($utility); ?>
-    </div>
+<?php if (!empty($bottom_header)): ?>
+  <div class="page-bottom-header <?php print isset($header_bottom_modifier) ? $header_bottom_modifier : ''; ?>">
+    <<?php print $bottom_header_wrapper; ?> class="<?php print $bottom_header_classes; ?>">
+      <?php print $bottom_header; ?>
+    </<?php print $bottom_header_wrapper; ?>>
   </div>
 <?php endif; ?>
 
@@ -87,17 +87,22 @@
       <?php endif; ?>
       </div>
 
+    <?php if (!empty($bottom_left) || !empty($bottom_central)): ?>
       <div class="row">
       <?php if (!empty($bottom_left)): ?>
         <<?php print $bottom_left_wrapper; ?> class="col-md-3 <?php print $bottom_left_classes; ?>">
           <?php print $bottom_left; ?>
         </<?php print $bottom_left_wrapper; ?>>
       <?php endif; ?>
+
+      <?php if (!empty($bottom_left)): ?>
         <section class="section <?php print (!empty($bottom_left) ? 'col-md-9 ' : 'col-md-12 ') . $bottom_central_classes; ?>">
           <?php print $bottom_central; ?>
         </section>
+      <?php endif; ?>
       </div>
-
+    <?php endif; ?>
+    
     </div>
   </div>
 

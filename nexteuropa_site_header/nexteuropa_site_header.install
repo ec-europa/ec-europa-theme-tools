@@ -26,7 +26,7 @@ function nexteuropa_site_header_disable() {
  * Implements hook_install().
  */
 function nexteuropa_site_header_install() {
-  // Enable the user menu on install if the setting has been overridden.
+  // Enable multilingualism if the setting has not been overridden.
   $multilingual = theme_get_setting('ec_europa_multilingual', 'europa');
   _nexteuropa_site_header_handle_multilingualism($multilingual);
 }

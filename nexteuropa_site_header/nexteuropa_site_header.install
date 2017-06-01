@@ -29,4 +29,7 @@ function nexteuropa_site_header_install() {
   // Enable multilingualism if the setting has not been overridden.
   $multilingual = theme_get_setting('ec_europa_multilingual', 'europa');
   _nexteuropa_site_header_handle_multilingualism($multilingual);
+
+  $header_home = theme_get_setting('ec_europa_site_header_home', 'europa');
+  _nexteuropa_site_header_handle_homepage($header_home);
 }

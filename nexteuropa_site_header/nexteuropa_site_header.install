@@ -30,5 +30,3 @@ function nexteuropa_site_header_install() {
   $multilingual = theme_get_setting('ec_europa_multilingual', 'europa');
   _nexteuropa_site_header_handle_multilingualism($multilingual);
 }
-
-}

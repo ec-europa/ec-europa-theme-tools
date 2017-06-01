@@ -84,6 +84,7 @@ function _nexteuropa_site_header_theme_settings_submit(&$form, &$form_state) {
  */
 function _nexteuropa_site_header_handle_homepage($op) {
   $context = module_invoke('context', 'load', 'ec_europa_site_header');
+  $message = '';
 
   if (!$op) {
     $context->conditions['path'] = _nexteuropa_site_header_no_homepage();

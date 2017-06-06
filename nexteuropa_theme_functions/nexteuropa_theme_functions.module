@@ -148,7 +148,7 @@ function nexteuropa_theme_functions_form_alter(&$form, &$form_state, $form_id) {
       $date_fields = [];
       // Get all exposed fields.
       foreach ($form['#info'] as $exposed => $filter_values) {
-        // Only process the date_pop up fields for search API related.
+        // Only process the date_popup fields for search API related.
         if (isset($form[$filter_values['value']]['#type'])) {
           if ($form[$filter_values['value']]['#type'] == 'date_popup') {
             array_push($date_fields, $filter_values['value']);
@@ -168,14 +168,14 @@ function nexteuropa_theme_functions_form_alter(&$form, &$form_state, $form_id) {
             $form[$filter_values['value']]['value']['#title_display'] = 'invisible';
             // Process each element, we will have more information.
             $form[$filter_values['value']]['#after_build'][]
-              = '_nexteuropa_theme_functions_datepopup_accessibilty_nosearchapi_build';
+              = '_nexteuropa_theme_functions_datepopup_accessibility_nosearchapi_build';
           }
         }
       }
 
       if (!empty($date_fields)) {
         // Call our helper to manipulate labels.
-        $form = _nexteuropa_theme_functions_datepopup_accessibilty($form, $date_fields);
+        $form = _nexteuropa_theme_functions_datepopup_accessibility($form, $date_fields);
       }
       break;
   }

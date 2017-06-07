@@ -54,7 +54,7 @@ function _nexteuropa_inpage_nav_render($anchors) {
     $render_config = [
       '#theme' => 'inpage_nav_block',
       '#links' => theme('item_list', $variables),
-      '#title' => t('Page Contents'),
+      '#title' => t('Page Contents', [], ['langcode' => $GLOBALS['language_content']->language]),
       '#attached' => [
         'js' => [
           [
@@ -108,23 +108,24 @@ function _nexteuropa_inpage_nav_build_inpage_nav($element) {
  * Helper function to get anchor from a field group.
  *
  * @param array $field_group
- *   The array containging field group information.
+ *   The array containing field group information.
  *
- * @return mixed
+ * @return array|bool
  *   Array of anchors or false if none.
  */
 function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
   // A few things must match to be sure about the label.
-  if (
-    isset($field_group->format_settings['instance_settings']['show_label']) &&
-    $field_group->format_settings['instance_settings']['show_label'] &&
-    $field_group->format_settings['instance_settings']['label_element'] == NEXTEUROPA_INPAGE_NAV_DEPTH &&
-    strpos($field_group->format_settings['instance_settings']['attributes'], 'id=') !== FALSE
+  if (!empty($field_group->format_settings['instance_settings']['show_label'])
+    && $field_group->format_settings['instance_settings']['label_element'] == NEXTEUROPA_INPAGE_NAV_DEPTH
+    && strpos($field_group->format_settings['instance_settings']['attributes'], 'id=') !== FALSE
   ) {
     // Set our label array. We have to t() the label here, as it is designed
     // like this by Field group module.
-    // @codingStandardsIgnoreLine
-    $label = isset($field_group->format_settings['label']) ? t($field_group->format_settings['label']) : $field_group->label;
+    // @codingStandardsIgnoreStart
+    $label = isset($field_group->format_settings['label'])
+      ? t($field_group->format_settings['label'], [], ['langcode' => $GLOBALS['language_content']->language])
+      : $field_group->label;
+    // @codingStandardsIgnoreEnd
     return [
       'id' => str_replace([
         'id=',
@@ -133,6 +134,7 @@ function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
       'label' => $label,
     ];
   }
+
   return FALSE;
 }
 

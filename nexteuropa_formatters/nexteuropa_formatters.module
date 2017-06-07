@@ -733,7 +733,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     '#options' => array_merge($options, $url['options']),
   ];
 
-  if ($modifier == "file--link") {
+  if ($modifier === 'file--link') {
     // Removal of unnecessary data of the render array.
     unset($render_array['file_metadata']['info']);
     unset($render_array['button']);

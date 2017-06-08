@@ -52,6 +52,7 @@ function _nexteuropa_theme_functions_contactphone_patterns($label) {
       'explain' => t('@label is missing or with wrong format (+cc r xxx xx xx (description))', ['@label' => $label]),
     ],
   ];
+
   return $patterns;
 }
 
@@ -121,17 +122,18 @@ function _nexteuropa_theme_functions_file_callback_helper($options) {
  * @return mixed
  *   Returns form object.
  */
-function _nexteuropa_theme_functions_datepopup_accessibilty($form, $fields) {
+function _nexteuropa_theme_functions_datepopup_accessibility($form, $fields) {
   foreach ($fields as $field_name) {
-    if (isset($form['#info']["filter-{$field_name}"]['label']) && !empty($form['#info']["filter-{$field_name}"]['label'])) {
+    if (!empty($form['#info']["filter-{$field_name}"]['label'])) {
       // Set the label title.
       $form[$field_name]['#title_label'] = $form['#info']["filter-{$field_name}"]['label'];
       // Remove the (date) label.
       unset($form['#info']["filter-{$field_name}"]['label']);
       // Process which element in after_build.
-      $form[$field_name]['#after_build'][] = '_nexteuropa_theme_functions_datepopup_accessibilty_build';
+      $form[$field_name]['#after_build'][] = '_nexteuropa_theme_functions_datepopup_accessibility_build';
     }
   }
+
   return $form;
 }
 
@@ -146,11 +148,12 @@ function _nexteuropa_theme_functions_datepopup_accessibilty($form, $fields) {
  * @return mixed
  *   Returns element.
  */
-function _nexteuropa_theme_functions_datepopup_accessibilty_build($element, &$form_state) {
+function _nexteuropa_theme_functions_datepopup_accessibility_build($element, &$form_state) {
   // Switch labels.
   $element['date']['#title'] = $element['#title_label'];
   // Add date picker classes.
   _nexteuropa_theme_functions_add_datepicker($element['date']);
+
   return $element;
 }
 
@@ -165,7 +168,7 @@ function _nexteuropa_theme_functions_datepopup_accessibilty_build($element, &$fo
  * @return mixed
  *   Returns element.
  */
-function _nexteuropa_theme_functions_datepopup_accessibilty_nosearchapi_build($element, &$form_state) {
+function _nexteuropa_theme_functions_datepopup_accessibility_nosearchapi_build($element, &$form_state) {
   // Switch labels.
   $element['value']['date']['#title'] = $element['#title'];
   // Make sure we see popup label.
@@ -183,8 +186,8 @@ function _nexteuropa_theme_functions_datepopup_accessibilty_nosearchapi_build($e
  *    Element to set the wrapper upon.
  */
 function _nexteuropa_theme_functions_add_datepicker(&$element) {
-  $element['#prefix'] = '<div class="date-picker">';
-  $element['#suffix'] = '<span class="date-picker--icon icon--calendar"></span></div>';
+  $element['#field_prefix'] = '<div class="date-picker">';
+  $element['#field_suffix'] = '<i class="icon icon--calendar date-picker--icon"></i></div>';
 }
 
 /**

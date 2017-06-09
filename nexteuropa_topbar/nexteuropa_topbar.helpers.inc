@@ -24,7 +24,7 @@ function _nexteuropa_topbar_user_menu_info() {
  */
 function _nexteuropa_topbar_handle_user_menu($op) {
   $context = module_invoke('context', 'load', 'ec_europa_topbar');
-
+  $message = '';
   $user_menu = _nexteuropa_topbar_user_menu_info();
 
   if ($op) {

@@ -95,7 +95,7 @@
         </<?php print $bottom_left_wrapper; ?>>
       <?php endif; ?>
 
-      <?php if (!empty($bottom_left)): ?>
+      <?php if (!empty($bottom_central)): ?>
         <section class="section <?php print (!empty($bottom_left) ? 'col-md-9 ' : 'col-md-12 ') . $bottom_central_classes; ?>">
           <?php print $bottom_central; ?>
         </section>

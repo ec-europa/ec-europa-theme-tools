@@ -84,6 +84,7 @@ function _nexteuropa_site_header_theme_settings_submit(&$form, &$form_state) {
  */
 function _nexteuropa_site_header_handle_homepage($op) {
   $context = module_invoke('context', 'load', 'ec_europa_site_header');
+  $message = '';
 
   if (!$op) {
     $context->conditions['path'] = _nexteuropa_site_header_no_homepage();
@@ -104,6 +105,8 @@ function _nexteuropa_site_header_handle_homepage($op) {
  * Helper function to enable or disable the language switcher.
  */
 function _nexteuropa_site_header_handle_multilingualism($op) {
+  $message = '';
+
   if ($op) {
     if (!module_exists('nexteuropa_language_selector_site_popup')) {
       module_enable([

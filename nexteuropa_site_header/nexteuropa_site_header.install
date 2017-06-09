@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Nexteuropa site header install file.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function nexteuropa_site_header_enable() {
+  // Activation message.
+  $t = get_t();
+  drupal_set_message($t('NextEuropa Site Header module is now active on your site.'));
+}
+
+/**
+ * Implements hook_disable().
+ */
+function nexteuropa_site_header_disable() {
+  $t = get_t();
+  drupal_set_message($t('NextEuropa Site Header module is now disabled on your site.'));
+}
+
+/**
+ * Implements hook_install().
+ */
+function nexteuropa_site_header_install() {
+  // Enable multilingualism if the setting has not been overridden.
+  $multilingual = theme_get_setting('ec_europa_multilingual', 'europa');
+  _nexteuropa_site_header_handle_multilingualism($multilingual);
+
+  $header_home = theme_get_setting('ec_europa_site_header_home', 'europa');
+  _nexteuropa_site_header_handle_homepage($header_home);
+}

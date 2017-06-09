@@ -35,6 +35,7 @@ function nexteuropa_language_selector_site_popup_preprocess_splash(&$variables) 
   $languages_blacklist = variable_get('splash_screen_blacklist', []);
   $languages = language_list('enabled');
   $languages_list = NULL;
+  $parameters = NULL;
 
   // Prepare links href when destination is set.
   // Use case: use site level language selector.
@@ -49,8 +50,10 @@ function nexteuropa_language_selector_site_popup_preprocess_splash(&$variables) 
     }
 
     if (isset($href_array['query'])) {
-      parse_str($href_array['query'], $parameters);
-      $options['query'] = $parameters;
+      if (!is_array($href_array['query'])) {
+        parse_str($href_array['query'], $parameters);
+      }
+      $options['query'] = NULL === $parameters ? $parameters : $href_array['query'];
     }
   }
   $options['attributes']['class'] = "splash-page__btn-close";

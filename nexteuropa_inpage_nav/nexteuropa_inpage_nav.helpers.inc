@@ -122,9 +122,12 @@ function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
     // Set our label array. We have to t() the label here, as it is designed
     // like this by Field group module.
     // @codingStandardsIgnoreStart
-    $label = isset($field_group->format_settings['label'])
-      ? t($field_group->format_settings['label'], [], ['langcode' => $GLOBALS['language_content']->language])
-      : $field_group->label;
+    if (!empty($field_group->format_settings['label'])) {
+      $label = t($field_group->format_settings['label'], [], ['langcode' => $GLOBALS['language_content']->language]);
+    }
+    else {
+      $label = $field_group->label;
+    }
     // @codingStandardsIgnoreEnd
     return [
       'id' => str_replace([

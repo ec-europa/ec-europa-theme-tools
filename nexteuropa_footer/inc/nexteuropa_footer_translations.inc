@@ -206,7 +206,7 @@ function _nexteuropa_footer_translations() {
   ];
 
   $items['menu-nexteuropa-site-links']['items'][] = [
-    'title' => t("Commission and it's priorities"),
+    'title' => t("Commission and its priorities"),
     'weight' => '0',
     'languages' => [
       'bg' => 'Комисията и нейните приоритети',

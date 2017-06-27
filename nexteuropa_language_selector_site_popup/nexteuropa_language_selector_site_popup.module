@@ -47,6 +47,11 @@ function nexteuropa_language_selector_site_popup_preprocess_splash(&$variables) 
     if (strpos($href, 'node/') == 0 &&
         function_exists('translation_path_get_translations')) {
       $translations = translation_path_get_translations($href);
+      if (preg_match('/(node)\/(\d+)/', $_GET['destination'], $matches)) {
+        if (isset($matches[1], $matches[2]) && $matches[1] === 'node' && is_numeric($matches[2])) {
+          $nid = $matches[2];
+        }
+      }
     }
 
     if (isset($href_array['query'])) {
@@ -64,7 +69,8 @@ function nexteuropa_language_selector_site_popup_preprocess_splash(&$variables) 
   // Add enabled languages, if not in blacklist. Add all these languages to our
   // processed list.
   foreach ($languages[1] as $lang) {
-    if (!in_array($lang->prefix, $languages_blacklist)) {
+    $node_tranlated = isset($nid) ? _dt_core_is_node_translated($nid, $lang->language) : FALSE;
+    if (!in_array($lang->language, $languages_blacklist) || $node_tranlated) {
 
       if (isset($translations[$lang->language])) {
         $href = $translations[$lang->language];

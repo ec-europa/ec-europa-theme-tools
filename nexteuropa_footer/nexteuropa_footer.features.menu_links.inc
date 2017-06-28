@@ -192,7 +192,7 @@ function nexteuropa_footer_menu_default_menu_links() {
       'identifier' => 'menu-nexteuropa-service-links_europa-analytics:https://webanalytics.ec.europa.eu',
     ),
     'module' => 'menu',
-    'hidden' => 0,
+    'hidden' => 1,
     'external' => 1,
     'has_children' => 0,
     'expanded' => 1,
@@ -362,7 +362,7 @@ function nexteuropa_footer_menu_default_menu_links() {
     'menu_name' => 'menu-nexteuropa-site-links',
     'link_path' => 'https://ec.europa.eu/commission/index',
     'router_path' => '',
-    'link_title' => 'Commission and it\'s priorities',
+    'link_title' => 'Commission and its priorities',
     'options' => array(
       'identifier' => 'menu-nexteuropa-site-links_commission-and-its-priorities:https://ec.europa.eu/commission/index',
       'alter' => TRUE,
@@ -412,7 +412,7 @@ function nexteuropa_footer_menu_default_menu_links() {
 
   // Translatables
   // Included for use with string extractors like potx.
-  t('Commission and it\'s priorities');
+  t('Commission and its priorities');
   t('About the Commission\'s new web presence');
   t('Contact');
   t('Cookies');

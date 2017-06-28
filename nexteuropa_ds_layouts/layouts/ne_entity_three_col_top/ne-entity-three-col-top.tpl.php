@@ -20,7 +20,7 @@
       </div>
     </nav>
 
-  <?php if (theme_get_setting('ec_europa_improved_website', 'europa')): ?>
+  <?php if (theme_get_setting('ec_europa_improved_website', 'europa') && theme_get_setting('ec_europa_improved_identification', 'europa')): ?>
     <?php if (!$is_front || $is_front && theme_get_setting('ec_europa_improved_website_home', 'europa')): ?>
     <div class="container-fluid page-header__site-identification">
       <h3><?php print $site_name; ?></h3>
@@ -104,19 +104,21 @@
 
       <div class="row">
         <a id="main-content" tabindex="-1"></a>
-      <?php if (!empty($left)): ?>
-        <<?php print $left_wrapper; ?> class="col-md-3 <?php print $left_classes; ?>">
-          <?php print $left; ?>
-        </<?php print $left_wrapper; ?>>
-      <?php endif; ?>
-        <section class="<?php print $content_column_class; ?> <?php print $central_classes; ?>">
-          <?php print $central; ?>
-        </section>
       <?php if (!empty($right)): ?>
-        <<?php print $right_wrapper; ?> class="col-md-3 <?php print $right_classes; ?>">
+        <<?php print $right_wrapper; ?> class="<?php print $right_classes; ?>">
           <?php print $right; ?>
         </<?php print $right_wrapper; ?>>
       <?php endif; ?>
+
+      <?php if (!empty($left)): ?>
+        <<?php print $left_wrapper; ?> class="<?php print $left_classes; ?>">
+          <?php print $left; ?>
+        </<?php print $left_wrapper; ?>>
+      <?php endif; ?>
+
+        <section class="<?php print $central_classes; ?>">
+          <?php print $central; ?>
+        </section>
       </div>
     </div>
   </div>

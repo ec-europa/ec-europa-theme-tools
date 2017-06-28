@@ -606,17 +606,21 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
  *   HTML markup. NULL if no url is available.
  */
 function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = FALSE, $is_external = FALSE, $url = []) {
-  global $language_content;
-
   if (empty($url)) {
     if (!$url['path'] = file_create_url($file->uri)) {
       return NULL;
     }
     $url['options'] = [];
   }
+
   // Define the file icon class.
   $icons_available = ['image', 'audio', 'video'];
-  $file_icon_class = in_array($file->type, $icons_available) ? ' icon--' . $file->type : ($modifier == 'file--link' ? ' icon--file-link' : ' icon--file');
+  if (in_array($file->type, $icons_available)) {
+    $file_icon_class = ' icon--' . $file->type;
+  }
+  else {
+    $file_icon_class = ($modifier === 'file--link' ? ' icon--file-link' : ' icon--file');
+  }
 
   // If we have a modifier, just append it to the class.
   $file_class = (!empty($modifier) ? ' ' . $modifier : '');
@@ -627,12 +631,19 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     $file_size = nexteuropa_theme_functions_format_size($file->filesize);
   }
 
+  $content_langcode = $GLOBALS['language_content']->language;
+
   // Get our full language string.
   if (isset($file->entity->language) || isset($file->language)) {
-    $language_to_use = isset($file->entity->language) ? entity_translation_get_existing_language('node', $file->entity) : $file->language;
+    if (isset($file->entity->language)) {
+      $language_to_use = entity_translation_get_existing_language('node', $file->entity);
+    }
+    else {
+      $language_to_use = $file->language;
+    }
     $file_language_string = _nexteuropa_theme_functions_get_language_obj($language_to_use, 'native');
-    if (!$subfile && module_exists('locale') && isset($language_content->language)) {
-      $file_language_string = locale($file_language_string, NULL, $language_content->language);
+    if (!$subfile && module_exists('locale')) {
+      $file_language_string = locale($file_language_string, NULL, $content_langcode);
     }
   }
 
@@ -660,7 +671,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   // File information and title setter.
   if ($subfile && isset($file_language_string)) {
     $file_info_string = implode(' - ', $file_info_parts);
-    $title_string = $file_language_string . ' ' . t('version');
+    $title_string = $file_language_string . ' ' . t('version', [], ['langcode' => $content_langcode]);
 
     // Sub file download classes settings.
     $options['attributes']['class'][] = 'btn--condensed';
@@ -687,7 +698,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     $options['attributes']['type'] = $file->filemime . '; length=' . $file->filesize;
   }
 
-  $file_text = t('Download');
+  $file_text = t('Download', [], ['langcode' => $content_langcode]);
   if (isset($file_extension, $file_size)) {
     $file_text .= '<span class="sr-only">' . $file_extension . ' - ' . $file_size . '</span>';
   }
@@ -700,7 +711,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   ];
 
   $render_array['icon'] = [
-    '#markup' => '<span class="file__icon icon' . $file_icon_class . '"></span>',
+    '#markup' => '<i class="file__icon icon' . $file_icon_class . '"></i>',
   ];
 
   $render_array['file_metadata'] = [
@@ -730,16 +741,18 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     '#options' => array_merge($options, $url['options']),
   ];
 
-  if ($modifier == "file--link") {
+  if ($modifier === 'file--link') {
+    // Removal of unnecessary data of the render array.
+    unset($render_array['file_metadata']['info']);
+    unset($render_array['button']);
+
     // Reorganize elements to match styleguide.
     $render_array['file_metadata']['#prefix'] = '<div class="file__metadata--link">';
     $render_array['file_metadata']['title']['#prefix'] = '<a class="file__title" href="' . $url['path'] . '">';
     $render_array['file_metadata']['title']['#suffix'] = '</a>';
-
-    unset($render_array['file_metadata']['info']);
-    unset($render_array['button']);
   }
 
   drupal_alter('nexteuropa_formatter_file', $render_array);
+
   return drupal_render($render_array);
 }

@@ -192,7 +192,7 @@ function nexteuropa_footer_menu_default_menu_links() {
       'identifier' => 'menu-nexteuropa-service-links_europa-analytics:https://webanalytics.ec.europa.eu',
     ),
     'module' => 'menu',
-    'hidden' => 0,
+    'hidden' => 1,
     'external' => 1,
     'has_children' => 0,
     'expanded' => 1,

@@ -631,7 +631,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     $file_size = nexteuropa_theme_functions_format_size($file->filesize);
   }
 
-  $content_langcode = $GLOBALS['language_content']->language;
+  $content_langcode = _dt_shared_functions_get_content_language_langcode();
 
   // Get our full language string.
   if (isset($file->entity->language) || isset($file->language)) {

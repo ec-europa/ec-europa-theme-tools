@@ -53,32 +53,146 @@ function _nexteuropa_header_background_prepare_options($filter = FALSE) {
 }
 
 /**
- * Implements hook_form_alter().
+ * Implements hook_menu().
  */
-function nexteuropa_header_background_form_alter(&$form, &$form_state) {
-  if ($form['#form_id'] == 'system_theme_settings') {
-    // Get informations about content types.
-    $data = _nexteuropa_header_background_prepare_options();
-    // Build the form.
-    $form['header'] = [
+function nexteuropa_header_background_menu() {
+  $items = [];
+
+  $items['admin/config/media/header_background'] = array(
+    'title' => 'Nexteuropa Header Background settings',
+    'description' => 'Configure the Nexteuropa Header Background module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => ['nexteuropa_header_background_admin'],
+    'access arguments' => ['access administration pages'],
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback: nexteuropa_headeR_background settings.
+ *
+ * @see nexteuropa_header_background_menu()
+ */
+function nexteuropa_header_background_admin($form, &$form_state) {
+  // Get informations about content types.
+  $data = _nexteuropa_header_background_prepare_options();
+
+  $form = [];
+  // Build the form.
+  $form['header'] = [
+    '#type' => 'fieldset',
+    '#title' => t('DT Header background'),
+  ];
+
+  $form['header']['nexteuropa_header_background_field'] = [
+    '#type' => 'fieldset',
+    '#title' => t('DT Header background'),
+    '#type' => 'select',
+    '#title' => t('Choose an image field to be used to set the background image on a node'),
+    '#description' => t('You can choose one of the existing fields with type "image" or "file"'),
+    '#options' => _nexteuropa_header_background_image_field(),
+    '#weight' => -1,
+    '#default_value' => variable_get('nexteuropa_header_background_field', FALSE),
+  ];
+
+  $form['header']['nexteuropa_header_background_default'] = [
+    '#type' => 'managed_file',
+    '#title' => t('Default image for the header background'),
+    '#upload_validators' => [
+      'file_validate_is_image' => [],
+      'file_validate_extensions' => ['png jpg jpeg gif'],
+      'file_validate_image_resolution' => ['0', '2400x900'],
+    ],
+    '#progress_message' => t('Uploading the image'),
+    '#progress_indicator' => 'throbber',
+    '#default_value' => variable_get('nexteuropa_header_background_default', FALSE),
+    '#required' => FALSE,
+    '#upload_location' => 'public://',
+    '#weight' => 0,
+    '#theme' => 'theme_image_widget',
+    '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
+  ];
+
+  $form['header']['views'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Activate the Header Background on views pages'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  ];
+
+  $form['header']['views']['nexteuropa_header_background_activate_listing'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Would you like to be able to see this default image also in listing pages?'),
+    '#default_value' => variable_get('nexteuropa_header_background_activate_listing', FALSE),
+  ];
+
+  if (!empty($data['options'])) {
+    $form['header']['content_types'] = [
       '#type' => 'fieldset',
-      '#title' => t('DT Header background'),
+      '#title' => t('Select in which content types you want to show the default header background image.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
     ];
 
-    $form['header']['nexteuropa_header_background_field'] = [
-      '#type' => 'fieldset',
-      '#title' => t('DT Header background'),
-      '#type' => 'select',
-      '#title' => t('Choose an image field to be used to set the background image on a node'),
-      '#description' => t('You can choose one of the existing fields with type "image" or "file"'),
-      '#options' => _nexteuropa_header_background_image_field(),
+    $form['header']['content_types']['checkall'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Select / Unselect all'),
+      '#attributes' => ['onclick' => 'checkAll(this);'],
       '#weight' => -1,
-      '#default_value' => variable_get('nexteuropa_header_background_field', FALSE),
     ];
 
-    $form['header']['nexteuropa_header_background_default'] = [
+    $form['header']['content_types']['nexteuropa_header_background_which_content_type'] = [
+      '#type' => 'checkboxes',
+      '#options' => $data['options'],
+      '#description' => t('The content types using the header background field are selected and not editable by default.'),
+      '#default_value' => variable_get('nexteuropa_header_background_which_content_type', $data['check_options']),
+    ];
+
+    // Disable the default content type options.
+    foreach ($data['check_options'] as $disable) {
+      $form['header']['content_types']['nexteuropa_header_background_which_content_type'][$disable]['#disabled'] = TRUE;
+    }
+  }
+
+  $form['header']['overridable'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Override Header Background image basing on content types'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  ];
+
+  $form['header']['overridable']['nexteuropa_header_background_per_content_type'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Would you like to be able to override the default image on a content type basis?'),
+    '#default_value' => variable_get('nexteuropa_header_background_per_content_type', FALSE),
+  ];
+
+  $form['header']['overrides'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Overrides per content type'),
+    '#description' => t('This is the list of content types where you can set a different default background image for the header'),
+    '#prefix' => '<div id="nexteuropa_header_background_overrides">',
+    '#suffix' => '</div>',
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#states' => [
+      'visible' => [
+        ':input[name="nexteuropa_header_background_per_content_type"]' => ['checked' => TRUE],
+      ],
+    ],
+  ];
+
+  $i = 1;
+  foreach ($data['types'] as $machine_name => $header_background) {
+    if ($header_background['value']) {
+      $form_state['storage']['nexteuropa_header_background_' . $machine_name] = $header_background['value'];
+    }
+
+    $form['header']['overrides']['nexteuropa_header_background_' . $machine_name] = [
       '#type' => 'managed_file',
-      '#title' => t('Default image for the header background'),
+      '#title' => t('Default image for the header background for the %ct content type', ['%ct' => $header_background['name']]),
       '#upload_validators' => [
         'file_validate_is_image' => [],
         'file_validate_extensions' => ['png jpg jpeg gif'],
@@ -86,152 +200,60 @@ function nexteuropa_header_background_form_alter(&$form, &$form_state) {
       ],
       '#progress_message' => t('Uploading the image'),
       '#progress_indicator' => 'throbber',
-      '#default_value' => variable_get('nexteuropa_header_background_default', FALSE),
+      '#default_value' => $header_background['value'],
       '#required' => FALSE,
       '#upload_location' => 'public://',
-      '#weight' => 0,
+      '#weight' => $i,
       '#theme' => 'theme_image_widget',
       '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
     ];
 
-    $form['header']['views'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Activate the Header Background on views pages'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
-    ];
+    $i++;
+  }
 
-    $form['header']['views']['activate_listing'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Would you like to be able to see this default image also in listing pages?'),
-      '#default_value' => variable_get('nexteuropa_header_background_activate_listing', FALSE),
-    ];
+  $form['header']['reset'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Delete existing Header Background css files'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  ];
 
-    if (!empty($data['options'])) {
-      $form['header']['content_types'] = [
-        '#type' => 'fieldset',
-        '#title' => t('Select in which content types you want to show the default header background image.'),
-        '#collapsible' => TRUE,
-        '#collapsed' => TRUE,
-      ];
+  $form['header']['reset']['button'] = [
+    '#type' => 'submit',
+    '#value' => 'Remove existing css files',
+    '#prefix' => '<div id="header-reset">',
+    '#suffix' => '<div class="description">' . t("Remove all the css files if needed.") . '</div></div>',
+    '#ajax' => [
+      'callback' => '_nexteuropa_header_background_clear_css',
+      'event' => 'click',
+      'wrapper' => 'header-reset',
+      'effect' => 'fade',
+      'method' => 'replace',
+    ],
+  ];
 
-      $form['header']['content_types']['checkall'] = [
-        '#type' => 'checkbox',
-        '#title' => t('Select / Unselect all'),
-        '#attributes' => ['onclick' => 'checkAll(this);'],
-        '#weight' => -1,
-      ];
+  drupal_add_js("
+    function checkAll(e){
+      var elements = document.getElementById('edit-which-content-type').getElementsByTagName('input'), z = 0;
 
-      $form['header']['content_types']['which_content_type'] = [
-        '#type' => 'checkboxes',
-        '#options' => $data['options'],
-        '#description' => t('The content types using the header background field are selected and not editable by default.'),
-        '#default_value' => variable_get('nexteuropa_header_background_which_content_type', $data['check_options']),
-      ];
-
-      // Disable the default content type options.
-      foreach ($data['check_options'] as $disable) {
-        $form['header']['content_types']['which_content_type'][$disable]['#disabled'] = TRUE;
-      }
-    }
-
-    $form['header']['overridable'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Override Header Background image basing on content types'),
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
-    ];
-
-    $form['header']['overridable']['per_content_type'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Would you like to be able to override the default image on a content type basis?'),
-      '#default_value' => variable_get('nexteuropa_header_background_per_content_type', FALSE),
-    ];
-
-    $form['header']['overrides'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Overrides per content type'),
-      '#description' => t('This is the list of content types where you can set a different default background image for the header'),
-      '#prefix' => '<div id="nexteuropa_header_background_overrides">',
-      '#suffix' => '</div>',
-      '#collapsible' => TRUE,
-      '#collapsed' => FALSE,
-      '#states' => [
-        'visible' => [
-          ':input[name="per_content_type"]' => ['checked' => TRUE],
-        ],
-      ],
-    ];
-
-    $i = 1;
-    foreach ($data['types'] as $machine_name => $header_background) {
-      if ($header_background['value']) {
-        $form_state['storage']['nexteuropa_header_background_' . $machine_name] = $header_background['value'];
-      }
-
-      $form['header']['overrides']['nexteuropa_header_background_' . $machine_name] = [
-        '#type' => 'managed_file',
-        '#title' => t('Default image for the header background for the %ct content type', ['%ct' => $header_background['name']]),
-        '#upload_validators' => [
-          'file_validate_is_image' => [],
-          'file_validate_extensions' => ['png jpg jpeg gif'],
-          'file_validate_image_resolution' => ['0', '2400x900'],
-        ],
-        '#progress_message' => t('Uploading the image'),
-        '#progress_indicator' => 'throbber',
-        '#default_value' => $header_background['value'],
-        '#required' => FALSE,
-        '#upload_location' => 'public://',
-        '#weight' => $i,
-        '#theme' => 'theme_image_widget',
-        '#description' => t('Upload a file, allowed extensions: jpg, jpeg, png, gif. Minimal image size is 2400x900px'),
-      ];
-
-      $i++;
-    }
-
-    $form['header']['reset'] = [
-      '#type' => 'fieldset',
-      '#title' => t('Delete existing Header Background css files'),
-      '#collapsible' => TRUE,
-      '#collapsed' => TRUE,
-    ];
-
-    $form['header']['reset']['button'] = [
-      '#type' => 'submit',
-      '#value' => 'Remove existing css files',
-      '#prefix' => '<div id="header-reset">',
-      '#suffix' => '<div class="description">' . t("Remove all the css files if needed.") . '</div></div>',
-      '#ajax' => [
-        'callback' => '_nexteuropa_header_background_clear_css',
-        'event' => 'click',
-        'wrapper' => 'header-reset',
-        'effect' => 'fade',
-        'method' => 'replace',
-      ],
-    ];
-
-    drupal_add_js("
-      function checkAll(e){
-        var elements = document.getElementById('edit-which-content-type').getElementsByTagName('input'), z = 0;
-
-        for(z=0; z<elements.length; z++){
-          if(elements[z].type == 'checkbox' && elements[z].name != 'checkall'){
-            elements[z].checked = e.checked;
-          }
+      for(z=0; z<elements.length; z++){
+        if(elements[z].type == 'checkbox' && elements[z].name != 'checkall'){
+          elements[z].checked = e.checked;
         }
       }
-    ", 'inline');
-
-    // Add the default to the storage if needed.
-    $default = variable_get('nexteuropa_header_background_default', FALSE);
-
-    if ($default) {
-      $form_state['storage']['nexteuropa_header_background_default'] = $default;
     }
+  ", 'inline');
 
-    $form['#submit'][] = "_nexteuropa_header_background_theme_settings_submit";
+  // Add the default to the storage if needed.
+  $default = variable_get('nexteuropa_header_background_default', FALSE);
+
+  if ($default) {
+    $form_state['storage']['nexteuropa_header_background_default'] = $default;
   }
+
+  $form['#submit'][] = "_nexteuropa_header_background_theme_settings_submit";
+
+  return system_settings_form($form);
 }
 
 /**
@@ -265,22 +287,6 @@ function _nexteuropa_header_background_theme_settings_submit(&$form, &$form_stat
       }
     }
   }
-
-  // Save the variable for the "overrides" checkbox.
-  $override = $form_state['values']['per_content_type'] == 1 ? TRUE : FALSE;
-  variable_set('nexteuropa_header_background_per_content_type', $override);
-  // Save the variable for the selected content types.
-  $activate_listing = $form_state['values']['activate_listing'] == 1 ? TRUE : FALSE;
-  variable_set('nexteuropa_header_background_activate_listing', $activate_listing);
-  // Save the variable for the selected image field.
-  $image_field = !empty($form_state['values']['nexteuropa_header_background_field']) ? $form_state['values']['nexteuropa_header_background_field'] : FALSE;
-  variable_set('nexteuropa_header_background_field', $image_field);
-  // Save the variable for the selected content types.
-  $selected_ct = array_keys(array_filter($form_state['values']['which_content_type']));
-  // We disable the default ct options so we don't have them in the form values.
-  $check_options = _nexteuropa_header_background_prepare_options('check_options');
-  $which_content_type = array_merge($selected_ct, $check_options);
-  variable_set('nexteuropa_header_background_which_content_type', $which_content_type);
 }
 
 /**

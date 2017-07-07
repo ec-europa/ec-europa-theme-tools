@@ -522,7 +522,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         break;
 
       case 'context_nav_item':
-        $content_langcode = _dt_shared_functions_get_content_language_langcode();
+        $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
 
         $layout_field_settings = ds_get_field_settings($entity_type, $entity->type, 'full');
         $field_name = $field['field_name'];

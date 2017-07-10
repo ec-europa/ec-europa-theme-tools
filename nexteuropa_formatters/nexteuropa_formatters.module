@@ -9,6 +9,28 @@ require_once 'nexteuropa_formatters.field.inc';
 require_once 'nexteuropa_formatters.field_group.inc';
 
 /**
+ * Implements hook_form_system_theme_settings_alter().
+ */
+function nexteuropa_formatters_form_system_theme_settings_alter(&$form, &$form_state) {
+  // Build the form.
+  if (empty($form['europa'])) {
+    $form['europa'] = [
+      '#type' => 'fieldset',
+      '#title' => t('Europa settings'),
+    ];
+  }
+
+  $form['europa']['ec_europa_file_field'] = [
+    '#title' => t('Choose a field that you use to override the default title for file entities.'),
+    '#type' => 'select',
+    '#description' => t('You can choose one of the existing fields with type "text"'),
+    '#options' => _nexteuropa_theme_functions_textfields('text'),
+    '#weight' => 0,
+    '#default_value' => theme_get_setting('ec_europa_file_field', 'europa'),
+  ];
+}
+
+/**
  * Implements hook_theme_registry_alter().
  */
 function nexteuropa_formatters_theme_registry_alter(&$registry) {

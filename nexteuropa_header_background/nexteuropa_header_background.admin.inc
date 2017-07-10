@@ -71,7 +71,7 @@ function nexteuropa_header_background_menu() {
 }
 
 /**
- * Page callback: nexteuropa_headeR_background settings.
+ * Page callback: nexteuropa_header_background settings.
  *
  * @see nexteuropa_header_background_menu()
  */

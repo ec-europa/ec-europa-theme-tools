@@ -13,9 +13,9 @@ include_once 'nexteuropa_theme_functions.helpers.inc';
 function nexteuropa_theme_functions_init() {
   if ($node = menu_get_object()) {
     $available_languages = language_list('prefix');
-    $content_language_code = _nexteuropa_theme_functions_content_language($node);
+    $content_langcode = _nexteuropa_theme_functions_content_language($node);
     if (isset($available_languages[$content_language_code])) {
-      $GLOBALS['language_content'] = $available_languages[$content_language_code];
+      $GLOBALS['language_content'] = $available_languages[$content_langcode];
     }
   }
 }

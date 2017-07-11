@@ -1223,7 +1223,7 @@ function nexteuropa_formatters_preprocess_field(&$variables) {
 
     if ($show_translation
       && ($info['display'][$view_mode]['type'] == 'link_button_download'
-        || $info['display'][$view_mode]['type'] == 'link_download')
+      || $info['display'][$view_mode]['type'] == 'link_download')
     ) {
       foreach ($variables['items'] as $item_key => $item) {
         $variables['items'][$item_key]['#suffix'] = theme('nexteuropa_file_translations', ['node' => $variables['element']['#object']]);

@@ -703,13 +703,16 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
     $file_info_string = isset($file_language_string) ? '<span class="file__content-language">' . $file_language_string . ' </span>' : '';
     $file_info_string .= !empty($file_info_parts) ? '<span class="file__properties">(' . implode(' - ', $file_info_parts) . '</span>)' : '';
 
-    // Use the description as the link text if available.
-    if (isset($file->entity)) {
-      $file_node = entity_metadata_wrapper('node', $file->entity);
-      $title_string = $file_node->title->value();
-    }
-    else {
-      $title_string = !empty($file->description) ? $file->description : $file->filename;
+    // DTTSB-2132 - Commissioners site: mission letter not displaying title.
+    if (empty($file->filename_field)) {
+      // Use the description as the link text if available.
+      if (isset($file->entity)) {
+        $file_node = entity_metadata_wrapper('node', $file->entity);
+        $title_string = $file_node->title->value();
+      }
+      else {
+        $title_string = !empty($file->description) ? $file->description : $file->filename;
+      }
     }
 
     // Main download button classes settings.

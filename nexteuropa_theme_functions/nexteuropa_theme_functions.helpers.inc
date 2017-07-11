@@ -249,10 +249,10 @@ function _nexteuropa_theme_functions_content_language($node) {
 }
 
 /**
- * Returns the language code of the content language, fallback to interface language.
+ * Returns the language code of the content language.
  *
  * @return string
- *   The language code.
+ *   The language content code or fallback to interface language.
  */
 function _nexteuropa_theme_functions_get_content_language_langcode() {
   return !empty($GLOBALS['language_content']) ? $GLOBALS['language_content']->language : $GLOBALS['language']->language;

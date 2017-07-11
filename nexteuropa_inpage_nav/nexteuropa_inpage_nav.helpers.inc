@@ -16,8 +16,8 @@
  */
 function _nexteuropa_inpage_nav_render($anchors) {
   if (is_array($anchors)) {
-    // Initialize the block.
     $items = [];
+    $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
 
     // Default link parameters, external TRUE is because it just makes the
     // anchors append.
@@ -50,11 +50,11 @@ function _nexteuropa_inpage_nav_render($anchors) {
       ],
     ];
 
-    // Render config for the full block.
-    $render_config = [
+    // Builds the render array for the full block.
+    $render_array = [
       '#theme' => 'inpage_nav_block',
       '#links' => theme('item_list', $variables),
-      '#title' => t('Page Contents', [], ['langcode' => $GLOBALS['language_content']->language]),
+      '#title' => t('Page Contents', [], ['langcode' => $content_langcode]),
       '#attached' => [
         'js' => [
           [
@@ -73,7 +73,7 @@ function _nexteuropa_inpage_nav_render($anchors) {
       ],
     ];
 
-    return drupal_render($render_config);
+    return drupal_render($render_array);
   }
 }
 
@@ -119,11 +119,13 @@ function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
     && $field_group->format_settings['instance_settings']['label_element'] == NEXTEUROPA_INPAGE_NAV_DEPTH
     && strpos($field_group->format_settings['instance_settings']['attributes'], 'id=') !== FALSE
   ) {
+    $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
+
     // Set our label array. We have to t() the label here, as it is designed
     // like this by Field group module.
     // @codingStandardsIgnoreStart
     if (!empty($field_group->format_settings['label'])) {
-      $label = t($field_group->format_settings['label'], [], ['langcode' => $GLOBALS['language_content']->language]);
+      $label = t($field_group->format_settings['label'], [], ['langcode' => $content_langcode]);
     }
     else {
       $label = $field_group->label;

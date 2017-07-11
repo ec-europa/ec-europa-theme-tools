@@ -193,8 +193,8 @@ function _nexteuropa_theme_functions_add_datepicker(&$element) {
 /**
  * Helper function to retrieve the text fields.
  */
-function _nexteuropa_theme_functions_textfields() {
-  $fields = field_read_fields(['type' => 'text_long']);
+function _nexteuropa_theme_functions_textfields($type = 'text_long') {
+  $fields = field_read_fields(['type' => $type]);
   $list[] = t('Select an option');
 
   foreach ($fields as $field_name => $field) {

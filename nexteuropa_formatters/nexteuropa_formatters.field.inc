@@ -500,6 +500,10 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
                 // Add the default options.
                 $uri['options'] += $options;
+                // Alter the title, if that's the case.
+                module_load_include('module', 'dt_shared_functions');
+                $lang = _dt_shared_functions_get_content_language_langcode();
+                _dt_shared_functions_scan_nav_title($item['entity'], 'title', $lang);
                 // Format the link.
                 $render_array['#markup'] = l($handler->getLabel($item['entity']), $link_url, $uri['options']);
                 // Add the render array to the element.

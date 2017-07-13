@@ -525,14 +525,16 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         break;
 
       case 'context_nav_item':
+        $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
+
         $layout_field_settings = ds_get_field_settings($entity_type, $entity->type, 'full');
         $field_name = $field['field_name'];
         if (isset($layout_field_settings[$field_name]['formatter_settings']['ft']['lb'])) {
           // @codingStandardsIgnoreLine
-          $label_altered = t($layout_field_settings[$field_name]['formatter_settings']['ft']['lb']);
+          $label_altered = t($layout_field_settings[$field_name]['formatter_settings']['ft']['lb'], [], ['langcode' => $content_langcode]);
         }
         //@codingStandardsIgnoreLine
-        $wrapper_label = isset($label_altered) ? $label_altered : t($instance['label']);
+        $wrapper_label = isset($label_altered) ? $label_altered : t($instance['label'], [], ['langcode' => $content_langcode]);
 
         // Apply custom label to the element.
         $element = array_merge(

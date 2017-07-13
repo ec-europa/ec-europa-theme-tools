@@ -193,8 +193,8 @@ function _nexteuropa_theme_functions_add_datepicker(&$element) {
 /**
  * Helper function to retrieve the text fields.
  */
-function _nexteuropa_theme_functions_textfields() {
-  $fields = field_read_fields(['type' => 'text_long']);
+function _nexteuropa_theme_functions_textfields($type = 'text_long') {
+  $fields = field_read_fields(['type' => $type]);
   $list[] = t('Select an option');
 
   foreach ($fields as $field_name => $field) {
@@ -246,6 +246,16 @@ function _nexteuropa_theme_functions_content_language($node) {
   }
 
   return $content_language;
+}
+
+/**
+ * Returns the language code of the content language.
+ *
+ * @return string
+ *   The language content code or fallback to interface language.
+ */
+function _nexteuropa_theme_functions_get_content_language_langcode() {
+  return !empty($GLOBALS['language_content']) ? $GLOBALS['language_content']->language : $GLOBALS['language']->language;
 }
 
 /**

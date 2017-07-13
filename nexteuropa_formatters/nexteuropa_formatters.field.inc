@@ -501,7 +501,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 // Add the default options.
                 $uri['options'] += $options;
                 // Alter the title, if that's the case.
-                $content_langcode = _dt_shared_functions_get_content_language_langcode();
+                $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
                 _nexteuropa_theme_functions_set_navigation_title($item['entity'], 'title', $content_langcode);
                 // Format the link.
                 $render_array['#markup'] = l($handler->getLabel($item['entity']), $link_url, $uri['options']);

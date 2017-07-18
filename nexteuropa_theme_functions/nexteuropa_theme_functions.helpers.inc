@@ -67,8 +67,9 @@ function _nexteuropa_theme_functions_contactphone_patterns($label) {
  *   Field name with the caption or description.
  */
 function _nexteuropa_theme_functions_file_caption(&$variables, $field_name) {
-  // Check if the field has a caption.
-  if (!empty($variables['content'][$field_name])) {
+  $wrapper = entity_metadata_wrapper('file', $variables['file']);
+
+  if (!empty($wrapper->{$field_name}->value())) {
     // Resets the HTML of the field and adds the wrapper for the caption.
     $variables['content'][$field_name]['#theme'] = 'ds_field_reset';
     $variables['content'][$field_name]['#prefix'] = '<span class="file__caption">';

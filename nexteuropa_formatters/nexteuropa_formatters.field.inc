@@ -502,7 +502,11 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 $uri['options'] += $options;
                 // Alter the title, if that's the case.
                 $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
-                _nexteuropa_theme_functions_set_navigation_title($item['entity'], 'title', $content_langcode);
+                $data = [
+                  'entity' => $item['entity'],
+                  'language' => $content_langcode,
+                ];
+                drupal_alter('nexteuropa_formatters_title', $data);
                 // Format the link.
                 $render_array['#markup'] = l($handler->getLabel($item['entity']), $link_url, $uri['options']);
                 // Add the render array to the element.

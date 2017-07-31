@@ -205,7 +205,7 @@ function nexteuropa_formatters_field_formatter_info() {
       ],
     ],
     'services_terms' => [
-      'label' => t('NE: Term (ID : NAME)'),
+      'label' => t('NE: Term (NAME:[name]@ID:[tid])'),
       'field types' => [
         'taxonomy_term_reference',
       ],

@@ -100,6 +100,7 @@ function theme_nexteuropa_file_translations($variables) {
   $files_count = isset($node->field_core_file) ? count($node->field_core_file) : 0;
 
   if ($files_count > 1) {
+    $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
     $displayed_langcode = entity_translation_get_existing_language($node->type, $node);
 
     // Remove one from the count, if the current language is in the list.
@@ -133,12 +134,12 @@ function theme_nexteuropa_file_translations($variables) {
       ],
       '#attributes' => [
         'class' => ['file__translations-control'],
-        'title' => t('Click to see translations'),
+        'title' => t('Click to see translations', [], ['langcode' => $content_langcode]),
         'data-toggle' => ['collapse'],
         'aria-expanded' => ['false'],
         'aria-controls' => ['file__translations-' . $nid],
       ],
-      '#title' => t("Available languages (@count)", ['@count' => $files_count]),
+      '#title' => t('Available languages (@count)', ['@count' => $files_count], ['langcode' => $content_langcode]),
     ];
     // Attaching the link.
     $output .= render($link);
@@ -149,7 +150,10 @@ function theme_nexteuropa_file_translations($variables) {
       'items' => [],
       'type' => 'ul',
       'attributes' => [
-        'class' => ['collapse', 'file__translations-list'],
+        'class' => [
+          'collapse',
+          'file__translations-list',
+        ],
         'id' => ['file__translations-' . $nid],
       ],
     ];
@@ -164,7 +168,7 @@ function theme_nexteuropa_file_translations($variables) {
       $file_object = file_load($file_info['fid']);
       // Add our language.
       $file_object->language = $lang;
-      $file_object->filename = t('@language version', ['@language' => $language]);
+      $file_object->filename = $language;
       $file_markup = _nexteuropa_formatters_file_markup($file_object, 'file--bare', TRUE);
       $list['items'][] = [
         'class' => ['file__translations-item'],
@@ -172,12 +176,12 @@ function theme_nexteuropa_file_translations($variables) {
       ];
     }
 
+    // @todo Change implementation to display help text through settings.
     $show_helptext = FALSE;
     if ($show_helptext) {
       $list['items'][] = [
         'class' => ['file__translations-details'],
-        'data' => t('Looking for another language and it is not in the list? !link',
-          ['!link' => l(t('Find out why.'), "#")]),
+        'data' => t('Looking for another language and it is not in the list? !link', ['!link' => l(t('Find out why.'), "#")], ['langcode' => $content_langcode]),
       ];
     }
 

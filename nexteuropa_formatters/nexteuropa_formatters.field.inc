@@ -204,6 +204,12 @@ function nexteuropa_formatters_field_formatter_info() {
         'taxonomy_term_reference',
       ],
     ],
+    'services_terms' => [
+      'label' => t('NE: Term (NAME:[name]@ID:[tid])'),
+      'field types' => [
+        'taxonomy_term_reference',
+      ],
+    ],
     'bold_last' => [
       'label' => t('NE: Bold last word'),
       'field types' => [
@@ -500,6 +506,13 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 $link_url = isset($item['entity']->legacy) ? $item['entity']->legacy : $uri['path'];
                 // Add the default options.
                 $uri['options'] += $options;
+                // Alter the title, if that's the case.
+                $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
+                $data = [
+                  'entity' => $item['entity'],
+                  'language' => $content_langcode,
+                ];
+                drupal_alter('nexteuropa_formatters_title', $data);
                 // Format the link.
                 $render_array['#markup'] = l($handler->getLabel($item['entity']), $link_url, $uri['options']);
                 // Add the render array to the element.
@@ -701,6 +714,15 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
           '#markup' => '<a data-toggle="collapse" data-target="#' . drupal_clean_css_identifier($term->name) . '">' . $term->name . ' <span class="icon icon--down"></span></a>
             <div id="' . drupal_clean_css_identifier($term->name) . '" class="collapse">' . check_markup($term->description, $format) . '</div>',
         ];
+        break;
+
+      case 'services_terms':
+        foreach ($items as $delta => $item) {
+          $term = i18n_taxonomy_localize_terms(taxonomy_term_load($item['tid']));
+          $element[$delta] = [
+            '#markup' => 'NAME:' . $term->name . '@ID:' . $term->tid,
+          ];
+        }
         break;
 
       case 'listing_title':

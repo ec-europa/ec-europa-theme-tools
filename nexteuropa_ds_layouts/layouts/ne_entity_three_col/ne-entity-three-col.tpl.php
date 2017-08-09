@@ -54,17 +54,25 @@
 <?php endif; ?>
 
   <div class="page-content">
-    <div class="container-fluid">
+    
+    <?php if (!empty($local_tabs)): ?>
+      <div class="tabs-row">
+        <div class="container-fluid">
+          <?php print $local_tabs; ?>
+        </div>
+      </div>
+    <?php endif; ?>
 
-    <?php if (!empty($top) || !empty($local_tabs) || !empty($messages)): ?>
+    <div class="container-fluid">
+    
+    <?php if (!empty($top) || !empty($messages)): ?>
       <div class="row">
         <section class="section section--content-top col-md-12 <?php print $top_classes; ?>">
-        <?php if (!empty($local_tabs)): ?>
-          <?php print $local_tabs; ?>
-        <?php endif; ?>
+        
         <?php if (!empty($messages)): ?>
           <?php print $messages; ?>
         <?php endif; ?>
+
           <?php print $top; ?>
         </section>
       </div>

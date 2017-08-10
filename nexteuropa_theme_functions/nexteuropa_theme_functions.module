@@ -244,7 +244,6 @@ function nexteuropa_theme_functions_preprocess_file_entity(&$variables) {
 
       _nexteuropa_theme_functions_file_caption($variables, 'field_video_description');
       break;
-
   }
 }
 
@@ -317,4 +316,29 @@ function nexteuropa_theme_functions_translated_menu_link_alter(&$item, $map) {
       $item['href'] = token_replace($item['href'] . '_[europa_tokens:europa_interface_language]', $item, []);
     }
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alters the exposed form to include some additional logic.
+ */
+function nexteuropa_theme_functions_form_views_exposed_form_alter(&$form, &$form_state) {
+  if (!$form_state['submitted']) {
+    // Hide the button, but only when js is available.
+    if (!empty($form['reset'])) {
+      $form['reset']['#attributes']['class'][] = 'js-hide';
+      $form['reset']['#attributes']['class'][] = 'js-showonsubmit';
+      $form['reset']['#attributes']['class'][] = 'btn-default';
+    }
+  }
+}
+
+/**
+ * Implements hook_ajax_render_alter().
+ *
+ * Displays the clear filters button after the ajax request.
+ */
+function nexteuropa_theme_functions_ajax_render_alter(&$commands) {
+  $commands[] = ajax_command_invoke('body', 'trigger', ['toggleResetButtonIfRequired']);
 }

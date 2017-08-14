@@ -54,17 +54,24 @@
 <?php endif; ?>
 
   <div class="page-content">
+  <?php if (!empty($local_tabs)): ?>
+    <div class="tabs-row">
+      <div class="container-fluid">
+        <?php print $local_tabs; ?>
+      </div>
+    </div>
+  <?php endif; ?>
+
     <div class="container-fluid">
 
-    <?php if (!empty($top_top) || !empty($local_tabs) || !empty($messages)): ?>
+    <?php if (!empty($top_top) || !empty($messages)): ?>
       <div class="row">
         <section class="section section--content-top col-md-12 <?php print $top_top_classes; ?>">
-        <?php if (!empty($local_tabs)): ?>
-          <?php print $local_tabs; ?>
-        <?php endif; ?>
+        
         <?php if (!empty($messages)): ?>
           <?php print $messages; ?>
         <?php endif; ?>
+
           <?php print $top_top; ?>
         </section>
       </div>
@@ -122,7 +129,6 @@
       </div>
     </div>
   </div>
-
 </<?php print $layout_wrapper; ?>>
 
 <?php if (!empty($drupal_render_children)): ?>

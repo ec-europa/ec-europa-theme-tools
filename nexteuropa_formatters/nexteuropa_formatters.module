@@ -671,7 +671,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   // File information and title setter.
   if ($subfile && isset($file_language_string)) {
     $file_info_string = implode(' - ', $file_info_parts);
-    $title_string = $file_language_string . ' ' . t('version', [], ['langcode' => $content_langcode]);
+    $title_string = $file_language_string;
 
     // Sub file download classes settings.
     $options['attributes']['class'][] = 'btn--condensed';

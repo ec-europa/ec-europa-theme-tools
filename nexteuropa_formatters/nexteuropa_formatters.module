@@ -401,7 +401,7 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
   // Build the output.
   $output = '';
   foreach ($variables['items'] as $item) {
-    $item_render = $subrender + ['#markup' => drupal_render($item)];
+    $item_render = $subrender + ['#markup' => strip_tags(drupal_render($item))];
     $output .= drupal_render($item_render);
   }
 
@@ -609,7 +609,7 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
     'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
     'theme_ds_field_nexteuropa_formatters_context_nav_item' => t('Nexteuropa: Contextual nav item'),
-    'theme_ds_field_nexteuropa_formatters_timeline' => t('Nexteuropa: timeline'),
+    'theme_ds_field_nexteuropa_formatters_timeline' => t('Nexteuropa: Timeline'),
   ];
 }
 
@@ -619,7 +619,7 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
  * @param object $file
  *   File object.
  * @param string $modifier
- *   Class modefier for the file block element.
+ *   Class modifier for the file block element.
  * @param bool $subfile
  *   True/False parameter to set if it is a subfile.
  * @param bool $is_external

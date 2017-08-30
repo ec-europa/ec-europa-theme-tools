@@ -709,32 +709,28 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
       // This should probably fallback to the previous implementation that was
       // in place.
       case 'collapsed_term':
-        $term_id = $items[0]['tid'];
-        $term = taxonomy_term_load($term_id);
-        $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
+        foreach ($items as $delta => $item) {
+          $name = 'taxonomy:term:' . $item['tid'] . ':name';
+          $description = 'taxonomy:term:' . $item['tid'] . ':description';
+          $source_name_string = i18n_string_get_source($name)->string;
+          $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
+          $css_id = drupal_clean_css_identifier(drupal_strtolower($name));
+          $term_name = i18n_string_translate($name, $source_name_string, ['langcode' => $content_langcode]);
+          
+          if (!empty(i18n_string_get_source($description))) {
+            $source_description_string = i18n_string_get_source($description)->string;
+            $term_description = i18n_string_translate($description, $source_description_string, ['langcode' => $content_langcode]);
 
-        $format = isset($term->format) ? $term->format : 'full_html';
+            $output = '<div class="expandable expandable--link">'
+              . '<a href="#'. $css_id . '" class="expandable__toggle collapsed" data-toggle="collapse" aria-expanded="false">' . $term_name . '<i class="icon icon--up"></i></a>'
+              . '<div id="' . $css_id . '" class="expandable__content collapse">' . $term_description . '</div>';
+          }
+          else {
+            $output = $term_name;
+          }
 
-        $term_name_source_string = i18n_string_get_source('taxonomy:term:' . $term_id . ':name')->string;
-        // @codingStandardsIgnoreLine
-        $term_name_translated_string = t($term_name_source_string, [], ['langcode' => $content_langcode]);
-
-        $term_description_source = i18n_string_get_source('taxonomy:term:' . $term_id . ':description');
-        if (is_object($term_description_source)) {
-          $css_id = drupal_clean_css_identifier($term_name_translated_string);
-
-          // @codingStandardsIgnoreLine
-          $term_description_translated_string = t($term_description_source->string, [], ['langcode' => $content_langcode]);
-
-          $output = '<div class="expandable expandable--link">'
-            . '<a href="#'. $css_id . '" class="expandable__toggle collapsed" data-toggle="collapse" data-target="#' . $css_id . '" aria-expanded="false">' . $term_name_translated_string . '<i class="icon icon--up"></i></a>'
-            . '<div id="' . $css_id . '" class="expandable__content collapse"><p>' . check_markup($term_description_translated_string, $format) . '</p></div>';
+          $element[$delta] = ['#markup' => $output];
         }
-        else {
-          $output = $term_name_translated_string;
-        }
-
-        $element[0] = ['#markup' => $output];
         break;
 
       case 'services_terms':

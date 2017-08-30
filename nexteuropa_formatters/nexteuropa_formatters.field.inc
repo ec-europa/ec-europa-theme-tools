@@ -709,17 +709,20 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
       // This should probably fallback to the previous implementation that was
       // in place.
       case 'collapsed_term':
+        $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
+
         foreach ($items as $delta => $item) {
           $name = 'taxonomy:term:' . $item['tid'] . ':name';
           $description = 'taxonomy:term:' . $item['tid'] . ':description';
+
           $source_name_string = i18n_string_get_source($name)->string;
-          $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
-          $css_id = drupal_clean_css_identifier(drupal_strtolower($name));
           $term_name = i18n_string_translate($name, $source_name_string, ['langcode' => $content_langcode]);
 
-          if (!empty(i18n_string_get_source($description))) {
-            $source_description_string = i18n_string_get_source($description)->string;
-            $term_description = i18n_string_translate($description, $source_description_string, ['langcode' => $content_langcode]);
+          $source_description = i18n_string_get_source($description);
+          if (!empty($source_description)) {
+            $css_id = drupal_clean_css_identifier(drupal_strtolower($source_name_string));
+
+            $term_description = i18n_string_translate($description, $source_description->string, ['langcode' => $content_langcode]);
 
             $output = '<div class="expandable expandable--link">';
             $output .= '<a href="#' . $css_id . '" class="expandable__toggle collapsed" data-toggle="collapse" aria-expanded="false">' . $term_name . '<i class="icon icon--up"></i></a>';

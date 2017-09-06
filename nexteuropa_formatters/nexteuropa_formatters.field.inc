@@ -723,6 +723,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             $css_id = drupal_clean_css_identifier(drupal_strtolower($source_name_string));
 
             $term_description = i18n_string_translate($description, $source_description->string, ['langcode' => $content_langcode]);
+            $term_description = token_replace($term_description, [$entity_type => $entity]);
 
             $output = '<div class="expandable expandable--link">';
             $output .= '<a href="#' . $css_id . '" class="expandable__toggle collapsed" data-toggle="collapse" aria-expanded="false">' . $term_name . '<i class="icon icon--up"></i></a>';

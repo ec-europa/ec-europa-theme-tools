@@ -480,7 +480,6 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
     switch ($formatter) {
       // Formatter for the structured content view mode.
       case 'structured_content_links':
-
         // Default link config.
         $options = [
           'attributes' => [
@@ -631,7 +630,6 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
 
       case 'nexteuropa_tags':
         switch ($field['type']) {
-
           case 'taxonomy_term_reference':
             foreach ($items as $delta => $item) {
               $term = taxonomy_term_load($item['tid']);
@@ -678,7 +676,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
       case 'text_number':
         foreach ($items as $delta => $item) {
           $element[$delta] = [
-            '#markup' => number_format($item['safe_value'], 0, ".", ",") . $display['settings']['suffix'],
+            '#markup' => number_format($item['safe_value'], 0, '.', ',') . $display['settings']['suffix'],
           ];
         }
         break;
@@ -696,8 +694,8 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
                 $classes .= ' label--' . check_plain(trim($modifier));
               }
             }
-            else {
-              $classes .= $user_modifiers != '' ? ' label--' . check_plain($user_modifiers) : '';
+            elseif (!empty($user_modifiers)) {
+              $classes .= ' label--' . check_plain($user_modifiers);
             }
           }
 
@@ -707,13 +705,39 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
         }
         break;
 
+      // @todo Revert this implementation afterwards ticket DTTSB-2364 is done.
+      // This should probably fallback to the previous implementation that was
+      // in place.
       case 'collapsed_term':
-        $term = i18n_taxonomy_localize_terms(taxonomy_term_load($items[0]['tid']));
-        $format = $term->format ? $term->format : 'full_html';
-        $element[0] = [
-          '#markup' => '<a data-toggle="collapse" data-target="#' . drupal_clean_css_identifier($term->name) . '">' . $term->name . ' <span class="icon icon--down"></span></a>
-            <div id="' . drupal_clean_css_identifier($term->name) . '" class="collapse">' . check_markup($term->description, $format) . '</div>',
-        ];
+        $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
+
+        foreach ($items as $delta => $item) {
+
+          $term = i18n_taxonomy_localize_terms(taxonomy_term_load($item['tid']));
+          $format = $term->format ? $term->format : 'full_html';
+
+          $name = 'taxonomy:term:' . $item['tid'] . ':name';
+          $description = 'taxonomy:term:' . $item['tid'] . ':description';
+
+          $source_name_string = i18n_string_get_source($name)->string;
+          $term_name = i18n_string_translate($name, $source_name_string, ['langcode' => $content_langcode]);
+
+          $source_description = i18n_string_get_source($description);
+          if (!empty($source_description)) {
+            $css_id = drupal_clean_css_identifier(drupal_strtolower($source_name_string));
+
+            $term_description = i18n_string_translate($description, $source_description->string, ['langcode' => $content_langcode]);
+
+            $output = '<div class="expandable expandable--link">';
+            $output .= '<a href="#' . $css_id . '" class="expandable__toggle collapsed" data-toggle="collapse" aria-expanded="false">' . $term_name . '<i class="icon icon--up"></i></a>';
+            $output .= '<div id="' . $css_id . '" class="expandable__content collapse">' . check_markup($term_description, $format) . '</div>';
+          }
+          else {
+            $output = $term_name;
+          }
+
+          $element[$delta] = ['#markup' => $output];
+        }
         break;
 
       case 'services_terms':
@@ -795,7 +819,7 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
             $url['options'] = [];
 
             // Add modifier.
-            $modifier = ($formatter == "link_download" ? "file--link" : "");
+            $modifier = ($formatter == 'link_download' ? 'file--link' : '');
             drupal_alter('nexteuropa_formatters_modifier', $modifier, $entity_type, $entity);
 
             $element[$delta] = [
@@ -946,12 +970,12 @@ function nexteuropa_formatters_field_formatter_view($entity_type, $entity, $fiel
  * @param string $item_title
  *   The title of the link.
  * @param string $item_link
- *    The href value of the link.
- *
- * @see theme_link()
+ *   The href value of the link.
  *
  * @return array
- *    Render array constructing a link.
+ *   Render array constructing a link.
+ *
+ * @see theme_link()
  */
 function _nexteuropa_formatters_tags_item_link($item_title, $item_link) {
   return [
@@ -1067,7 +1091,7 @@ function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, 
  * Implements hook_field_formatter_info_alter().
  */
 function nexteuropa_formatters_field_formatter_info_alter(&$info) {
-  $additonal_options = [
+  $additional_options = [
     'show_translations' => '',
     'nexteuropa_listing_columns' => 'default',
     'nexteuropa_listing_modifier' => '',
@@ -1076,12 +1100,12 @@ function nexteuropa_formatters_field_formatter_info_alter(&$info) {
   ];
 
   if (isset($info['entityreference_entity_view_ifl']['settings'])) {
-    $info['entityreference_entity_view_ifl']['settings'] += $additonal_options;
+    $info['entityreference_entity_view_ifl']['settings'] += $additional_options;
   }
 
   // The check avoids breaking ctools in Dynamic Display Suite fields.
   if (isset($info['entityreference_entity_view']['settings'])) {
-    $info['entityreference_entity_view']['settings'] += $additonal_options;
+    $info['entityreference_entity_view']['settings'] += $additional_options;
 
     $info['link_listing_title']['settings'] += [
       'nexteuropa_title_listing_modifier' => '',

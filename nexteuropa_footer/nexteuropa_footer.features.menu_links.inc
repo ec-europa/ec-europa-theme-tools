@@ -302,10 +302,10 @@ function nexteuropa_footer_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
-  // Exported menu link: menu-nexteuropa-social-media_other-social-media:http://ec.europa.eu/dgs/communication/services/journalist/social-media_en.htm.
-  $menu_links['menu-nexteuropa-social-media_other-social-media:http://ec.europa.eu/dgs/communication/services/journalist/social-media_en.htm'] = array(
+  // Exported menu link: menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks_en.
+  $menu_links['menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks_en'] = array(
     'menu_name' => 'menu-nexteuropa-social-media',
-    'link_path' => 'http://ec.europa.eu/dgs/communication/services/journalist/social-media_en.htm',
+    'link_path' => 'https://europa.eu/european-union/contact/social-networks_en',
     'router_path' => '',
     'link_title' => 'Other social media',
     'options' => array(
@@ -313,7 +313,7 @@ function nexteuropa_footer_menu_default_menu_links() {
         'data-display-title' => 1,
         'data-remove-class' => 0,
       ),
-      'identifier' => 'menu-nexteuropa-social-media_other-social-media:http://ec.europa.eu/dgs/communication/services/journalist/social-media_en.htm',
+      'identifier' => 'menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks_en',
       'alter' => TRUE,
     ),
     'module' => 'menu',

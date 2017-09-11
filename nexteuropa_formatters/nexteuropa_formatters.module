@@ -422,7 +422,7 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
  */
 function theme_ds_field_nexteuropa_formatters_timeline($variables) {
   $output = '<ul class="timeline__list">';
-
+  
   foreach ($variables['items'] as $item) {
     $output .= drupal_render($item);
   }
@@ -609,7 +609,7 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
     'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
     'theme_ds_field_nexteuropa_formatters_context_nav_item' => t('Nexteuropa: Contextual nav item'),
-    'theme_ds_field_nexteuropa_formatters_timeline' => t('Nexteuropa: Timeline'),
+    'theme_ds_field_nexteuropa_formatters_timeline' => t('Nexteuropa: timeline'),
   ];
 }
 

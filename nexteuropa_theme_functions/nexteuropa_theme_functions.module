@@ -303,6 +303,7 @@ function nexteuropa_theme_functions_nexteuropa_token_token_handlers() {
  * Implements hook_translated_menu_link_alter().
  */
 function nexteuropa_theme_functions_translated_menu_link_alter(&$item, $map) {
+  // @todo Remove this.
   // Make our single links coming from menu items language aware.
   $menus = [
     'menu-nexteuropa-service-links',
@@ -311,10 +312,14 @@ function nexteuropa_theme_functions_translated_menu_link_alter(&$item, $map) {
   ];
 
   if (in_array($item['menu_name'], $menus)) {
-    // @todo Remove this.
     if ($item['title'] != 'Europa Analytics') {
       $item['href'] = token_replace($item['href'] . '_[europa_tokens:europa_interface_language]', $item, []);
     }
+  }
+
+  // Search for link Other Social Media in menu menu-nexteuropa-social-media.
+  if ($item['menu_name'] == 'menu-nexteuropa-social-media' && $item['link_title'] == 'Other social media') {
+    $item['href'] = token_replace($item['href'] . '_[europa_tokens:europa_interface_language]', $item, []);
   }
 }
 

@@ -1,6 +1,6 @@
 /**
  * @file
- * In-page nav related behaviors.
+ * In-page nav related behaviors..
  */
 
 (function ($) {
@@ -148,7 +148,8 @@
   }
 
   function GetInpageOffsetTop() {
-    return $('.inpage-nav__wrapper').closest('.col-md-3').offset().top;
+    var firstOfList = $('.inpage-nav__wrapper').find('li:first-of-type > a').attr('href');
+    return $(firstOfList).offset().top;
   }
 
   function GetOffsetBottom(selector) {

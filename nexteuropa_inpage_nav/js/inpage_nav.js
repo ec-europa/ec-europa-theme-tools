@@ -1,6 +1,6 @@
 /**
  * @file
- * In-page nav related behaviors..
+ * In-page nav related behaviors.
  */
 
 (function ($) {

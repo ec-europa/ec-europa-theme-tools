@@ -44,6 +44,7 @@ function nexteuropa_footer_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
+
   // Exported menu link: menu-nexteuropa-inst-links_european-union:https://europa.eu/.
   $menu_links['menu-nexteuropa-inst-links_european-union:https://europa.eu/european-union/index'] = array(
     'menu_name' => 'menu-nexteuropa-inst-links',
@@ -267,7 +268,8 @@ function nexteuropa_footer_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
-  // Exported menu link: menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks.
+
+  // Exported menu link: menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks_en.
   $menu_links['menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks'] = array(
     'menu_name' => 'menu-nexteuropa-social-media',
     'link_path' => 'https://europa.eu/european-union/contact/social-networks',
@@ -291,6 +293,7 @@ function nexteuropa_footer_menu_default_menu_links() {
     'language' => 'und',
     'menu_links_customized' => 1,
   );
+
   // Exported menu link: menu-nexteuropa-social-media_twitter:https://twitter.com/eu_commission.
   $menu_links['menu-nexteuropa-social-media_twitter:https://twitter.com/eu_commission'] = array(
     'menu_name' => 'menu-nexteuropa-social-media',

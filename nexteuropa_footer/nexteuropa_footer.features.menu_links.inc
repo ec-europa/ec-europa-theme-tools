@@ -269,7 +269,7 @@ function nexteuropa_footer_menu_default_menu_links() {
     'menu_links_customized' => 1,
   );
 
-  // Exported menu link: menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks_en.
+  // Exported menu link: menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks.
   $menu_links['menu-nexteuropa-social-media_other-social-media:https://europa.eu/european-union/contact/social-networks'] = array(
     'menu_name' => 'menu-nexteuropa-social-media',
     'link_path' => 'https://europa.eu/european-union/contact/social-networks',

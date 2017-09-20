@@ -197,7 +197,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
     // Removing classes related to label and field type that we will never use.
     if (!empty($variables['classes_array'])) {
-      $variables['classes_array'] = array_filter($variables['classes_array'], function ($value) {
+      $variables['classes_array'] = array_filter($variables['classes_array'], function($value) {
         return ((strstr($value, 'field-type') == TRUE || strstr($value, 'field-label') == TRUE) ? FALSE : TRUE);
       });
     }
@@ -422,7 +422,11 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
  */
 function theme_ds_field_nexteuropa_formatters_timeline($variables) {
   $output = '<ul class="timeline__list">';
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 5298f6b6aaa78bc4136c0b21c8f37cbbad2afe74
   foreach ($variables['items'] as $item) {
     $output .= drupal_render($item);
   }
@@ -609,7 +613,11 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
     'theme_ds_field_nexteuropa_formatters_section_item' => t('Nexteuropa: Section item (4/4/4)'),
     'theme_ds_field_nexteuropa_formatters_h4label_item' => t('Nexteuropa: Field Label H4 item'),
     'theme_ds_field_nexteuropa_formatters_context_nav_item' => t('Nexteuropa: Contextual nav item'),
+<<<<<<< HEAD
+    'theme_ds_field_nexteuropa_formatters_timeline' => t('Nexteuropa: Timeline'),
+=======
     'theme_ds_field_nexteuropa_formatters_timeline' => t('Nexteuropa: timeline'),
+>>>>>>> 5298f6b6aaa78bc4136c0b21c8f37cbbad2afe74
   ];
 }
 
@@ -627,7 +635,7 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
  * @param array $url
  *   Url depending on field type.
  *
- * @return string|null
+ * @return string|NULL
  *   HTML markup. NULL if no url is available.
  */
 function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = FALSE, $is_external = FALSE, $url = []) {

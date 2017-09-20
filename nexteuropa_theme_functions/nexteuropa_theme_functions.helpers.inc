@@ -117,9 +117,9 @@ function _nexteuropa_theme_functions_file_callback_helper($options) {
  * Helper for label date_popup accessibility, search api related.
  *
  * @param object $form
- *    The form object.
+ *   The form object.
  * @param array $fields
- *    Array with the fields to be processed.
+ *   Array with the fields to be processed.
  *
  * @return mixed
  *   Returns form object.
@@ -143,9 +143,9 @@ function _nexteuropa_theme_functions_datepopup_accessibility($form, $fields) {
  * Helper function to process at the element level.
  *
  * @param array $element
- *    Current element.
+ *   Current element.
  * @param array $form_state
- *    Form state.
+ *   Form state.
  *
  * @return mixed
  *   Returns element.
@@ -163,9 +163,9 @@ function _nexteuropa_theme_functions_datepopup_accessibility_build($element, &$f
  * Helper function to process at the element level, for non-search api.
  *
  * @param array $element
- *    Current element.
+ *   Current element.
  * @param array $form_state
- *    Form state.
+ *   Form state.
  *
  * @return mixed
  *   Returns element.
@@ -185,7 +185,7 @@ function _nexteuropa_theme_functions_datepopup_accessibility_nosearchapi_build($
  * Helper to set the wrapper around the date fields.
  *
  * @param array $element
- *    Element to set the wrapper upon.
+ *   Element to set the wrapper upon.
  */
 function _nexteuropa_theme_functions_add_datepicker(&$element) {
   $element['#field_prefix'] = '<div class="date-picker">';

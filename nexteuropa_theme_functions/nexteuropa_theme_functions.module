@@ -18,6 +18,11 @@ function nexteuropa_theme_functions_init() {
       $GLOBALS['language_content'] = $available_languages[$content_langcode];
     }
   }
+  else {
+    if (isset($GLOBALS['language_content'])) {
+      unset($GLOBALS['language_content']);
+    }
+  }
 }
 
 /**

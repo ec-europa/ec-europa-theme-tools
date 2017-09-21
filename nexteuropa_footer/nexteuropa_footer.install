@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * @file
+ * NextEuropa footer install file.
+ */
+
+
+/**
+ * Import footer related translations.
+ */
+function nexteuropa_footer_update_7101() {
+  drush_invoke('ec-footer-translate');
+}

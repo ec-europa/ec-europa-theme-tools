@@ -695,7 +695,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
 
   // File information and title setter.
   if ($subfile && isset($file_language_string)) {
-    $file_info_string = implode(' - ', $file_info_parts);
+    $file_info_string = '(' . implode(' - ', $file_info_parts) . ')';
     $title_string = $file_language_string;
 
     // Sub file download classes settings.
@@ -704,7 +704,7 @@ function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = 
   }
   else {
     $file_info_string = isset($file_language_string) ? '<span class="file__content-language">' . $file_language_string . ' </span>' : '';
-    $file_info_string .= !empty($file_info_parts) ? '<span class="file__properties">(' . implode(' - ', $file_info_parts) . '</span>)' : '';
+    $file_info_string .= !empty($file_info_parts) ? ' <span class="file__properties">(' . implode(' - ', $file_info_parts) . ')</span>' : '';
 
     // Use the description as the link text if available.
     // DTTSB-2132 - Commissioners site: mission letter not displaying title.

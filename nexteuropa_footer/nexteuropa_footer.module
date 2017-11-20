@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Nexteuropa footer feature.
@@ -32,7 +33,7 @@ function nexteuropa_footer_theme_registry_alter(&$theme_registry) {
  */
 function _nexteuropa_footer_item_name_get($title, $menu) {
   $mlid = db_select('menu_links', 'ml')
-    ->fields('ml', array('mlid'))
+    ->fields('ml', ['mlid'])
     ->condition('link_title', $title)
     ->condition('menu_name', $menu)
     ->execute()
@@ -49,7 +50,7 @@ function _nexteuropa_footer_item_name_get($title, $menu) {
 /**
  * Translate menu items.
  *
- * @return array $logs
+ * @return array
  *   Saved info about updated items.
  */
 function _nexteuropa_footer_translate() {

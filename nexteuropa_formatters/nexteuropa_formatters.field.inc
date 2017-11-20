@@ -359,7 +359,7 @@ function nexteuropa_formatters_field_formatter_settings_form($field, $instance, 
  * @param string $formatter
  *   Formatter name.
  *
- * @return string Class connected to formatter.
+ * @return string
  *   Class connected to formatter.
  */
 function _nexteuropa_formatters_field_formatter_view_classes($formatter) {
@@ -1004,13 +1004,13 @@ function _nexteuropa_formatters_tags_item_link($item_title, $item_link) {
  *   definitions. The array notably contains the following keys and values;
  *   - type: The name of the formatter to use.
  *   - settings: The array of formatter settings.
- * @param array $formatter
- *   The formatter settings.
+ * @param string $formatter
+ *   The formatter.
  *
- * @return array A renderable array for the element.
+ * @return array
  *   A renderable array for the element.
  */
-function _nexteuropa_formatters_link_listing_title_field_formatter_view($field, $instance, $items, $display, $formatter) {
+function _nexteuropa_formatters_link_listing_title_field_formatter_view(array $field, array $instance, array $items, array $display, $formatter) {
   $settings = $display['settings'];
   $settings = [
     'modifier' => 'listing--title',

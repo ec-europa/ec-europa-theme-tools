@@ -26,7 +26,7 @@
  *       the same structure as other elements. Only used for field groups.
  *   {code}
  */
-function hook_nexteuropa_inpage_nav_add($element, $ds_field_settings) {
+function hook_nexteuropa_inpage_nav_add(array $element, array $ds_field_settings) {
   // Example.
   return [
     $element['field_name']['#field_name'] => [

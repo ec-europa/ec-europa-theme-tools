@@ -229,6 +229,6 @@ function nexteuropa_header_background_help($path, $arg) {
   switch ($path) {
     // Main module help for the nexteuropa_header_background module.
     case 'admin/help#nexteuropa_header_background':
-      return '<p>' . t('NextEuropa Header background module requires class "@class" to be defined on the template that displays the full-node content.', array('@class' => ".page-header--image")) . '</p>';
+      return '<p>' . t('NextEuropa Header background module requires class "@class" to be defined on the template that displays the full-node content.', ['@class' => ".page-header--image"]) . '</p>';
   }
 }

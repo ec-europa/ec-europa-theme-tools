@@ -52,7 +52,14 @@ function nexteuropa_site_header_form_system_theme_settings_alter(&$form, &$form_
     '#type' => 'checkbox',
     '#title' => t('Does your website implement multilingualism?'),
     '#default_value' => theme_get_setting('ec_europa_multilingual', 'europa'),
-    '#description' => t('If you have a multilingual website we will handle your language switcher'),
+    '#description' => t('If you have a multilingual website we will handle your site language switcher'),
+  ];
+
+  $form['europa']['ec_europa_page_language_switcher'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Do you want to show a page language switcher?'),
+    '#default_value' => theme_get_setting('ec_europa_page_language_switcher', 'europa'),
+    '#description' => t('If you select this option you will also have a secondary language switcher.'),
   ];
 
   $form_state['ec_europa_site_header_home'] = $form['europa']['ec_europa_site_header_home']['#default_value'];

@@ -21,6 +21,26 @@ function _nexteuropa_theme_functions_get_language_obj($langcode, $type = 'name')
 }
 
 /**
+ * Helper function to find and render a block.
+ *
+ * @param string $module
+ *   The module that implements the block.
+ * @param string $delta
+ *   Delta of the block.
+ *
+ * @return string
+ *   The content of the block or empty string.
+ */
+function _nexteuropa_theme_functions_render_block_content($module, $delta) {
+  if ($block = block_load($module, $delta)) {
+    $render_array = _block_get_renderable_array(_block_render_blocks([$block]));
+    $output = render($render_array);
+
+    return $output;
+  }
+}
+
+/**
  * Helper function for contact phone fields.
  *
  * This function returns an array that will help
@@ -66,7 +86,7 @@ function _nexteuropa_theme_functions_contactphone_patterns($label) {
  * @param string $field_name
  *   Field name with the caption or description.
  */
-function _nexteuropa_theme_functions_file_caption(&$variables, $field_name) {
+function _nexteuropa_theme_functions_file_caption(array &$variables, $field_name) {
   $type = $variables['entity_type'];
   $wrapper = entity_metadata_wrapper($type, $variables[$type]);
 
@@ -117,14 +137,14 @@ function _nexteuropa_theme_functions_file_callback_helper($options) {
  * Helper for label date_popup accessibility, search api related.
  *
  * @param object $form
- *    The form object.
+ *   The form object.
  * @param array $fields
- *    Array with the fields to be processed.
+ *   Array with the fields to be processed.
  *
  * @return mixed
  *   Returns form object.
  */
-function _nexteuropa_theme_functions_datepopup_accessibility($form, $fields) {
+function _nexteuropa_theme_functions_datepopup_accessibility($form, array $fields) {
   foreach ($fields as $field_name) {
     if (!empty($form['#info']["filter-{$field_name}"]['label'])) {
       // Set the label title.
@@ -143,14 +163,14 @@ function _nexteuropa_theme_functions_datepopup_accessibility($form, $fields) {
  * Helper function to process at the element level.
  *
  * @param array $element
- *    Current element.
+ *   Current element.
  * @param array $form_state
- *    Form state.
+ *   Form state.
  *
  * @return mixed
  *   Returns element.
  */
-function _nexteuropa_theme_functions_datepopup_accessibility_build($element, &$form_state) {
+function _nexteuropa_theme_functions_datepopup_accessibility_build(array $element, array &$form_state) {
   // Switch labels.
   $element['date']['#title'] = $element['#title_label'];
   // Add date picker classes.
@@ -163,14 +183,14 @@ function _nexteuropa_theme_functions_datepopup_accessibility_build($element, &$f
  * Helper function to process at the element level, for non-search api.
  *
  * @param array $element
- *    Current element.
+ *   Current element.
  * @param array $form_state
- *    Form state.
+ *   Form state.
  *
  * @return mixed
  *   Returns element.
  */
-function _nexteuropa_theme_functions_datepopup_accessibility_nosearchapi_build($element, &$form_state) {
+function _nexteuropa_theme_functions_datepopup_accessibility_nosearchapi_build(array $element, array &$form_state) {
   // Switch labels.
   $element['value']['date']['#title'] = $element['#title'];
   // Make sure we see popup label.
@@ -185,9 +205,9 @@ function _nexteuropa_theme_functions_datepopup_accessibility_nosearchapi_build($
  * Helper to set the wrapper around the date fields.
  *
  * @param array $element
- *    Element to set the wrapper upon.
+ *   Element to set the wrapper upon.
  */
-function _nexteuropa_theme_functions_add_datepicker(&$element) {
+function _nexteuropa_theme_functions_add_datepicker(array &$element) {
   $element['#field_prefix'] = '<div class="date-picker">';
   $element['#field_suffix'] = '<i class="icon icon--calendar date-picker--icon"></i></div>';
 }

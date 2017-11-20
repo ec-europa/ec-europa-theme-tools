@@ -14,7 +14,7 @@
  * @return string
  *   Rendered inpage navigation markup.
  */
-function _nexteuropa_inpage_nav_render($anchors) {
+function _nexteuropa_inpage_nav_render(array $anchors) {
   if (is_array($anchors)) {
     $items = [];
     $content_langcode = _nexteuropa_theme_functions_get_content_language_langcode();
@@ -88,7 +88,7 @@ function _nexteuropa_inpage_nav_render($anchors) {
  * @return array
  *   Modified render array for the entity.
  */
-function _nexteuropa_inpage_nav_build_inpage_nav($element) {
+function _nexteuropa_inpage_nav_build_inpage_nav(array $element) {
   // Get the anchors.
   $anchors = _nexteuropa_inpage_nav_get_anchors($element);
 
@@ -107,7 +107,7 @@ function _nexteuropa_inpage_nav_build_inpage_nav($element) {
 /**
  * Helper function to get anchor from a field group.
  *
- * @param array $field_group
+ * @param object $field_group
  *   The array containing field group information.
  *
  * @return array|bool
@@ -154,7 +154,7 @@ function _nexteuropa_inpage_nav_get_field_group_anchor($field_group) {
  * @return mixed
  *   Array of anchors or false if none.
  */
-function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
+function _nexteuropa_inpage_nav_get_field_anchors(array $field, array $ds_field = NULL) {
   $anchors = [];
   // In case of a text summary we parse the code as well.
   if (isset($field['#field_type']) && in_array($field['#field_type'], ['text_with_summary', 'text_long'])) {
@@ -215,7 +215,7 @@ function _nexteuropa_inpage_nav_get_field_anchors($field, $ds_field = NULL) {
  * @param bool $parent
  *   The parent if any.
  */
-function _nexteuropa_inpage_nav_recursive_anchors(&$childs, &$has_child, $children, $element, $parent = NULL) {
+function _nexteuropa_inpage_nav_recursive_anchors(array &$childs, &$has_child, array $children, array $element, $parent = NULL) {
   // Check the children.
   foreach ($children as $field) {
     // If we were able to get a label from the helper we append them to the
@@ -254,7 +254,7 @@ function _nexteuropa_inpage_nav_recursive_anchors(&$childs, &$has_child, $childr
  * @return array
  *   The anchors that can be used for rendering.
  */
-function _nexteuropa_inpage_nav_get_anchors($element) {
+function _nexteuropa_inpage_nav_get_anchors(array $element) {
   // We load our ds field settings once.
   $ds_field_settings = ds_get_field_settings($element['#entity_type'], $element['#bundle'], $element['#view_mode']);
   $ordered_array = [];

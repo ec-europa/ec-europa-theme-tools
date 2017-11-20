@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * nexteuropa_footer.features.menu_links.inc

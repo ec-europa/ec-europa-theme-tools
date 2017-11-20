@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Code for the Nexteuropa footer feature.
@@ -230,7 +231,7 @@ function _nexteuropa_footer_translations() {
     'weight' => '0',
     'languages' => [
       'bg' => 'Комисията и нейните приоритети',
-      'cs' => 'Komise a její priority',
+      'cs' => 'Komise a její priority',
       'da' => 'Kommissionen og dens prioriteter',
       'de' => 'Prioritäten der Kommission',
       'et' => 'Komisjon ja tema prioriteedid',

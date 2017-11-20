@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * nexteuropa_theme_settings.default_breakpoints.inc

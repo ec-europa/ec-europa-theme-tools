@@ -23,7 +23,7 @@
  * @return string
  *   Return $output.
  */
-function theme_nexteuropa_bem_item_list($variables) {
+function theme_nexteuropa_bem_item_list(array $variables) {
   $items = $variables['items'];
   $type = $variables['type'];
   $subtype = in_array($type, ['ul', 'ol']) ? 'li' : 'div';
@@ -95,7 +95,7 @@ function theme_nexteuropa_bem_item_list($variables) {
  * @return string
  *   Markup of translations.
  */
-function theme_nexteuropa_file_translations($variables) {
+function theme_nexteuropa_file_translations(array $variables) {
   $node = $variables['node'];
   $files_count = isset($node->field_core_file) ? count($node->field_core_file) : 0;
 
@@ -161,20 +161,25 @@ function theme_nexteuropa_file_translations($variables) {
     // Before we start listing translations, we unset our source language.
     unset($files[$displayed_langcode]);
 
+    $languages = locale_language_list();
+    $languages_order = array_flip(array_keys($languages));
+
     foreach ($files as $lang => $file) {
-      $languages = locale_language_list();
-      $language = isset($languages[$lang]) ? $languages[$lang] : NULL;;
+      $language = isset($languages[$lang]) ? $languages[$lang] : NULL;
       $file_info = reset($file);
       $file_object = file_load($file_info['fid']);
       // Add our language.
       $file_object->language = $lang;
       $file_object->filename = $language;
       $file_markup = _nexteuropa_formatters_file_markup($file_object, 'file--bare', TRUE);
-      $list['items'][] = [
+      $key = isset($languages_order[$lang]) ? $languages_order[$lang] : count($list['items']);
+      $list['items'][$key] = [
         'class' => ['file__translations-item'],
         'data' => $file_markup,
       ];
     }
+    // Reorder according to array key.
+    ksort($list['items']);
 
     // @todo Change implementation to display help text through settings.
     $show_helptext = FALSE;

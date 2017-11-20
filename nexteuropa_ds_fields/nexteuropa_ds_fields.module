@@ -43,14 +43,13 @@ function nexteuropa_ds_fields_ds_fields_info($entity_type) {
   }
 
   return ['node' => $fields];
-
 }
 
 /**
  * Custom function to return a simple hr element in a field.
  *
  * @return string
- *    Horizontal rule markup, in-line with our style-guide.
+ *   Horizontal rule markup, in-line with our style-guide.
  */
 function _nexteuropa_ds_fields_hr() {
   return '<hr class="hr--fullwidth">';
@@ -63,12 +62,15 @@ function _nexteuropa_ds_fields_hr() {
  *   The configuration of a DS field.
  *
  * @return string
- *    Value with replaced tokens.
+ *   Value with replaced tokens.
  */
-function _nexteuropa_ds_fields_token_replace($field) {
-  if (isset($field['properties']['value'])) {
-    $value = $field['properties']['value'];
-    $value = token_replace($value, [$field['entity_type'] => $field['entity']], ['clear' => TRUE]);
-    return $value;
+function _nexteuropa_ds_fields_token_replace(array $field) {
+  $value = '';
+  if (!empty($field['properties']['value'])) {
+    $value = token_replace($field['properties']['value'], [
+      $field['entity_type'] => $field['entity'],
+    ], ['clear' => TRUE]);
   }
+
+  return $value;
 }

@@ -197,7 +197,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
 
     // Removing classes related to label and field type that we will never use.
     if (!empty($variables['classes_array'])) {
-      $variables['classes_array'] = array_filter($variables['classes_array'], function($value) {
+      $variables['classes_array'] = array_filter($variables['classes_array'], function ($value) {
         return ((strstr($value, 'field-type') == TRUE || strstr($value, 'field-label') == TRUE) ? FALSE : TRUE);
       });
     }
@@ -223,7 +223,7 @@ function nexteuropa_formatters_theme_field_override($variables) {
  * @return string
  *   The markup as a string.
  */
-function _nexteuropa_formatters_field_component_listing($variables, $config) {
+function _nexteuropa_formatters_field_component_listing(array $variables, array $config) {
   $config += [
     'modifier' => 'default',
     'wrapper_modifier' => '',
@@ -383,7 +383,7 @@ function nexteuropa_formatters_ds_field_settings_alter(&$field_settings, $form, 
  * @return string
  *   The rendered output.
  */
-function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
+function theme_ds_field_nexteuropa_formatters_meta_item(array $variables) {
   // Default classes.
   $classes = ['meta__item'];
 
@@ -420,9 +420,9 @@ function theme_ds_field_nexteuropa_formatters_meta_item($variables) {
  * @return string
  *   The rendered output.
  */
-function theme_ds_field_nexteuropa_formatters_timeline($variables) {
+function theme_ds_field_nexteuropa_formatters_timeline(array $variables) {
   $output = '<ul class="timeline__list">';
-  
+
   foreach ($variables['items'] as $item) {
     $output .= drupal_render($item);
   }
@@ -441,7 +441,7 @@ function theme_ds_field_nexteuropa_formatters_timeline($variables) {
  * @return string
  *   The rendered output.
  */
-function theme_ds_field_nexteuropa_formatters_listing_title($variables) {
+function theme_ds_field_nexteuropa_formatters_listing_title(array $variables) {
   // Default classes.
   $classes = ['listing__title'];
   $entity_type = $variables['element']['#entity_type'];
@@ -483,7 +483,7 @@ function theme_ds_field_nexteuropa_formatters_listing_title($variables) {
  * @return string
  *   The rendered output.
  */
-function theme_ds_field_nexteuropa_formatters_section_item($variables) {
+function theme_ds_field_nexteuropa_formatters_section_item(array $variables) {
   // Default classes.
   $classes = ['section__group', 'section--row-three', 'section--navigation'];
 
@@ -529,7 +529,7 @@ function theme_ds_field_nexteuropa_formatters_section_item($variables) {
  * @return string
  *   The rendered output.
  */
-function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
+function theme_ds_field_nexteuropa_formatters_h4label_item(array $variables) {
   // Handling default output following BEM syntax.
   $output = '';
 
@@ -574,7 +574,7 @@ function theme_ds_field_nexteuropa_formatters_h4label_item($variables) {
  * @return string
  *   The rendered output.
  */
-function theme_ds_field_nexteuropa_formatters_context_nav_item($variables) {
+function theme_ds_field_nexteuropa_formatters_context_nav_item(array $variables) {
   $field = $variables['element'];
   $elements_rendered = '';
 
@@ -627,10 +627,10 @@ function nexteuropa_formatters_ds_field_theme_functions_info() {
  * @param array $url
  *   Url depending on field type.
  *
- * @return string|NULL
+ * @return string|null
  *   HTML markup. NULL if no url is available.
  */
-function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = FALSE, $is_external = FALSE, $url = []) {
+function _nexteuropa_formatters_file_markup($file, $modifier = NULL, $subfile = FALSE, $is_external = FALSE, array $url = []) {
   if (empty($url)) {
     if (!$url['path'] = file_create_url($file->uri)) {
       return NULL;

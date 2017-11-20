@@ -51,7 +51,7 @@ function nexteuropa_inpage_nav_ds_fields_info($entity_type) {
  * @return string
  *   Space, to have it render.
  */
-function _nexteuropa_inpage_nav_render_tmp($field) {
+function _nexteuropa_inpage_nav_render_tmp(array $field) {
   return ' ';
 }
 
